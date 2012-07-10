@@ -21,6 +21,7 @@ public class RequestContext {
     private Map<String, Object> resultMap;
 
     private String viewName;
+    private Exception actionError;
 
     public RequestContext(HttpServletRequest req) {
         request = req;
@@ -67,7 +68,7 @@ public class RequestContext {
     }
 
     public boolean jsonResponse() {
-        return false;
+        return "json".equals(request.getParameter("respDataType"));
     }
 
     public void setViewName(String viewName) {
@@ -75,12 +76,19 @@ public class RequestContext {
     }
 
     public String getViewTemplateFile() {
-        return viewName + ".ftl";
+        if (actionError != null) {
+            return "actionError.ftl";
+        } else {
+            return viewName + ".ftl";
+        }
     }
 
     public void setError(Exception e) {
         if (e != null) {
-            e.printStackTrace();
+            actionError = e;
+
+            putResult("success", false);
+            putResult("message", actionError.getMessage());
         }
     }
 }
