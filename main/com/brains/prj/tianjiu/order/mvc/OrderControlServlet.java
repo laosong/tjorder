@@ -35,9 +35,6 @@ public class OrderControlServlet extends HttpServlet {
 
     org.codehaus.jackson.map.ObjectMapper objectMapper;
 
-    String templatePath;
-    freemarker.template.Configuration ftConfig;
-
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -52,10 +49,7 @@ public class OrderControlServlet extends HttpServlet {
 
             objectMapper = new org.codehaus.jackson.map.ObjectMapper();
 
-            ftConfig = new freemarker.template.Configuration();
-            ftConfig.setTemplateExceptionHandler(freemarker.template.TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-            ftConfig.setEncoding(Locale.getDefault(), UTF_8);
-            ftConfig.setServletContextForTemplateLoading(getServletContext(), "WEB-INF/tpl");
+            TemplateRender.initConfig(webRootPath + "/WEB-INF/tpl", UTF_8);
         } catch (Exception e) {
             throw new ServletException(e);
         }
@@ -127,8 +121,7 @@ public class OrderControlServlet extends HttpServlet {
                     objectMapper.writeValue(resp.getOutputStream(), requestContext.getResult());
                 } else {
                     resp.setContentType("text/html;charset=utf-8");
-                    freemarker.template.Template template = ftConfig.getTemplate(requestContext.getViewTemplateFile());
-                    template.process(requestContext.getResult(), resp.getWriter());
+                    TemplateRender.process(requestContext.getViewTemplateFile(), requestContext.getResult(), resp.getWriter());
                 }
 
             } catch (PermissionException e) {
