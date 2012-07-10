@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="web" name="Web">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/web" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/main" />
+          <root url="file://$MODULE_DIR$/resource" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/main" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/resource" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="library" scope="PROVIDED" name="Tomcat 7" level="application_server_libraries" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.10.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" scope="PROVIDED" name="commons-lang-2.6-sources" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="commons-logging-1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="org.springframework.aop-3.1.1.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="mybatis-3.1.1-sources" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="mybatis-spring-1.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="mysql-connector-java-5.1.20-bin" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="commons-configuration-1.8" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="commons-validator-1.4.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="ognl-3.0.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="jackson-core-asl-1.9.8" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="freemarker" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="aopalliance" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="cglib-2.2.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="asm-3.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="c3p0-0.9.2-pre4" level="project" />
+  </component>
+</module>
+
