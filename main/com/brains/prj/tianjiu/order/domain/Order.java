@@ -39,6 +39,7 @@ public class Order implements Serializable {
     private Date createdDate;
     private String orderDesc;
     /*
+        0: 刚创建
         1：已下单，用户提交
         2：已付款，在线支付用户
         3：已发货，客服邮寄货物

@@ -10,11 +10,11 @@
     </insert>
 
     <resultMap id="productItemResultMap" type="com.brains.prj.tianjiu.order.domain.ProductItem">
-        <result column="id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="img" property="img"/>
-        <result column="price" property="price"/>
-        <result column="state" property="state"/>
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="img" column="img"/>
+        <result property="price" column="price"/>
+        <result property="state" column="state"/>
     </resultMap>
 
     <select id="getItemList" resultMap="productItemResultMap">
@@ -24,5 +24,33 @@
     <select id="getItemById" resultMap="productItemResultMap">
         SELECT * FROM product_item WHERE id=#{itemId}
     </select>
+
+    <parameterMap id="orderParameterMap" type="com.brains.prj.tianjiu.order.domain.Order">
+        <parameter property="orderCd"/>
+        <parameter property="types"/>
+        <parameter property="sumPrice"/>
+        <parameter property="createdDate"/>
+        <parameter property="state"/>
+    </parameterMap>
+    <parameterMap id="orderItemParameterMap" type="com.brains.prj.tianjiu.order.domain.OrderItem">
+        <parameter property="orderId"/>
+        <parameter property="itemId"/>
+        <parameter property="itemType"/>
+        <parameter property="promotionId"/>
+        <parameter property="quantity"/>
+        <parameter property="basePrice"/>
+        <parameter property="price"/>
+    </parameterMap>
+
+    <insert id="createOrder" parameterMap="orderParameterMap" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders(order_cd, types, sum_price, created_date, state) VALUES (?, ?, ?, ?, ?)
+    </insert>
+    <insert id="createOrderItem" parameterMap="orderItemParameterMap">
+        INSERT INTO order_item(order_id, item_id, item_type, promotion_id, quantity, base_price, price)
+          VALUES(?, ?, ?, ?, ?, ?, ?)
+    </insert>
+    <update id="updateOrderPriceById" parameterType="int">
+        UPDATE order SET sum_price=#{sumPrice} WHERE id=#{id}
+    </update>
 
 </mapper>

@@ -26,6 +26,8 @@
     <mapping path="addProductItem" bean="orderController" function="addProductItem" role="Anonymous"></mapping>
 
     <mapping path="showItemList" bean="orderController" function="getItemList" role="Anonymous"></mapping>
+
+    <mapping path="createOrderFromCart" bean="orderController" function="createOrderFromCart"></mapping>
     <mapping path="showOrder" bean="orderController" function="showOrder" role="Anonymous"
              validator="showOrderValidator"></mapping>
 </mappings>

@@ -8,20 +8,24 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
+import java.util.Date;
 import java.util.List;
 
-import com.brains.prj.tianjiu.order.domain.ProductItem;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.brains.prj.tianjiu.order.orm.OrderMapper;
+import com.brains.prj.tianjiu.order.domain.*;
+import com.brains.prj.tianjiu.order.orm.*;
 
 @Service
 public class OrderService {
 
     @Autowired
     OrderMapper orderMapper;
+
+    @Autowired
+    CartMapper cartMapper;
 
     @Transactional
     public int addProductItem(String name, String img) {
@@ -33,8 +37,43 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<ProductItem> getItemList() {
-        //return getTestItems();
         return orderMapper.getItemList();
+    }
+
+    @Transactional
+    public int createOrderFromCart(int userId) throws CartEmptyException, ProductStateException {
+        int createResult = 0;
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setCartItems(cartMapper.getDetailItemsByUser(userId));
+        for (CartItem cartItem : shoppingCart.getCartItems()) {
+            ProductItem productItem = cartItem.getProductItem();
+            if (productItem.okForSale() == false) {
+                throw new ProductStateException(productItem.getId());
+            }
+        }
+        Order order = new Order();
+        order.setOrderCd(org.apache.commons.lang.RandomStringUtils.randomAscii(20));
+        order.setTypes((short) 1);
+        order.setSumPrice(shoppingCart.getTotalPrice());
+        order.setCreatedDate(new Date());
+        order.setState((short) 0);
+
+        createResult = orderMapper.createOrder(order);
+
+        for (CartItem cartItem : shoppingCart.getCartItems()) {
+            ProductItem productItem = cartItem.getProductItem();
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrderId(order.getId());
+            orderItem.setItemId(cartItem.getItemId());
+            orderItem.setItemType((short) 1);
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setBasePrice(productItem.getPrice());
+            orderItem.setPrice(productItem.getPrice());
+
+            orderMapper.createOrderItem(orderItem);
+        }
+
+        return createResult;
     }
 
     public List<ProductItem> getTestItems() {

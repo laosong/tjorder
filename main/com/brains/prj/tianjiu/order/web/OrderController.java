@@ -15,10 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.brains.prj.tianjiu.order.mvc.RequestContext;
 
-import com.brains.prj.tianjiu.order.domain.ProductItem;
-import com.brains.prj.tianjiu.order.domain.Order;
-
-import com.brains.prj.tianjiu.order.service.OrderService;
+import com.brains.prj.tianjiu.order.domain.*;
+import com.brains.prj.tianjiu.order.service.*;
 
 @Controller
 public class OrderController {
@@ -45,10 +43,19 @@ public class OrderController {
         rc.setViewName("showItemList.ftl");
     }
 
-    public void showOrder(RequestContext rc) {
-        Order order = new Order();
-        order.setCreatedDate(new java.util.Date());
-        rc.putResult("order", order);
-        rc.setViewName("showOrder.ftl");
+    public int createOrderFromCart(RequestContext rc) {
+        int createResult = 0;
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            createResult = orderService.createOrderFromCart(user.getUserId());
+
+            rc.setViewName("showOrder");
+        } catch (CartEmptyException e) {
+            rc.setError(e);
+        } catch (ProductStateException e) {
+            rc.setError(e);
+        }
+        return createResult;
     }
 }

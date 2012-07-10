@@ -54,4 +54,8 @@ public class ShoppingCart implements Serializable {
         }
         return totalPrice;
     }
+
+    public boolean isEmpty() {
+        return cartItems == null || cartItems.size() == 0;
+    }
 }
