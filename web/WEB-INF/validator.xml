@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE validations SYSTEM "easy-validation.dtd">
+
+<validations>
+    <validation name="addCartItemValidator">
+        <rule type="required" fieldName="itemId">
+            <message>itemId is required</message>
+        </rule>
+        <rule type="stringlength" fieldName="itemId">
+            <param min="1" max="10"/>
+            <message useAttributePlaceHolder="true">itemId should be between ${min} and ${max}</message>
+        </rule>
+    </validation>
+    <validation name="showOrderValidator">
+        <rule type="required" fieldName="orderId">
+            <message>orderId is required</message>
+        </rule>
+        <rule type="stringlength" fieldName="orderId">
+            <param min="1" max="10"/>
+            <message useAttributePlaceHolder="true">orderId should be between ${min} and ${max}</message>
+        </rule>
+    </validation>
+</validations>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.brains.prj.tianjiu.order.orm.CartMapper">
+
+    <select id="getItemCountByUser" parameterType="int" resultType="int">
+        SELECT COUNT(1) FROM cart_item WHERE user_id=#{userId}
+    </select>
+
+    <update id="incItemCountIfExist">
+        UPDATE cart_item SET quantity=quantity+#{itemCount} WHERE user_id=#{userId} AND item_id=#{itemId}
+    </update>
+
+    <parameterMap id="addItemParameterMap" type="com.brains.prj.tianjiu.order.domain.CartItem">
+        <parameter property="userId"/>
+        <parameter property="itemId"/>
+        <parameter property="quantity"/>
+        <parameter property="createdDate"/>
+        <parameter property="state"/>
+    </parameterMap>
+
+    <insert id="addItem" useGeneratedKeys="true" keyProperty="id" parameterMap="addItemParameterMap">
+        INSERT INTO cart_item(user_id, item_id, quantity, created_date, state)
+          VALUES(?,?,?,?,?)
+    </insert>
+
+    <delete id="delItemById">
+        DELETE FROM cart_item WHERE id=#{id} AND user_id=#{userId}
+    </delete>
+
+    <delete id="delItemByItemId">
+        DELETE FROM cart_item WHERE item_id=#{itemId} AND user_id=#{userId}
+    </delete>
+
+    <update id="decItemCountIfExist">
+        UPDATE cart_item SET quantity=quantity-#{itemCount} WHERE user_id=#{userId} AND item_id=#{itemId}
+    </update>
+
+    <resultMap id="briefCartItemResultMap" type="com.brains.prj.tianjiu.order.domain.CartItem">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="state" column="state"/>
+        <association property="productItem" javaType="com.brains.prj.tianjiu.order.domain.ProductItem">
+            <id property="id" column="product_id"/>
+            <result property="price" column="product_price"/>
+        </association>
+    </resultMap>
+
+    <select id="getBriefItemsByUser" resultMap="briefCartItemResultMap">
+        SELECT A.*, B.id AS product_id, B.price AS product_price
+         FROM cart_item A, product_item B WHERE A.item_id=B.id AND user_id=#{userId}
+    </select>
+
+    <resultMap id="detailCartItemResultMap" type="com.brains.prj.tianjiu.order.domain.CartItem">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="state" column="state"/>
+        <association property="productItem" javaType="com.brains.prj.tianjiu.order.domain.ProductItem">
+            <id property="id" column="product_id"/>
+            <result property="name" column="product_name"/>
+            <result property="img" column="product_img"/>
+            <result property="price" column="product_price"/>
+        </association>
+    </resultMap>
+
+    <select id="getDetailItemsByUser" resultMap="detailCartItemResultMap">
+        SELECT A.*, B.id AS product_id, B.name AS product_name, B.img AS product_img, B.price AS product_price
+         FROM cart_item A, product_item B WHERE A.item_id=B.id AND user_id=#{userId}
+    </select>
+
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mappings [
+        <!ELEMENT mappings (mapping)*>
+        <!ELEMENT mapping (#PCDATA)>
+        <!ATTLIST mapping
+                path CDATA #REQUIRED
+                bean CDATA #REQUIRED
+                function CDATA #REQUIRED
+                role (Anonymous|Normal|Admin) #IMPLIED
+                validator CDATA #IMPLIED>
+        ]>
+<mappings>
+    <mapping path="login" bean="loginController" function="login"></mapping>
+
+    <mapping path="addCartItem" bean="shoppingCartController" function="addItem" validator="addCartItemValidator"></mapping>
+    <mapping path="listCart" bean="shoppingCartController" function="listCart" role="Normal"></mapping>
+
+    <mapping path="addProductItem" bean="orderController" function="addProductItem" role="Anonymous"></mapping>
+    <mapping path="showItemList" bean="orderController" function="getItemList" role="Anonymous"></mapping>
+    <mapping path="showOrder" bean="orderController" function="showOrder" role="Anonymous" validator="showOrderValidator"></mapping>
+</mappings>

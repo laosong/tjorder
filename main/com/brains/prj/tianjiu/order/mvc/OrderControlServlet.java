@@ -1,0 +1,151 @@
+package com.brains.prj.tianjiu.order.mvc;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: songchunwen
+ * Date: 12-7-5
+ * Time: 下午6:35
+ * To change this template use File | Settings | File Templates.
+ */
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+import org.apache.commons.lang.StringUtils;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.util.ClassUtils;
+
+import com.easyvalidation.Validator;
+
+import com.brains.prj.tianjiu.order.common.*;
+
+public class OrderControlServlet extends HttpServlet {
+
+    private static final String UTF_8 = "utf-8";
+
+    HandlerMappingConfig mappingConfig = new HandlerMappingConfig();
+
+    ApplicationContext applicationContext;
+
+    org.codehaus.jackson.map.ObjectMapper objectMapper;
+
+    String templatePath;
+    freemarker.template.Configuration ftConfig;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        String webRootPath = config.getServletContext().getRealPath("/");
+        try {
+            mappingConfig.initConfig(webRootPath + "/WEB-INF/mapping.xml");
+
+            Validator.initialize(webRootPath + "/WEB-INF/validator.xml");
+
+            applicationContext = new FileSystemXmlApplicationContext(webRootPath + "/WEB-INF/applicationContext.xml");
+
+            objectMapper = new org.codehaus.jackson.map.ObjectMapper();
+
+            ftConfig = new freemarker.template.Configuration();
+            ftConfig.setTemplateExceptionHandler(freemarker.template.TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+            ftConfig.setEncoding(Locale.getDefault(), UTF_8);
+            ftConfig.setServletContextForTemplateLoading(getServletContext(), "WEB-INF/tpl");
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        _service(req, resp);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        _service(req, resp);
+    }
+
+    protected void _service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding(UTF_8);
+
+        String requestURI = req.getRequestURI();
+        int jPos = requestURI.indexOf(";jsessionid=");
+        if (jPos >= 0) {
+            requestURI = requestURI.substring(0, jPos);
+        }
+        String[] parts = StringUtils.split(requestURI, '/');
+
+        HandlerMapping handlerMapping = mappingConfig.getMapping(parts[1]);
+        if (handlerMapping != null) {
+            RequestContext requestContext = new RequestContext(req);
+
+            SystemUser user = requestContext.getSystemUser();
+            SystemUser.UserRole role = SystemUser.fromString(handlerMapping.getRole());
+
+            try {
+                if (role.compareTo(user.getUserRole()) > 0) {
+                    throw new PermissionException(user.getUserRole(), role);
+                }
+
+                List<com.easyvalidation.dto.Error> validateErrors = null;
+                if (handlerMapping.getValidator() != null) {
+                    Map<String, Object> reqParametersMap = new HashMap<String, Object>();
+
+                    Set<Map.Entry<String, String[]>> paraSet = req.getParameterMap().entrySet();
+                    for (Map.Entry<String, String[]> entry : paraSet) {
+                        reqParametersMap.put(entry.getKey(), entry.getValue()[0]);
+                    }
+
+                    validateErrors = Validator.checkValidations(handlerMapping.getValidator(), reqParametersMap);
+                }
+                if (validateErrors != null && validateErrors.size() > 0) {
+                    throw new ValidateException(validateErrors);
+                }
+
+                Object controller = applicationContext.getBean(handlerMapping.getBean());
+                if (controller == null) {
+                    throw new NoSuchMethodException();
+                }
+
+                Class clazz = controller.getClass();
+                Method handler = ClassUtils.getMethod(clazz, handlerMapping.getFunction(), RequestContext.class);
+                handler.invoke(controller, requestContext);
+
+                if (requestContext.jsonResponse()) {
+                    resp.setContentType("text/json;charset=utf-8");
+                    objectMapper.writeValue(resp.getOutputStream(), requestContext.getResult());
+                } else {
+                    resp.setContentType("text/html;charset=utf-8");
+                    freemarker.template.Template template = ftConfig.getTemplate(requestContext.getViewTemplateFile());
+                    template.process(requestContext.getResult(), resp.getWriter());
+                }
+
+            } catch (PermissionException e) {
+                throw new ServletException("PermissionException", e);
+            } catch (ValidateException e) {
+                throw new ServletException("ValidateException", e);
+            } catch (NoSuchMethodException e) {
+                throw new ServletException("NoSuchMethodException", e);
+            } catch (IllegalAccessException e) {
+                throw new ServletException("IllegalAccessException", e);
+            } catch (InvocationTargetException e) {
+                throw new ServletException("InvocationTargetException", e);
+            } catch (freemarker.template.TemplateException e) {
+                throw new ServletException("TemplateException", e);
+            }
+        } else {
+            throw new ServletException("no handlerMapping");
+        }
+    }
+}
