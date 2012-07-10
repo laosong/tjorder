@@ -15,8 +15,17 @@ public class PermissionException extends Exception {
     private SystemUser.UserRole needRole;
 
     public PermissionException(SystemUser.UserRole aRole, SystemUser.UserRole bRole) {
-        super(String.format("curRole={0}, needRole={1}", aRole, bRole));
         curRole = aRole;
         needRole = bRole;
+    }
+
+    @Override
+    public String getMessage() {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("curRole=");
+        stringBuffer.append(curRole);
+        stringBuffer.append(", needRole=");
+        stringBuffer.append(needRole);
+        return stringBuffer.toString();
     }
 }

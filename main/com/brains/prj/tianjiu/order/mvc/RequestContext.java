@@ -29,15 +29,31 @@ public class RequestContext {
         resultMap = new HashMap<String, Object>();
     }
 
-    public String[] getRequestParameters(String paraName) {
+    public String[] getParameters(String paraName) {
         return requestParametersMap.get(paraName);
     }
 
-    public String getRequestParameter(String paraName) {
+    public String getParameter(String paraName) {
         String[] pValues = requestParametersMap.get(paraName);
         if (pValues != null && pValues.length > 0) {
             return pValues[0];
         } else return null;
+    }
+
+    public int getParameterInt(String paraName) throws BadParameterException {
+        String[] pValues = requestParametersMap.get(paraName);
+        String pValue = null;
+        if (pValues != null && pValues.length > 0) {
+            pValue = pValues[0];
+        }
+
+        int result = 0;
+        try {
+            result = StringConvert.toInt(pValue);
+        } catch (StringConvert.ConvertException e) {
+            throw new BadParameterException("getParameterInt failed", paraName, pValue);
+        }
+        return result;
     }
 
     public void setSystemUser(SystemUser systemUser) {
@@ -88,7 +104,11 @@ public class RequestContext {
             actionError = e;
 
             putResult("success", false);
-            putResult("message", actionError.getMessage());
+            String message = actionError.getMessage();
+            if (message == null) {
+                message = actionError.getClass().getName();
+            }
+            putResult("message", message);
         }
     }
 }

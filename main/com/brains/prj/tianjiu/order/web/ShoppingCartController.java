@@ -27,10 +27,10 @@ public class ShoppingCartController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            int itemId = StringConvert.toInt(rc.getRequestParameter("itemId"));
+            int itemId = rc.getParameterInt("itemId");
             int itemCount = 0;
             try {
-                itemCount = StringConvert.toInt(rc.getRequestParameter("itemCount"));
+                itemCount = rc.getParameterInt("itemCount");
             } catch (Exception e) {
                 itemCount = 1;
             }
@@ -41,7 +41,7 @@ public class ShoppingCartController {
             rc.putResult("itemSum", briefShoppingCart.getItemSum());
             rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
             rc.setViewName("addCartItemOk");
-        } catch (StringConvert.ConvertException e) {
+        } catch (BadParameterException e) {
             rc.setError(e);
         } catch (ProductNotFoundException e) {
             rc.setError(e);
@@ -61,11 +61,11 @@ public class ShoppingCartController {
             int id = 0;
             int itemId = 0;
             try {
-                id = StringConvert.toInt(rc.getRequestParameter("id"));
+                id = rc.getParameterInt("id");
             } catch (Exception e) {
             }
             try {
-                itemId = StringConvert.toInt(rc.getRequestParameter("itemId"));
+                itemId = rc.getParameterInt("itemId");
             } catch (Exception e) {
             }
 
@@ -89,11 +89,11 @@ public class ShoppingCartController {
             int id = 0;
             int itemId = 0;
             try {
-                id = StringConvert.toInt(rc.getRequestParameter("id"));
+                id = rc.getParameterInt("id");
             } catch (Exception e) {
             }
             try {
-                itemId = StringConvert.toInt(rc.getRequestParameter("itemId"));
+                itemId = rc.getParameterInt("itemId");
             } catch (Exception e) {
             }
 
@@ -117,11 +117,11 @@ public class ShoppingCartController {
             int id = 0;
             int itemId = 0;
             try {
-                id = StringConvert.toInt(rc.getRequestParameter("id"));
+                id = rc.getParameterInt("id");
             } catch (Exception e) {
             }
             try {
-                itemId = StringConvert.toInt(rc.getRequestParameter("itemId"));
+                itemId = rc.getParameterInt("itemId");
             } catch (Exception e) {
             }
 
