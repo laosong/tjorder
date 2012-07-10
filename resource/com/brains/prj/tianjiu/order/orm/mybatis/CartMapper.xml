@@ -25,16 +25,25 @@
           VALUES(?,?,?,?,?)
     </insert>
 
-    <delete id="delItemById">
-        DELETE FROM cart_item WHERE id=#{id} AND user_id=#{userId}
+    <delete id="delItemByTestId">
+        DELETE FROM cart_item WHERE user_id=#{userId} AND item_id=#{itemId}
+        <if test="id > 0">
+            AND id=#{id}
+        </if>
     </delete>
 
-    <delete id="delItemByItemId">
-        DELETE FROM cart_item WHERE item_id=#{itemId} AND user_id=#{userId}
-    </delete>
+    <update id="incItemCountByTestId">
+        UPDATE cart_item SET quantity=quantity+#{itemCount} WHERE user_id=#{userId} AND item_id=#{itemId}
+        <if test="id > 0">
+            AND id=#{id}
+        </if>
+    </update>
 
-    <update id="decItemCountIfExist">
+    <update id="decItemCountByTestId">
         UPDATE cart_item SET quantity=quantity-#{itemCount} WHERE user_id=#{userId} AND item_id=#{itemId}
+        <if test="id > 0">
+            AND id=#{id}
+        </if>
     </update>
 
     <resultMap id="briefCartItemResultMap" type="com.brains.prj.tianjiu.order.domain.CartItem">

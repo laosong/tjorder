@@ -12,6 +12,12 @@
             <message useAttributePlaceHolder="true">itemId should be between ${min} and ${max}</message>
         </rule>
     </validation>
+    <validation name="comCartItemValidator">
+        <rule type="stringlength" fieldName="itemId">
+            <param min="1" max="10"/>
+            <message useAttributePlaceHolder="true">itemId should be between ${min} and ${max}</message>
+        </rule>
+    </validation>
     <validation name="showOrderValidator">
         <rule type="required" fieldName="orderId">
             <message>orderId is required</message>

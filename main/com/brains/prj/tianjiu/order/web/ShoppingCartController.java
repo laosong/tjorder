@@ -23,7 +23,7 @@ public class ShoppingCartController {
     ShoppingCartService shoppingCartService;
 
     public int addItem(RequestContext rc) {
-        int id = 0;
+        int addResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -36,7 +36,7 @@ public class ShoppingCartController {
             }
 
             ShoppingCart briefShoppingCart = new ShoppingCart();
-            id = shoppingCartService.addItem(user.getUserId(), itemId, itemCount, briefShoppingCart);
+            addResult = shoppingCartService.addItem(user.getUserId(), itemId, itemCount, briefShoppingCart);
 
             rc.putResult("itemSum", briefShoppingCart.getItemSum());
             rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
@@ -50,6 +50,104 @@ public class ShoppingCartController {
         } catch (CartFullException e) {
             rc.setError(e);
         }
-        return id;
+        return addResult;
+    }
+
+    public int delItem(RequestContext rc) {
+        int delResult = 0;
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            int id = 0;
+            int itemId = 0;
+            try {
+                id = StringConvert.toInt(rc.getRequestParameter("id"));
+            } catch (Exception e) {
+            }
+            try {
+                itemId = StringConvert.toInt(rc.getRequestParameter("itemId"));
+            } catch (Exception e) {
+            }
+
+            ShoppingCart briefShoppingCart = new ShoppingCart();
+            delResult = shoppingCartService.delItem(user.getUserId(), id, itemId);
+
+            rc.putResult("itemSum", briefShoppingCart.getItemSum());
+            rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
+            rc.setViewName("addCartItemOk");
+        } catch (CartItemNotFoundException e) {
+            rc.setError(e);
+        }
+        return delResult;
+    }
+
+    public int incItem(RequestContext rc) {
+        int incResult = 0;
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            int id = 0;
+            int itemId = 0;
+            try {
+                id = StringConvert.toInt(rc.getRequestParameter("id"));
+            } catch (Exception e) {
+            }
+            try {
+                itemId = StringConvert.toInt(rc.getRequestParameter("itemId"));
+            } catch (Exception e) {
+            }
+
+            ShoppingCart briefShoppingCart = new ShoppingCart();
+            incResult = shoppingCartService.incItem(user.getUserId(), id, itemId);
+
+            rc.putResult("itemSum", briefShoppingCart.getItemSum());
+            rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
+            rc.setViewName("addCartItemOk");
+        } catch (CartItemNotFoundException e) {
+            rc.setError(e);
+        }
+        return incResult;
+    }
+
+    public int decItem(RequestContext rc) {
+        int decResult = 0;
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            int id = 0;
+            int itemId = 0;
+            try {
+                id = StringConvert.toInt(rc.getRequestParameter("id"));
+            } catch (Exception e) {
+            }
+            try {
+                itemId = StringConvert.toInt(rc.getRequestParameter("itemId"));
+            } catch (Exception e) {
+            }
+
+            ShoppingCart briefShoppingCart = new ShoppingCart();
+            decResult = shoppingCartService.decItem(user.getUserId(), id, itemId);
+
+            rc.putResult("itemSum", briefShoppingCart.getItemSum());
+            rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
+            rc.setViewName("addCartItemOk");
+        } catch (CartItemNotFoundException e) {
+            rc.setError(e);
+        }
+        return decResult;
+    }
+
+    public void getCart(RequestContext rc) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            ShoppingCart detailShoppingCart = null;
+            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+
+            rc.putResult("cart", detailShoppingCart);
+            rc.setViewName("showCart");
+        } catch (CartItemNotFoundException e) {
+            rc.setError(e);
+        }
     }
 }

@@ -24,15 +24,19 @@ public interface CartMapper {
 
     public int addItem(CartItem cartItem);
 
-    public int delItemById(@Param("id") int id,
-                           @Param("userId") int userId);
+    public int delItemByTestId(@Param("userId") int userId,
+                               @Param("id") int id,
+                               @Param("itemId") int itemId);
 
-    public int delItemByItemId(@Param("itemId") int itemId,
-                               @Param("userId") int userId);
+    public int incItemCountByTestId(@Param("userId") int userId,
+                                    @Param("id") int id,
+                                    @Param("itemId") int itemId,
+                                    @Param("itemCount") int itemCount);
 
-    public int decItemCountIfExist(@Param("userId") int userId,
-                                   @Param("itemId") int itemId,
-                                   @Param("itemCount") int itemCount);
+    public int decItemCountByTestId(@Param("userId") int userId,
+                                    @Param("id") int id,
+                                    @Param("itemId") int itemId,
+                                    @Param("itemCount") int itemCount);
 
     public List<CartItem> getBriefItemsByUser(@Param("userId") int userId);
 

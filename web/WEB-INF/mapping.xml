@@ -12,10 +12,20 @@
 <mappings>
     <mapping path="login" bean="loginController" function="login"></mapping>
 
-    <mapping path="addCartItem" bean="shoppingCartController" function="addItem" validator="addCartItemValidator"></mapping>
-    <mapping path="listCart" bean="shoppingCartController" function="listCart" role="Normal"></mapping>
+    <mapping path="addCartItem" bean="shoppingCartController" function="addItem"
+             validator="addCartItemValidator"></mapping>
+    <mapping path="delCartItem" bean="shoppingCartController" function="delItem"
+             validator="comCartItemValidator"></mapping>
+    <mapping path="incCartItem" bean="shoppingCartController" function="incItem"
+             validator="comCartItemValidator"></mapping>
+    <mapping path="decCartItem" bean="shoppingCartController" function="decItem"
+             validator="comCartItemValidator"></mapping>
+
+    <mapping path="showCart" bean="shoppingCartController" function="getCart"></mapping>
 
     <mapping path="addProductItem" bean="orderController" function="addProductItem" role="Anonymous"></mapping>
+
     <mapping path="showItemList" bean="orderController" function="getItemList" role="Anonymous"></mapping>
-    <mapping path="showOrder" bean="orderController" function="showOrder" role="Anonymous" validator="showOrderValidator"></mapping>
+    <mapping path="showOrder" bean="orderController" function="showOrder" role="Anonymous"
+             validator="showOrderValidator"></mapping>
 </mappings>

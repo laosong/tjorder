@@ -63,12 +63,7 @@ public class ShoppingCartService {
 
     @Transactional
     public int delItem(int userId, int id, int itemId) throws CartItemNotFoundException {
-        int affectRows = 0;
-        if (id > 0) {
-            affectRows = cartMapper.delItemById(id, userId);
-        } else {
-            affectRows = cartMapper.delItemByItemId(itemId, userId);
-        }
+        int affectRows = cartMapper.delItemByTestId(userId, id, itemId);
         if (affectRows <= 0) {
             throw new CartItemNotFoundException(id, itemId);
         }
@@ -77,18 +72,24 @@ public class ShoppingCartService {
 
     @Transactional
     public int incItem(int userId, int id, int itemId) throws CartItemNotFoundException {
-        int affectRows = 0;
+        int affectRows = cartMapper.incItemCountByTestId(userId, id, itemId, 1);
+        if (affectRows <= 0) {
+            throw new CartItemNotFoundException(id, itemId);
+        }
         return affectRows;
     }
 
     @Transactional
     public int decItem(int userId, int id, int itemId) throws CartItemNotFoundException {
-        int affectRows = 0;
+        int affectRows = cartMapper.decItemCountByTestId(userId, id, itemId, 1);
+        if (affectRows <= 0) {
+            throw new CartItemNotFoundException(id, itemId);
+        }
         return affectRows;
     }
 
     @Transactional(readOnly = true)
-    public ShoppingCart getUseCart(int userId) {
+    public ShoppingCart getUseCart(int userId) throws CartItemNotFoundException {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setCartItems(cartMapper.getDetailItemsByUser(userId));
         return shoppingCart;
