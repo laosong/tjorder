@@ -30,7 +30,7 @@
                     <td align="center">
                         <button id="minus-3" class="ui-button ui-widget ui-state-default">
                             <span class="ui-icon ui-icon-minus"></span></button>
-                        <input name="num" type="text" id="num3" value="1" class="ui-widget"/>
+                        <input name="num" type="text" id="num3" value="${cartItem.getQuantity()?string}" class="ui-widget"/>
                         <button id="plus-3" class="ui-button ui-widget ui-state-default">
                             <span class="ui-icon ui-icon-plus"></span></button>
                     </td>
