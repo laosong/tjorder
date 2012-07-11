@@ -10,7 +10,9 @@
                 validator CDATA #IMPLIED>
         ]>
 <mappings>
+    <mapping path="showLoginPage" bean="loginController" function="showLoginPage"></mapping>
     <mapping path="login" bean="loginController" function="login"></mapping>
+    <mapping path="logout" bean="loginController" function="logout"></mapping>
 
     <mapping path="addCartItem" bean="shoppingCartController" function="addItem" role="Normal"
              validator="addCartItemValidator"></mapping>

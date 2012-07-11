@@ -20,6 +20,10 @@ import com.brains.prj.tianjiu.order.mvc.RequestContext;
 @Controller
 public class LoginController {
 
+    public void showLoginPage(RequestContext rc) {
+        rc.setViewName("login");
+    }
+
     public void login(RequestContext rc) {
 
         try {
@@ -35,5 +39,13 @@ public class LoginController {
         } catch (BadParameterException e) {
             rc.setError(e);
         }
+    }
+
+    public void logout(RequestContext rc) {
+        SystemUser user = new SystemUser();
+        user.setUserId(-1);
+        user.setUserRole(SystemUser.UserRole.Anonymous);
+        rc.setSystemUser(user);
+        rc.setViewName("loginOk");
     }
 }
