@@ -30,4 +30,6 @@
     <mapping path="createOrderFromCart" bean="orderController" function="createOrderFromCart"></mapping>
     <mapping path="showOrder" bean="orderController" function="showOrder" role="Anonymous"
              validator="showOrderValidator"></mapping>
+
+    <mapping path="showCity" bean="addressController" function="getCity"></mapping>
 </mappings>

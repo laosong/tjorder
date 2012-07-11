@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.brains.prj.tianjiu.order.orm.AddressMapper">
+
+    <resultMap id="cityResultMap" type="com.brains.prj.tianjiu.order.domain.CityInfo">
+        <id property="id" column="id"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="country" column="country"/>
+    </resultMap>
+
+    <select id="getAllCityInfo" resultMap="cityResultMap">
+        SELECT * FROM cities WHERE id>10
+    </select>
+
+    <select id="getCityInfo" resultMap="cityResultMap">
+        SELECT * FROM cities WHERE id=#{id}
+    </select>
+
+    <select id="getProvinceList">
+      SELECT DISTINCT(province) FROM cities;
+    </select>
+
+    <select id="getProvinceCity" parameterType="String">
+        SELECT city FROM cities WHERE province=#{province}
+    </select>
+
+    <select id="getCityCountry">
+        SELECT country FROM cities WHERE province=#{province} AND city=#{city}
+    </select>
+
+</mapper>

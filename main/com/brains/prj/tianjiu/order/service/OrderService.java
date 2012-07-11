@@ -27,6 +27,12 @@ public class OrderService {
     @Autowired
     CartMapper cartMapper;
 
+    @Autowired
+    DeliveryMapper deliveryMapper;
+
+    @Autowired
+    PaymentMapper paymentMapper;
+
     @Transactional
     public int addProductItem(String name, String img) {
         ProductItem productItem = new ProductItem();
@@ -72,8 +78,17 @@ public class OrderService {
 
             orderMapper.createOrderItem(orderItem);
         }
-
         return createResult;
+    }
+
+    @Transactional(readOnly = true)
+    public List<DeliveryInfo> getAvailableDelivery() {
+        return deliveryMapper.getDeliveryByState((short) 1);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PaymentInfo> getAvailablePayment() {
+        return paymentMapper.getPaymentByState((short) 1);
     }
 
     public List<ProductItem> getTestItems() {
