@@ -87,34 +87,36 @@ public class OrderControlServlet extends HttpServlet {
             SystemUser user = requestContext.getSystemUser();
             SystemUser.UserRole role = SystemUser.fromString(handlerMapping.getRole());
 
+            requestContext.putResult("systemuser", user);
+
             try {
                 if (role.compareTo(user.getUserRole()) > 0) {
-                    throw new PermissionException(user.getUserRole(), role);
-                }
+                    requestContext.setViewName("login");
+                } else {
+                    List<com.easyvalidation.dto.Error> validateErrors = null;
+                    if (handlerMapping.getValidator() != null) {
+                        Map<String, Object> reqParametersMap = new HashMap<String, Object>();
 
-                List<com.easyvalidation.dto.Error> validateErrors = null;
-                if (handlerMapping.getValidator() != null) {
-                    Map<String, Object> reqParametersMap = new HashMap<String, Object>();
+                        Set<Map.Entry<String, String[]>> paraSet = req.getParameterMap().entrySet();
+                        for (Map.Entry<String, String[]> entry : paraSet) {
+                            reqParametersMap.put(entry.getKey(), entry.getValue()[0]);
+                        }
 
-                    Set<Map.Entry<String, String[]>> paraSet = req.getParameterMap().entrySet();
-                    for (Map.Entry<String, String[]> entry : paraSet) {
-                        reqParametersMap.put(entry.getKey(), entry.getValue()[0]);
+                        validateErrors = Validator.checkValidations(handlerMapping.getValidator(), reqParametersMap);
+                    }
+                    if (validateErrors != null && validateErrors.size() > 0) {
+                        throw new ValidateException(validateErrors);
                     }
 
-                    validateErrors = Validator.checkValidations(handlerMapping.getValidator(), reqParametersMap);
-                }
-                if (validateErrors != null && validateErrors.size() > 0) {
-                    throw new ValidateException(validateErrors);
-                }
+                    Object controller = applicationContext.getBean(handlerMapping.getBean());
+                    if (controller == null) {
+                        throw new NoSuchMethodException();
+                    }
 
-                Object controller = applicationContext.getBean(handlerMapping.getBean());
-                if (controller == null) {
-                    throw new NoSuchMethodException();
+                    Class clazz = controller.getClass();
+                    Method handler = ClassUtils.getMethod(clazz, handlerMapping.getFunction(), RequestContext.class);
+                    handler.invoke(controller, requestContext);
                 }
-
-                Class clazz = controller.getClass();
-                Method handler = ClassUtils.getMethod(clazz, handlerMapping.getFunction(), RequestContext.class);
-                handler.invoke(controller, requestContext);
 
                 if (requestContext.jsonResponse()) {
                     resp.setContentType("text/json;charset=utf-8");
@@ -124,8 +126,6 @@ public class OrderControlServlet extends HttpServlet {
                     TemplateRender.process(requestContext.getViewTemplateFile(), requestContext.getResult(), resp.getWriter());
                 }
 
-            } catch (PermissionException e) {
-                throw new ServletException("PermissionException", e);
             } catch (ValidateException e) {
                 throw new ServletException("ValidateException", e);
             } catch (NoSuchMethodException e) {

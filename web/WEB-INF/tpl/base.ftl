@@ -2,7 +2,7 @@
 <html>
 <head>
     <title><@block name="title">天酒商城-</@block></title>
-    <META content="text/html; charset=utf-8" http-equiv=Content-Type>
+    <meta http-equiv=Content-Type content="text/html; charset=utf-8">
 <@block name="head_css">
     <style type="text/css">
         @import "/css/jquery/blitzer/jquery-ui-1.8.16.custom.css";
@@ -19,8 +19,12 @@
 <@block name="body_head">
     <div class="header_bar">
         <div id="h_1" class=""></div>
-        <div id="h_2" class="">
-            欢迎： <a href="/user/login.htm">[登录]</a> <b>|</b> <a href="/user/reg.htm">[免费注册]</a>
+        <div id="h_2" class=""> 欢迎：
+            <#if (systemuser.getUserId()<0)> <a href="/user/login.htm">[登录]</a> <b>|</b>
+                <a href="/user/reg.htm">[免费注册]</a>
+            <#else>
+            ${systemuser.getUserName()}<a href="/user/reg.htm">[退出]</a>
+            </#if>
         </div>
         <div id="h_3" class=""><a href="#"><img src="/images/top_logo.png" border="0"></a></div>
         <div id="h_4" class=""><img src="/images/slogan-1.png" alt="" border="0"></div>

@@ -33,14 +33,14 @@ public class OrderController {
         String img = "test.jpg";
 
         int itemId = orderService.addProductItem(name, img);
-        rc.setViewName("showOrder.ftl");
+        rc.setViewName("showOrder");
         return itemId;
     }
 
     public void getItemList(RequestContext rc) {
-        List<ProductItem> items = orderService.getItemList();
-        rc.putResult("items", items);
-        rc.setViewName("showItemList.ftl");
+        List<ProductItem> productItems = orderService.getItemList();
+        rc.putResult("productItems", productItems);
+        rc.setViewName("showItemList");
     }
 
     public int createOrderFromCart(RequestContext rc) {

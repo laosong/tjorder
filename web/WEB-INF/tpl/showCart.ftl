@@ -1,4 +1,3 @@
-<#assign cartItems = cart.getCartItems()>
 <@override name="title"><@super/>购物车</@override>
 <@override name="body_content">
 <div class="home_body">
@@ -17,6 +16,7 @@
                 <td width="20%" align="center"> 商品数量</td>
                 <td width="10%" align="center">操作</td>
             </tr>
+            <#assign cartItems = cart.getCartItems()>
             <#list cartItems as cartItem>
                 <#assign productItem = cartItem.getProductItem()>
                 <tr <#if cartItem_index%2==0> class="row_odd"</#if>>
