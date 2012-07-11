@@ -11,6 +11,8 @@ package com.brains.prj.tianjiu.order.mvc;
 import java.io.*;
 import java.util.Locale;
 
+import cn.org.rapid_framework.freemarker.directive.*;
+
 public class TemplateRender {
     static freemarker.template.Configuration ftConfig;
 
@@ -19,6 +21,11 @@ public class TemplateRender {
         ftConfig.setTemplateExceptionHandler(freemarker.template.TemplateExceptionHandler.HTML_DEBUG_HANDLER);
         ftConfig.setEncoding(Locale.getDefault(), encoding);
         ftConfig.setDirectoryForTemplateLoading(new File(templateDir));
+
+        ftConfig.setSharedVariable("block", new BlockDirective());
+        ftConfig.setSharedVariable("override", new OverrideDirective());
+        ftConfig.setSharedVariable("extends", new ExtendsDirective());
+        ftConfig.setSharedVariable("super", new SuperDirective());
     }
 
     public static void process(String templateFile, Object rootMap, Writer writer)
