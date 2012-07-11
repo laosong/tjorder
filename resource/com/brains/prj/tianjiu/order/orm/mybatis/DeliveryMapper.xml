@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.brains.prj.tianjiu.order.orm.DeliveryMapper">
+
+    <resultMap id="deliveryResultMap" type="com.brains.prj.tianjiu.order.domain.DeliveryInfo">
+        <id property="id" column="id"/>
+        <result property="deliverCd" column="deliver_cd"/>
+        <result property="deliverDesc" column="deliver_desc"/>
+        <result property="fee" column="fee"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <select id="getDeliveryByState" resultMap="deliveryResultMap">
+      SELECT * FROM delivery_info WHERE state=#{state}
+    </select>
+
+</mapper>
