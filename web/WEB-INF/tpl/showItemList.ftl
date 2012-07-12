@@ -64,7 +64,8 @@
                         <button id="plus-3" class="ui-button ui-widget ui-state-default">
                             <span class="ui-icon ui-icon-plus"></span></button>
                     </td>
-                    <td align="center"><a href="/orderAction/addCartItem?itemId=${productItem.getId()}">加入购物车</a></td>
+                    <td align="center"><a href="/orderAction/addCartItem?itemId=${productItem.getId()}&itemCount=1">加入购物车</a>
+                    </td>
                 </tr>
             </#list>
             <tr class="row_end">

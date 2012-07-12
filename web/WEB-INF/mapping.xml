@@ -33,5 +33,6 @@
     <mapping path="showOrder" bean="orderController" function="showOrder" role="Anonymous"
              validator="showOrderValidator"></mapping>
 
-    <mapping path="showCity" bean="addressController" function="getCity"></mapping>
+    <mapping path="showAllCity" bean="addressController" function="getAllCityInfo"></mapping>
+    <mapping path="showCity" bean="addressController" function="getCityInfo"></mapping>
 </mappings>
