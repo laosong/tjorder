@@ -26,4 +26,6 @@ public interface AddressMapper {
 
     public List<String> getCityCountry(@Param("province") String province,
                                        @Param("city") String city);
+
+    public List<UserAddress> getUserAddress(@Param("userId") int userId);
 }

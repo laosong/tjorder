@@ -4,6 +4,8 @@
 
 <mapper namespace="com.brains.prj.tianjiu.order.orm.AddressMapper">
 
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
     <resultMap id="cityResultMap" type="com.brains.prj.tianjiu.order.domain.CityInfo">
         <id property="id" column="id"/>
         <result property="province" column="province"/>
@@ -11,8 +13,8 @@
         <result property="country" column="country"/>
     </resultMap>
 
-    <select id="getAllCityInfo" resultMap="cityResultMap">
-        SELECT * FROM cities WHERE id>10
+    <select id="getAllCityInfo" resultMap="cityResultMap" useCache="true">
+        SELECT * FROM cities WHERE id>0
     </select>
 
     <select id="getCityInfo" resultMap="cityResultMap">
@@ -29,6 +31,22 @@
 
     <select id="getCityCountry">
         SELECT country FROM cities WHERE province=#{province} AND city=#{city}
+    </select>
+
+    <resultMap id="userAddressResultMap" type="com.brains.prj.tianjiu.order.domain.UserAddress">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="citiesId" column="cities_id"/>
+        <result property="address" column="address"/>
+        <result property="zipCode" column="zip_code"/>
+        <result property="recvName" column="recv_name"/>
+        <result property="recvPhone" column="recv_phone"/>
+        <result property="recvEmail" column="recv_email"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <select id="getUserAddress" parameterType="int" resultMap="userAddressResultMap">
+        SELECT * FROM usr_address WHERE user_id=#{userId}
     </select>
 
 </mapper>

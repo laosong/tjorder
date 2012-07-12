@@ -29,7 +29,12 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    public void getCity(RequestContext rc) {
+    public void getAllCityInfo(RequestContext rc) {
+        List<CityInfo> allCityInfo = addressService.getAllCityInfo();
+        rc.setViewName("showCity");
+    }
+
+    public void getCityInfo(RequestContext rc) {
         try {
             int id = rc.getParameterInt("id");
             CityInfo cityInfo = addressService.getCity(id);
