@@ -18,6 +18,7 @@ import javax.servlet.http.*;
 import org.apache.commons.lang.StringUtils;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.util.ClassUtils;
 
@@ -31,7 +32,7 @@ public class OrderControlServlet extends HttpServlet {
 
     HandlerMappingConfig mappingConfig = new HandlerMappingConfig();
 
-    ApplicationContext applicationContext;
+    AbstractApplicationContext applicationContext;
 
     org.codehaus.jackson.map.ObjectMapper objectMapper;
 
@@ -41,6 +42,8 @@ public class OrderControlServlet extends HttpServlet {
 
         String webRootPath = config.getServletContext().getRealPath("/");
         try {
+            org.apache.log4j.xml.DOMConfigurator.configure(webRootPath + "/WEB-INF/log4j.xml");
+
             mappingConfig.initConfig(webRootPath + "/WEB-INF/mapping.xml");
 
             Validator.initialize(webRootPath + "/WEB-INF/validator.xml");
@@ -57,6 +60,7 @@ public class OrderControlServlet extends HttpServlet {
 
     @Override
     public void destroy() {
+        applicationContext.destroy();
         super.destroy();
     }
 
