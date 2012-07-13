@@ -9,6 +9,11 @@
         </layout>
     </appender>
 
+    <category name="com.mchange.v2" additivity="false">
+        <priority value="ERROR"/>
+        <appender-ref ref="console"/>
+    </category>
+
     <category name="org.apache.ibatis" additivity="false">
         <priority value="ERROR"/>
         <appender-ref ref="console"/>
@@ -34,7 +39,7 @@
     </category>
 
     <root>
-        <priority value="ERROR"/>
+        <priority value="DEBUG"/>
         <appender-ref ref="console"/>
     </root>
 

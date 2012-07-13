@@ -28,7 +28,7 @@
         <property name="initialPoolSize" value="10"/>
         <property name="minPoolSize" value="5"/>
         <property name="maxPoolSize" value="30"/>
-        <property name="acquireIncrement" value="10"/>
+        <property name="acquireIncrement" value="2"/>
         <property name="maxIdleTime" value="10"/>
         <property name="maxStatements" value="0"/>
     </bean>
