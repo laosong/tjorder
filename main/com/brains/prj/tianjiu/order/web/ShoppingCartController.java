@@ -41,6 +41,7 @@ public class ShoppingCartController {
             rc.putResult("itemSum", briefShoppingCart.getItemSum());
             rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
             rc.setViewName("addCartItemOk");
+
         } catch (BadParameterException e) {
             rc.setError(e);
         } catch (ProductNotFoundException e) {
@@ -69,12 +70,10 @@ public class ShoppingCartController {
             } catch (Exception e) {
             }
 
-            ShoppingCart briefShoppingCart = new ShoppingCart();
             delResult = shoppingCartService.delItem(user.getUserId(), id, itemId);
 
-            rc.putResult("itemSum", briefShoppingCart.getItemSum());
-            rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
-            rc.setViewName("addCartItemOk");
+            rc.setViewName("delCartItemOk");
+
         } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }
@@ -97,12 +96,14 @@ public class ShoppingCartController {
             } catch (Exception e) {
             }
 
-            ShoppingCart briefShoppingCart = new ShoppingCart();
             incResult = shoppingCartService.incItem(user.getUserId(), id, itemId);
 
-            rc.putResult("itemSum", briefShoppingCart.getItemSum());
-            rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
-            rc.setViewName("addCartItemOk");
+            ShoppingCart detailShoppingCart = null;
+            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+
+            rc.putResult("cart", detailShoppingCart);
+            rc.setViewName("showCartData");
+
         } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }
@@ -125,16 +126,22 @@ public class ShoppingCartController {
             } catch (Exception e) {
             }
 
-            ShoppingCart briefShoppingCart = new ShoppingCart();
             decResult = shoppingCartService.decItem(user.getUserId(), id, itemId);
 
-            rc.putResult("itemSum", briefShoppingCart.getItemSum());
-            rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
-            rc.setViewName("addCartItemOk");
+            ShoppingCart detailShoppingCart = null;
+            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+
+            rc.putResult("cart", detailShoppingCart);
+            rc.setViewName("showCartData");
+
         } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }
         return decResult;
+    }
+
+    public void getCartPage(RequestContext rc) {
+        rc.setViewName("showCart");
     }
 
     public void getCart(RequestContext rc) {
@@ -145,7 +152,8 @@ public class ShoppingCartController {
             detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
 
             rc.putResult("cart", detailShoppingCart);
-            rc.setViewName("showCart");
+            rc.setViewName("showCartData");
+
         } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }

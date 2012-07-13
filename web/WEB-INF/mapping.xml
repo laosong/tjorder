@@ -14,6 +14,10 @@
     <mapping path="login" bean="loginController" function="login"></mapping>
     <mapping path="logout" bean="loginController" function="logout"></mapping>
 
+
+    <mapping path="showCart" bean="shoppingCartController" function="getCartPage" role="Normal"></mapping>
+    <mapping path="showCartData" bean="shoppingCartController" function="getCart" role="Normal"></mapping>
+
     <mapping path="addCartItem" bean="shoppingCartController" function="addItem" role="Normal"
              validator="addCartItemValidator"></mapping>
     <mapping path="delCartItem" bean="shoppingCartController" function="delItem" role="Normal"
@@ -23,10 +27,7 @@
     <mapping path="decCartItem" bean="shoppingCartController" function="decItem" role="Normal"
              validator="comCartItemValidator"></mapping>
 
-    <mapping path="showCart" bean="shoppingCartController" function="getCart" role="Normal"></mapping>
-
     <mapping path="addProductItem" bean="orderController" function="addProductItem" role="Anonymous"></mapping>
-
     <mapping path="showItemList" bean="orderController" function="getItemList" role="Anonymous"></mapping>
 
     <mapping path="createOrderFromCart" bean="orderController" function="createOrderFromCart"></mapping>
