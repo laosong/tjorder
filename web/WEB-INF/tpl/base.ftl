@@ -14,6 +14,7 @@
 <@block name="include_js">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/laosong.js"></script>
 </@block>
 </head>
 <body>
@@ -22,10 +23,10 @@
     <div class="header_bar">
         <div id="h_1" class=""></div>
         <div id="h_2" class=""> 欢迎：
-            <#if (systemuser.getUserId()<0)>
+            <#if (SystemUser.getUserId()<0)>
                 <a href="/orderAction/showLoginPage">[登录]</a> <b>|</b> <a href="javascript:void(0);">[免费注册]</a>
             <#else>
-                <a href="/orderAction/showCart">${systemuser.getUserName()}</a><b>|</b><a href="/orderAction/logout">[退出]</a>
+                <a href="/orderAction/showCart">${SystemUser.getUserName()}</a><b>|</b><a href="/orderAction/logout">[退出]</a>
             </#if>
         </div>
         <div id="h_3" class=""><a href="/orderAction/showItemList"><img src="/images/top_logo.png" border="0"></a></div>

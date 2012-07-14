@@ -47,7 +47,6 @@
     <div class="dialog-outer">
         <span class="dialog-bg dialog-bg-n"></span>
         <span class="dialog-bg dialog-bg-ne"></span>
-
         <span class="dialog-bg dialog-bg-e"></span>
         <span class="dialog-bg dialog-bg-se"></span>
         <span class="dialog-bg dialog-bg-s"></span>
@@ -70,7 +69,6 @@
     <div class="dialog-outer">
         <span class="dialog-bg dialog-bg-n"></span>
         <span class="dialog-bg dialog-bg-ne"></span>
-
         <span class="dialog-bg dialog-bg-e"></span>
         <span class="dialog-bg dialog-bg-se"></span>
         <span class="dialog-bg dialog-bg-s"></span>
@@ -100,11 +98,15 @@
         $("#shopping").button({ icons:{ primary:"ui-icon-triangle-1-w"}  });
         $("#order").button({ icons:{ primary:"ui-icon-script"}  });
 
+        $("#shopping").click(function (event) {
+            window.location.href = "/orderAction/showItemList";
+        });
+
         var cart_loading_dialog = $("#cart-loading-dialog");
         var cart_delete_dialog = $("#cart-delete-dialog");
 
-        function popupLoadingDialog(cart_row_obj) {
-            var o = cart_row_obj.find("input[name=edit_num]").offset();
+        function popupLoadingDialog(itemRowObj) {
+            var o = itemRowObj.find("input[name=edit_num]").offset();
             var t = o.top - 80;
             var l = o.left - cart_loading_dialog.width() / 2 + 18;
             cart_loading_dialog.css({
@@ -116,85 +118,123 @@
         }
 
         function closeLoadingDialog() {
-            $("#cart-loading-dialog").fadeOut();
+            cart_loading_dialog.fadeOut();
         }
 
-        function updateCartData(result) {
-            closeLoadingDialog();
+        function showDeleteConfirmDialog(delLinkObj) {
+            var o = delLinkObj.offset();
+            var t = o.top + delLinkObj.outerHeight() + 3;
+            var l = o.left + delLinkObj.width() - cart_delete_dialog.width();
+            cart_delete_dialog.css({
+                "display":"block",
+                "top":t,
+                "left":l,
+                "z-index":1000
+            });
+        }
 
+        function closeDeleteConfirmDialog() {
+            cart_delete_dialog.fadeOut();
+        }
+
+        var toDeleteRowObj = null;
+
+        function updateCartData(result) {
             $("#cartData").html(result);
             $("#cartData tr.cart_row").each(function () {
-                var this_obj = $(this);
+                var itemRowObj = $(this);
 
-                var id = this_obj.find("input[name=id]").val();
-                var itemId = this_obj.find("input[name=itemId]").val();
-
-                this_obj.find("a[name=decrease_num]").click(function (event) {
-                    popupLoadingDialog(this_obj);
-                    decreaseNum(id, itemId);
+                itemRowObj.find("a[name=decrease_num]").click(function (event) {
+                    decreaseNumClicked(itemRowObj);
                 });
-                this_obj.find("a[name=increase_num]").click(function (event) {
-                    popupLoadingDialog(this_obj);
-                    increaseNum(id, itemId);
+                itemRowObj.find("a[name=increase_num]").click(function (event) {
+                    increaseNumClicked(itemRowObj);
                 });
-                this_obj.find("a[name=delete_item]").click(function (event) {
+                itemRowObj.find("input[name=edit_num]").change(function (event) {
+                    editNumChanged(itemRowObj);
+                    return false;
+                })
+                itemRowObj.find("a[name=delete_item]").click(function (event) {
                     event.preventDefault();
-
-                    cart_delete_dialog.find("input[name=id]").val(id);
-                    cart_delete_dialog.find("input[name=itemId]").val(itemId);
-                    var o = $(this).offset();
-                    var t = o.top + $(this).outerHeight() + 3;
-                    var l = o.left + $(this).width() - cart_delete_dialog.width();
-                    cart_delete_dialog.css({
-                        "display":"block",
-                        "top":t,
-                        "left":l,
-                        "z-index":1000
-                    });
+                    toDeleteRowObj = itemRowObj;
+                    showDeleteConfirmDialog($(this));
                 })
             });
         }
 
-        function decreaseNum(id, itemId) {
-            var req_data = {id:id, itemId:itemId};
-            $.ajax({
-                type:"POST",
-                url:"/orderAction/decCartItem",
-                data:req_data,
-                success:function (result) {
-                    updateCartData(result);
-                }
-            });
-        }
-
-        function increaseNum(id, itemId) {
-            var req_data = {id:id, itemId:itemId};
-            $.ajax({
-                type:"POST",
-                url:"/orderAction/incCartItem",
-                data:req_data,
-                success:function (result) {
-                    updateCartData(result);
-                }
-            });
-        }
-
-        $.ajax({
-            type:"POST",
-            url:"/orderAction/showCartData",
-            data:null,
-            success:function (result) {
-                updateCartData(result);
+        function decreaseNumClicked(itemRowObj) {
+            var id = itemRowObj.find("input[name=id]").val();
+            var itemId = itemRowObj.find("input[name=itemId]").val();
+            var num = itemRowObj.find("input[name=edit_num]").val();
+            if (num < 2) {
+                return;
             }
-        });
+            popupLoadingDialog(itemRowObj);
+
+            var req_data = {id:id, itemId:itemId};
+            $.callOrderAction("POST", "/orderAction/decCartItem", req_data,
+                    function (data) {
+                        updateCartData(data);
+                    }).always(function () {
+                        closeLoadingDialog();
+                    });
+        }
+
+        function increaseNumClicked(itemRowObj) {
+            var id = itemRowObj.find("input[name=id]").val();
+            var itemId = itemRowObj.find("input[name=itemId]").val();
+            var req_data = {id:id, itemId:itemId};
+
+            popupLoadingDialog(itemRowObj);
+            $.callOrderAction("POST", "/orderAction/incCartItem", req_data,
+                    function (data) {
+                        updateCartData(data);
+                    }).always(function () {
+                        closeLoadingDialog();
+                    });
+        }
+
+        function editNumChanged(itemRowObj) {
+            var id = itemRowObj.find("input[name=id]").val();
+            var itemId = itemRowObj.find("input[name=itemId]").val();
+            var itemCount = itemRowObj.find("input[name=edit_num]").val();
+            if (itemCount <= 0) {
+                return;
+            }
+            popupLoadingDialog(itemRowObj);
+
+            var req_data = {id:id, itemId:itemId, itemCount:itemCount};
+            $.callOrderAction("POST", "/orderAction/setCartItemCount", req_data,
+                    function (data) {
+                        updateCartData(data);
+                    }).always(function () {
+                        closeLoadingDialog();
+                    });
+        }
+
+        $.callOrderAction("POST", "/orderAction/showCartData", null,
+                function (data) {
+                    updateCartData(data);
+                });
 
         $("#cart-delete-dialog .dialog-close").click(function (event) {
-            $("#cart-delete-dialog").hide();
+            closeDeleteConfirmDialog();
         });
         $("#cart-delete-dialog .btn-ok").click(function (event) {
-            var cart_delete_form = cart_delete_dialog.find("form[name=cart_delete_form]")[0];
-            cart_delete_form.action = "/orderAction/delCartItem";
-            cart_delete_form.submit();
+            if (toDeleteRowObj != null) {
+                var itemRowObj = toDeleteRowObj;
+                var id = itemRowObj.find("input[name=id]").val();
+                var itemId = itemRowObj.find("input[name=itemId]").val();
+                var req_data = {id:id, itemId:itemId};
+
+                popupLoadingDialog(itemRowObj);
+                $.callOrderAction("POST", "/orderAction/delCartItem", req_data,
+                        function (data) {
+                            updateCartData(data);
+                        }).always(function () {
+                            closeLoadingDialog();
+                        });
+            }
         });
     });
 </script>

@@ -3,6 +3,7 @@
 <!DOCTYPE validations SYSTEM "easy-validation.dtd">
 
 <validations>
+
     <validation name="addCartItemValidator">
         <rule type="required" fieldName="itemId">
             <message>itemId is required</message>
@@ -12,12 +13,28 @@
             <message useAttributePlaceHolder="true">itemId should be between ${min} and ${max}</message>
         </rule>
     </validation>
+
     <validation name="comCartItemValidator">
         <rule type="stringlength" fieldName="itemId">
             <param min="1" max="10"/>
             <message useAttributePlaceHolder="true">itemId should be between ${min} and ${max}</message>
         </rule>
     </validation>
+
+    <validation name="setCartItemValidator">
+        <rule type="stringlength" fieldName="itemId">
+            <param min="1" max="10"/>
+            <message useAttributePlaceHolder="true">itemId should be between ${min} and ${max}</message>
+        </rule>
+        <rule type="required" fieldName="itemCount">
+            <message>itemCount is required</message>
+        </rule>
+        <rule type="int" fieldName="itemCount">
+            <param min="1" max="10000"/>
+            <message useAttributePlaceHolder="true">itemCount should be between ${min} and ${max}</message>
+        </rule>
+    </validation>
+
     <validation name="showOrderValidator">
         <rule type="required" fieldName="orderId">
             <message>orderId is required</message>
@@ -27,4 +44,5 @@
             <message useAttributePlaceHolder="true">orderId should be between ${min} and ${max}</message>
         </rule>
     </validation>
+
 </validations>

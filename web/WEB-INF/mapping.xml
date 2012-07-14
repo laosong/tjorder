@@ -26,6 +26,8 @@
              validator="comCartItemValidator"></mapping>
     <mapping path="decCartItem" bean="shoppingCartController" function="decItem" role="Normal"
              validator="comCartItemValidator"></mapping>
+    <mapping path="setCartItemCount" bean="shoppingCartController" function="setItemCount" role="Normal"
+             validator="setCartItemValidator"></mapping>
 
     <mapping path="addProductItem" bean="orderController" function="addProductItem" role="Anonymous"></mapping>
     <mapping path="showItemList" bean="orderController" function="getItemList" role="Anonymous"></mapping>

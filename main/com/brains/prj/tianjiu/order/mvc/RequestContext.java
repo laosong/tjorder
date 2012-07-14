@@ -83,7 +83,11 @@ public class RequestContext {
         return resultMap;
     }
 
-    public boolean jsonResponse() {
+    public boolean isJsonReq() {
+        return "json".equals(request.getParameter("reqDataType"));
+    }
+
+    public boolean needJsonResp() {
         return "json".equals(request.getParameter("respDataType"));
     }
 
@@ -110,5 +114,9 @@ public class RequestContext {
             }
             putResult("message", message);
         }
+    }
+
+    public boolean hasError() {
+        return actionError != null;
     }
 }
