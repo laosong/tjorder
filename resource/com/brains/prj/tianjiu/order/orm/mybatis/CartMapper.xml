@@ -33,14 +33,21 @@
     </delete>
 
     <update id="incItemCountByTestId">
-        UPDATE cart_item SET quantity=quantity+#{itemCount} WHERE user_id=#{userId} AND item_id=#{itemId}
+        UPDATE cart_item SET quantity=quantity+#{itemCount} WHERE user_id=#{userId} AND item_id=#{itemId} AND quantity>0
         <if test="id > 0">
             AND id=#{id}
         </if>
     </update>
 
     <update id="decItemCountByTestId">
-        UPDATE cart_item SET quantity=quantity-#{itemCount} WHERE user_id=#{userId} AND item_id=#{itemId}
+        UPDATE cart_item SET quantity=quantity-#{itemCount} WHERE user_id=#{userId} AND item_id=#{itemId} AND quantity>1
+        <if test="id > 0">
+            AND id=#{id}
+        </if>
+    </update>
+
+    <update id="setItemCountByTestId">
+        UPDATE cart_item SET quantity=#{itemCount} WHERE user_id=#{userId} AND item_id=#{itemId} AND quantity>0
         <if test="id > 0">
             AND id=#{id}
         </if>
