@@ -140,6 +140,39 @@ public class ShoppingCartController {
         return decResult;
     }
 
+    public int setItemCount(RequestContext rc) {
+        int decResult = 0;
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            int id = 0;
+            int itemId = 0;
+            try {
+                id = rc.getParameterInt("id");
+            } catch (Exception e) {
+            }
+            try {
+                itemId = rc.getParameterInt("itemId");
+            } catch (Exception e) {
+            }
+            int itemCount = rc.getParameterInt("itemCount");
+
+            decResult = shoppingCartService.setItemCount(user.getUserId(), id, itemId, itemCount);
+
+            ShoppingCart detailShoppingCart = null;
+            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+
+            rc.putResult("cart", detailShoppingCart);
+            rc.setViewName("showCartData");
+
+        } catch (BadParameterException e) {
+            rc.setError(e);
+        } catch (CartItemNotFoundException e) {
+            rc.setError(e);
+        }
+        return decResult;
+    }
+
     public void getCartPage(RequestContext rc) {
         rc.setViewName("showCart");
     }

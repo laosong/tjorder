@@ -88,6 +88,15 @@ public class ShoppingCartService {
         return affectRows;
     }
 
+    @Transactional
+    public int setItemCount(int userId, int id, int itemId, int itemCount) throws CartItemNotFoundException {
+        int affectRows = cartMapper.setItemCountByTestId(userId, id, itemId, itemCount);
+        if (affectRows <= 0) {
+            throw new CartItemNotFoundException(id, itemId);
+        }
+        return affectRows;
+    }
+
     @Transactional(readOnly = true)
     public ShoppingCart getUseCart(int userId) throws CartItemNotFoundException {
         ShoppingCart shoppingCart = new ShoppingCart();
