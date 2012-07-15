@@ -1,7 +1,6 @@
 <@override name="title"><@super/>购物车</@override>
 <@override name="head_css">
 <style type="text/css">
-    @import "/css/home/laosong.css";
 </style>
 </@override>
 <@override name="body_content">
@@ -121,10 +120,10 @@
             cart_loading_dialog.fadeOut();
         }
 
-        function showDeleteConfirmDialog(delLinkObj) {
-            var o = delLinkObj.offset();
-            var t = o.top + delLinkObj.outerHeight() + 3;
-            var l = o.left + delLinkObj.width() - cart_delete_dialog.width();
+        function showDeleteConfirmDialog(itemRowObj) {
+            var o = itemRowObj.find("a[name=delete_item]").offset();
+            var t = o.top + 20;
+            var l = o.left + 25 - cart_delete_dialog.width();
             cart_delete_dialog.css({
                 "display":"block",
                 "top":t,
@@ -157,7 +156,7 @@
                 itemRowObj.find("a[name=delete_item]").click(function (event) {
                     event.preventDefault();
                     toDeleteRowObj = itemRowObj;
-                    showDeleteConfirmDialog($(this));
+                    showDeleteConfirmDialog(itemRowObj);
                 })
             });
         }
@@ -175,7 +174,8 @@
             $.callOrderAction("POST", "/orderAction/decCartItem", req_data,
                     function (data) {
                         updateCartData(data);
-                    }).always(function () {
+                    }
+            ).always(function () {
                         closeLoadingDialog();
                     });
         }
@@ -189,7 +189,8 @@
             $.callOrderAction("POST", "/orderAction/incCartItem", req_data,
                     function (data) {
                         updateCartData(data);
-                    }).always(function () {
+                    }
+            ).always(function () {
                         closeLoadingDialog();
                     });
         }
@@ -199,6 +200,27 @@
             var itemId = itemRowObj.find("input[name=itemId]").val();
             var itemCount = itemRowObj.find("input[name=edit_num]").val();
             if (itemCount <= 0) {
+                noty({text:"itemCount invalid.",
+                            layout:"center",
+                            type:"error",
+                            animateOpen:{"height":"toggle"},
+                            animateClose:{"height":"toggle"},
+                            speed:500,
+                            timeout:5000,
+                            closeButton:true,
+                            closeOnSelfClick:true,
+                            closeOnSelfOver:false,
+                            modal:false,
+                            onClose:function () {
+                                $.callOrderAction("POST", "/orderAction/showCartData", null,
+                                        function (data) {
+                                            updateCartData(data);
+                                        });
+                            }
+                        }
+
+                )
+                ;
                 return;
             }
             popupLoadingDialog(itemRowObj);
@@ -207,7 +229,8 @@
             $.callOrderAction("POST", "/orderAction/setCartItemCount", req_data,
                     function (data) {
                         updateCartData(data);
-                    }).always(function () {
+                    }
+            ).always(function () {
                         closeLoadingDialog();
                     });
         }
@@ -215,28 +238,29 @@
         $.callOrderAction("POST", "/orderAction/showCartData", null,
                 function (data) {
                     updateCartData(data);
-                });
+                }
+        );
 
         $("#cart-delete-dialog .dialog-close").click(function (event) {
             closeDeleteConfirmDialog();
         });
         $("#cart-delete-dialog .btn-ok").click(function (event) {
+            closeDeleteConfirmDialog();
             if (toDeleteRowObj != null) {
                 var itemRowObj = toDeleteRowObj;
                 var id = itemRowObj.find("input[name=id]").val();
                 var itemId = itemRowObj.find("input[name=itemId]").val();
                 var req_data = {id:id, itemId:itemId};
 
-                popupLoadingDialog(itemRowObj);
                 $.callOrderAction("POST", "/orderAction/delCartItem", req_data,
                         function (data) {
                             updateCartData(data);
-                        }).always(function () {
-                            closeLoadingDialog();
-                        });
+                        }
+                );
             }
         });
-    });
+    })
+    ;
 </script>
 </@override>
 <@extends name="base.ftl"/>

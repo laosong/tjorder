@@ -72,7 +72,11 @@ public class ShoppingCartController {
 
             delResult = shoppingCartService.delItem(user.getUserId(), id, itemId);
 
-            rc.setViewName("delCartItemOk");
+            ShoppingCart detailShoppingCart = null;
+            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+
+            rc.putResult("cart", detailShoppingCart);
+            rc.setViewName("showCartData");
 
         } catch (CartItemNotFoundException e) {
             rc.setError(e);

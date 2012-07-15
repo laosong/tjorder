@@ -6,7 +6,10 @@
 <@block name="include_css">
     <style type="text/css">
         @import "/css/jquery/blitzer/jquery-ui-1.8.16.custom.css";
+        @import "/needim-noty/css/jquery.noty.css";
+        @import "/needim-noty/css/noty_theme_default.css";
         @import "/css/home/home.css";
+        @import "/css/home/laosong.css";
     </style>
 </@block>
 <@block name="head_css">
@@ -14,6 +17,7 @@
 <@block name="include_js">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/needim-noty/js/jquery.noty.js"></script>
     <script type="text/javascript" src="/js/laosong.js"></script>
 </@block>
 </head>
