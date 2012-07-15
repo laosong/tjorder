@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE validations SYSTEM "easy-validation.dtd">
+<!DOCTYPE validations[
+        <!ELEMENT validations (properties*, validation+)>
+        <!ATTLIST validations>
+
+        <!ELEMENT properties (file+)>
+        <!ATTLIST properties locale (US|FR|EN|SA|CN|TW|NL|AU|CA|GB|DE|IL|IN|IT|JP|KR|BR|ES|SE|TH) #REQUIRED>
+
+        <!ELEMENT file (#PCDATA)>
+        <!ATTLIST file >
+
+        <!ELEMENT validation (rule)+>
+        <!ATTLIST validation name NMTOKEN #REQUIRED>
+
+        <!ELEMENT rule (param?,message)>
+        <!ATTLIST rule
+                fieldName NMTOKEN #IMPLIED
+                type (required|int|double|email|expression|date|stringlength|url|creditcard|isbn|inetaddress) #REQUIRED>
+
+        <!ELEMENT param EMPTY>
+        <!ATTLIST param
+                dateformat CDATA #IMPLIED
+                expression CDATA #IMPLIED
+                max NMTOKEN #IMPLIED
+                min NMTOKEN #IMPLIED
+                regex (true|false) "false">
+
+        <!ELEMENT message (#PCDATA)>
+        <!ATTLIST message
+                key NMTOKEN #IMPLIED
+                useAttributePlaceHolder (true|false) "false">
+        ]>
 
 <validations>
 
