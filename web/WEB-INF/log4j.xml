@@ -39,7 +39,7 @@
     </category>
 
     <root>
-        <priority value="DEBUG"/>
+        <priority value="ERROR"/>
         <appender-ref ref="console"/>
     </root>
 

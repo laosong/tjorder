@@ -22,14 +22,14 @@ import com.brains.prj.tianjiu.order.orm.*;
 @Service
 public class AddressService {
 
-    @Autowired
     AddressMapper addressMapper;
 
+    @Autowired
     public void setAddressMapper(AddressMapper addressMapper) {
         this.addressMapper = addressMapper;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(value = "tm2", readOnly = true)
     public List<CityInfo> getAllCityInfo() {
         return addressMapper.getAllCityInfo();
     }

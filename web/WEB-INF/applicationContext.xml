@@ -33,21 +33,32 @@
         <property name="maxStatements" value="0"/>
     </bean>
 
+    <bean id="lazyDataSource" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+        <property name="targetDataSource">
+            <ref local="c3p0DataSource"/>
+        </property>
+    </bean>
+
     <!-- transaction manager, use JtaTransactionManager for global tx -->
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="c3p0DataSource"/>
+    <bean id="transactionManager1" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <qualifier value="tm1"/>
+        <property name="dataSource" ref="lazyDataSource"/>
+    </bean>
+    <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <qualifier value="tm2"/>
+        <property name="dataSource" ref="myDataSource"/>
     </bean>
 
     <!-- enable autowire -->
     <context:annotation-config/>
 
     <!-- enable transaction demarcation with annotations -->
-    <tx:annotation-driven/>
+    <tx:annotation-driven transaction-manager="transactionManager1"/>
 
     <!-- define the SqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
-        <property name="dataSource" ref="c3p0DataSource"/>
+        <property name="dataSource" ref="lazyDataSource"/>
         <property name="typeAliasesPackage" value="com.brains.prj.tianjiu.order.domain"/>
         <property name="mapperLocations" value="classpath*:com/brains/prj/tianjiu/order/orm/mybatis/*.xml"/>
     </bean>
