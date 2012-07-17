@@ -39,14 +39,20 @@
         </property>
     </bean>
 
-    <!-- transaction manager, use JtaTransactionManager for global tx -->
-    <bean id="transactionManager1" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <qualifier value="tm1"/>
-        <property name="dataSource" ref="lazyDataSource"/>
+    <bean id="orderDataSource" class="com.brains.prj.tianjiu.order.common.OrderDataSource">
+        <property name="defaultTargetDataSource" ref="lazyDataSource"></property>
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="com.brains.prj.tianjiu.order.service.AddressService.getAllCityInfo"
+                       value-ref="myDataSource"/>
+            </map>
+        </property>
     </bean>
-    <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <qualifier value="tm2"/>
-        <property name="dataSource" ref="myDataSource"/>
+
+    <!-- transaction manager, use JtaTransactionManager for global tx -->
+    <bean id="transactionManager1" class="com.brains.prj.tianjiu.order.common.OrderTransactionManager">
+        <qualifier value="tm1"/>
+        <property name="dataSource" ref="orderDataSource"/>
     </bean>
 
     <!-- enable autowire -->
@@ -58,7 +64,7 @@
     <!-- define the SqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
-        <property name="dataSource" ref="lazyDataSource"/>
+        <property name="dataSource" ref="orderDataSource"/>
         <property name="typeAliasesPackage" value="com.brains.prj.tianjiu.order.domain"/>
         <property name="mapperLocations" value="classpath*:com/brains/prj/tianjiu/order/orm/mybatis/*.xml"/>
     </bean>
