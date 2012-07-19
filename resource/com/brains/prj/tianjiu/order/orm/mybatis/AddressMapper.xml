@@ -21,15 +21,15 @@
         SELECT * FROM cities WHERE id=#{id}
     </select>
 
-    <select id="getProvinceList">
+    <select id="getProvinces" resultType="String">
       SELECT DISTINCT(province) FROM cities;
     </select>
 
-    <select id="getProvinceCity" parameterType="String">
-        SELECT city FROM cities WHERE province=#{province}
+    <select id="getProvinceCities" resultType="String">
+        SELECT DISTINCT(city) FROM cities WHERE province=#{province}
     </select>
 
-    <select id="getCityCountry">
+    <select id="getCityCountries" resultType="String">
         SELECT country FROM cities WHERE province=#{province} AND city=#{city}
     </select>
 
@@ -45,7 +45,7 @@
         <result property="state" column="state"/>
     </resultMap>
 
-    <select id="getUserAddress" parameterType="int" resultMap="userAddressResultMap">
+    <select id="getUserAddresses" parameterType="int" resultMap="userAddressResultMap">
         SELECT * FROM usr_address WHERE user_id=#{userId}
     </select>
 

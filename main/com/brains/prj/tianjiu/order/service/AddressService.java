@@ -29,7 +29,7 @@ public class AddressService {
         this.addressMapper = addressMapper;
     }
 
-    @Transactional(value = "tm2", readOnly = true)
+    @Transactional(readOnly = true)
     public List<CityInfo> getAllCityInfo() {
         return addressMapper.getAllCityInfo();
     }
@@ -38,5 +38,28 @@ public class AddressService {
     public CityInfo getCity(int cityId) {
         CityInfo cityInfo = addressMapper.getCityInfo(cityId);
         return cityInfo;
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getProvinces() {
+        List<String> provinces = addressMapper.getProvinces();
+        return provinces;
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getProvinceCities(String province) {
+        List<String> provinceCities = addressMapper.getProvinceCities(province);
+        return provinceCities;
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getCityCountries(String province, String city) {
+        List<String> cityCountries = addressMapper.getCityCountries(province, city);
+        return cityCountries;
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserAddress> getUserAddresses(int userId) {
+        return addressMapper.getUserAddresses(userId);
     }
 }

@@ -45,4 +45,22 @@ public class AddressController {
             rc.setError(e);
         }
     }
+
+    public void getProvinces(RequestContext rc) {
+        List<String> provinces = addressService.getProvinces();
+        rc.putResult("provinces", provinces);
+    }
+
+    public void getProvinceCities(RequestContext rc) {
+        String province = rc.getParameter("provinceName");
+        List<String> provinceCities = addressService.getProvinceCities(province);
+        rc.putResult("provinceCities", provinceCities);
+    }
+
+    public void getCityCountries(RequestContext rc) {
+        String province = rc.getParameter("provinceName");
+        String city = rc.getParameter("cityName");
+        List<String> cityCountries = addressService.getCityCountries(province, city);
+        rc.putResult("cityCountries", cityCountries);
+    }
 }

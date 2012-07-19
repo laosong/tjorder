@@ -20,12 +20,12 @@ public interface AddressMapper {
 
     public CityInfo getCityInfo(@Param("id") int id);
 
-    public List<String> getProvinceList();
+    public List<String> getProvinces();
 
-    public List<String> getProvinceCity(@Param("province") String province);
+    public List<String> getProvinceCities(@Param("province") String province);
 
-    public List<String> getCityCountry(@Param("province") String province,
-                                       @Param("city") String city);
+    public List<String> getCityCountries(@Param("province") String province,
+                                         @Param("city") String city);
 
-    public List<UserAddress> getUserAddress(@Param("userId") int userId);
+    public List<UserAddress> getUserAddresses(@Param("userId") int userId);
 }
