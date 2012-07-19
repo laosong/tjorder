@@ -21,17 +21,33 @@ import com.brains.prj.tianjiu.order.orm.*;
 @Service
 public class OrderService {
 
-    @Autowired
     OrderMapper orderMapper;
 
-    @Autowired
     CartMapper cartMapper;
 
-    @Autowired
     DeliveryMapper deliveryMapper;
 
-    @Autowired
     PaymentMapper paymentMapper;
+
+    @Autowired
+    public void setOrderMapper(OrderMapper orderMapper) {
+        this.orderMapper = orderMapper;
+    }
+
+    @Autowired
+    public void setCartMapper(CartMapper cartMapper) {
+        this.cartMapper = cartMapper;
+    }
+
+    @Autowired
+    public void setDeliveryMapper(DeliveryMapper deliveryMapper) {
+        this.deliveryMapper = deliveryMapper;
+    }
+
+    @Autowired
+    public void setPaymentMapper(PaymentMapper paymentMapper) {
+        this.paymentMapper = paymentMapper;
+    }
 
     @Transactional
     public int addProductItem(String name, String img) {
@@ -46,27 +62,41 @@ public class OrderService {
         return orderMapper.getItemList();
     }
 
+
+    @Transactional(readOnly = true)
+    public List<DeliveryInfo> getAvailableDelivery() {
+        return deliveryMapper.getDeliveryByState((short) 1);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PaymentInfo> getAvailablePayment() {
+        return paymentMapper.getPaymentByState((short) 1);
+    }
+
     @Transactional
-    public int createOrderFromCart(int userId) throws CartEmptyException, ProductStateException {
-        int createResult = 0;
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setCartItems(cartMapper.getDetailItemsByUser(userId));
-        for (CartItem cartItem : shoppingCart.getCartItems()) {
+    public Order submitOrder(Order order) throws ProductStateException {
+        ShoppingCart cart = new ShoppingCart();
+        List<CartItem> cartItems = cartMapper.getDetailItemsByUser(order.getUserId());
+        cart.setCartItems(cartItems);
+
+        for (CartItem cartItem : cartItems) {
             ProductItem productItem = cartItem.getProductItem();
             if (productItem.okForSale() == false) {
                 throw new ProductStateException(productItem.getId());
             }
         }
-        Order order = new Order();
+        float itemFee = cart.getTotalPrice();
+        OrderFee orderFee = order.calcOrderFee(itemFee);
+
         order.setOrderCd(org.apache.commons.lang.RandomStringUtils.randomAscii(20));
         order.setTypes((short) 1);
-        order.setSumPrice(shoppingCart.getTotalPrice());
+        order.setSumPrice(orderFee.getTotalFee());
         order.setCreatedDate(new Date());
-        order.setState((short) 0);
+        order.setState((short) 1);
 
-        createResult = orderMapper.createOrder(order);
+        int createResult = orderMapper.createOrder(order);
 
-        for (CartItem cartItem : shoppingCart.getCartItems()) {
+        for (CartItem cartItem : cartItems) {
             ProductItem productItem = cartItem.getProductItem();
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(order.getId());
@@ -78,17 +108,12 @@ public class OrderService {
 
             orderMapper.createOrderItem(orderItem);
         }
-        return createResult;
+
+        return order;
     }
 
-    @Transactional(readOnly = true)
-    public List<DeliveryInfo> getAvailableDelivery() {
-        return deliveryMapper.getDeliveryByState((short) 1);
-    }
-
-    @Transactional(readOnly = true)
-    public List<PaymentInfo> getAvailablePayment() {
-        return paymentMapper.getPaymentByState((short) 1);
+    public void updateOrderFee(Order order, OrderFee orderFee) {
+        return;
     }
 
     public List<ProductItem> getTestItems() {

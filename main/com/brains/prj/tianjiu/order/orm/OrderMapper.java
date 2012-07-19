@@ -27,4 +27,9 @@ public interface OrderMapper {
 
     public int updateOrderPriceById(@Param("id") int id,
                                     @Param("sumPrice") float sumPrice);
+
+    public Order getUserOrderInfo(@Param("userId") int userId,
+                                  @Param("orderId") int orderId);
+
+    public List<OrderItem> getOrderItems(@Param("orderId") int orderId);
 }

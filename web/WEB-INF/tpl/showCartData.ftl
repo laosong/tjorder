@@ -16,7 +16,7 @@
                 <img src="/upload/${productItem.getImg()}" border="0" width="100" height="100" align="middle"/>
             </a> &nbsp;&nbsp;<a href="#">${productItem.getName()?html}</a>
         </td>
-        <td align="right"><span><STRONG>${productItem.getPrice()}</STRONG></span></td>
+        <td align="right"><span><STRONG>${productItem.getPrice()?string}</STRONG></span></td>
         <td align="center" class="p-quantity">
             <div class="quantity-form">
                 <a name="decrease_num" class="decrement" href="javascript:void(0);">-</a>
@@ -25,11 +25,11 @@
             </div>
         </td>
         <td align="center"><a name="delete_item" href="javascript:void(0);">删除</a></td>
-        <input type="hidden" name="id" value="${cartItem.getId()}"/>
-        <input type="hidden" name="itemId" value="${productItem.getId()}"/>
+        <input type="hidden" name="id" value="${cartItem.getId()?c}"/>
+        <input type="hidden" name="itemId" value="${productItem.getId()?c}"/>
     </tr>
 </#list>
     <tr class="row_end">
-        <td colspan="5" align="right">共计 ${cart.getItemSum()} 件商品 ${cart.getTotalPrice()} 元</td>
+        <td colspan="5" align="right">共计 ${cart.getItemSum()?string} 件商品 ${cart.getTotalPrice()?string} 元</td>
     </tr>
 </table>

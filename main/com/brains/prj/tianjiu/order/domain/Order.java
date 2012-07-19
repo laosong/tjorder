@@ -10,11 +10,13 @@ package com.brains.prj.tianjiu.order.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Order implements Serializable {
     private static final long serialVersionUID = 5732179769607691332L;
 
     private int id;
+    private int userId;
     /*
     订单编号(唯一)
      */
@@ -22,15 +24,15 @@ public class Order implements Serializable {
     /*
     支付方式id（表payment_info）
      */
-    private String paymentId;
+    private int paymentId;
     /*
     配送方式id（表delivery_info）
      */
-    private String deliveryId;
+    private int deliveryId;
     /*
     配送方式id（表shipping_info）
      */
-    private String shippingId;
+    private int shippingId;
     /*
     1：一般订单
      */
@@ -51,12 +53,26 @@ public class Order implements Serializable {
      */
     private short state;
 
+    private PaymentInfo paymentInfo;
+    private DeliveryInfo deliveryInfo;
+    private ShippingInfo shippingInfo;
+
+    private List<OrderItem> orderItems;
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getOrderCd() {
@@ -67,27 +83,27 @@ public class Order implements Serializable {
         this.orderCd = orderCd;
     }
 
-    public String getPaymentId() {
+    public int getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(String paymentId) {
+    public void setPaymentId(int paymentId) {
         this.paymentId = paymentId;
     }
 
-    public String getDeliveryId() {
+    public int getDeliveryId() {
         return deliveryId;
     }
 
-    public void setDeliveryId(String deliveryId) {
+    public void setDeliveryId(int deliveryId) {
         this.deliveryId = deliveryId;
     }
 
-    public String getShippingId() {
+    public int getShippingId() {
         return shippingId;
     }
 
-    public void setShippingId(String shippingId) {
+    public void setShippingId(int shippingId) {
         this.shippingId = shippingId;
     }
 
@@ -129,5 +145,48 @@ public class Order implements Serializable {
 
     public void setState(short state) {
         this.state = state;
+    }
+
+    public PaymentInfo getPaymentInfo() {
+        return paymentInfo;
+    }
+
+    public void setPaymentInfo(PaymentInfo paymentInfo) {
+        this.paymentInfo = paymentInfo;
+    }
+
+    public DeliveryInfo getDeliveryInfo() {
+        return deliveryInfo;
+    }
+
+    public void setDeliveryInfo(DeliveryInfo deliveryInfo) {
+        this.deliveryInfo = deliveryInfo;
+    }
+
+    public ShippingInfo getShippingInfo() {
+        return shippingInfo;
+    }
+
+    public void setShippingInfo(ShippingInfo shippingInfo) {
+        this.shippingInfo = shippingInfo;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public OrderFee calcOrderFee(float itemFee) {
+        OrderFee orderFee = new OrderFee();
+        orderFee.setItemFee(itemFee);
+        if (deliveryInfo != null) {
+            if (itemFee < 99) {
+                orderFee.setDeliveryFee(deliveryInfo.getFee());
+            }
+        }
+        return orderFee;
     }
 }

@@ -32,10 +32,13 @@
     <mapping path="addProductItem" bean="orderController" function="addProductItem" role="Anonymous"></mapping>
     <mapping path="showItemList" bean="orderController" function="getItemList" role="Anonymous"></mapping>
 
-    <mapping path="createOrderFromCart" bean="orderController" function="createOrderFromCart"></mapping>
-    <mapping path="showOrder" bean="orderController" function="showOrder" role="Anonymous"
+    <mapping path="submitCart" bean="orderController" function="submitCart" role="Normal"></mapping>
+    <mapping path="submitOrder" bean="orderController" function="submitOrder" role="Normal"
              validator="showOrderValidator"></mapping>
 
     <mapping path="showAllCity" bean="addressController" function="getAllCityInfo"></mapping>
     <mapping path="showCity" bean="addressController" function="getCityInfo"></mapping>
+    <mapping path="getProvinces" bean="addressController" function="getProvinces"></mapping>
+    <mapping path="getProvinceCities" bean="addressController" function="getProvinceCities"></mapping>
+    <mapping path="getCityCountries" bean="addressController" function="getCityCountries"></mapping>
 </mappings>

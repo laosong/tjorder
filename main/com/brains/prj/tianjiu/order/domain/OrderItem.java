@@ -27,6 +27,8 @@ public class OrderItem implements Serializable {
     private float price;
     private short commented;
 
+    private ProductItem productItem;
+
     public int getId() {
         return id;
     }
@@ -97,5 +99,13 @@ public class OrderItem implements Serializable {
 
     public void setCommented(short commented) {
         this.commented = commented;
+    }
+
+    public ProductItem getProductItem() {
+        return productItem;
+    }
+
+    public void setProductItem(ProductItem productItem) {
+        this.productItem = productItem;
     }
 }

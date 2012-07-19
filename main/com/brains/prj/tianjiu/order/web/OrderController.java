@@ -10,6 +10,7 @@ package com.brains.prj.tianjiu.order.web;
 
 import java.util.List;
 
+import com.brains.prj.tianjiu.order.common.BadParameterException;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,40 +23,62 @@ import com.brains.prj.tianjiu.order.service.*;
 public class OrderController {
 
     @Autowired
+    ShoppingCartService shoppingCartService;
+
+    @Autowired
     OrderService orderService;
 
-    public void setOrderService(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    @Autowired
+    AddressService addressService;
 
-    public int addProductItem(RequestContext rc) {
+    public void addProductItem(RequestContext rc) {
         String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
         String img = "test.jpg";
 
         int itemId = orderService.addProductItem(name, img);
+        rc.putResult("itemId", itemId);
         rc.setViewName("showOrder");
-        return itemId;
+        return;
     }
 
     public void getItemList(RequestContext rc) {
         List<ProductItem> productItems = orderService.getItemList();
         rc.putResult("productItems", productItems);
         rc.setViewName("showItemList");
+        return;
     }
 
-    public int createOrderFromCart(RequestContext rc) {
-        int createResult = 0;
+    public void submitCart(RequestContext rc) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            createResult = orderService.createOrderFromCart(user.getUserId());
+            List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
 
-            rc.setViewName("showOrder");
-        } catch (CartEmptyException e) {
-            rc.setError(e);
-        } catch (ProductStateException e) {
+            ShoppingCart cart = shoppingCartService.getUseCart(user.getUserId());
+
+            rc.putResult("userAddresses", userAddresses);
+            rc.putResult("cart", cart);
+            rc.setViewName("prepareOrder");
+
+        } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }
-        return createResult;
+        return;
+    }
+
+    public void updateOrderShipInfo(RequestContext rc) {
+        return;
+    }
+
+    public void updateOrderPayment(RequestContext rc) {
+        return;
+    }
+
+    public void updateOrderDelivery(RequestContext rc) {
+        return;
+    }
+
+    public void submitOrder(RequestContext rc) {
+
     }
 }

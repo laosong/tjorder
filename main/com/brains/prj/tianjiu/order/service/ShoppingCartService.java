@@ -23,11 +23,19 @@ public class ShoppingCartService {
 
     public static final int MAX_ITEM_COUNT = 10;
 
-    @Autowired
     CartMapper cartMapper;
 
-    @Autowired
     OrderMapper orderMapper;
+
+    @Autowired
+    public void setCartMapper(CartMapper cartMapper) {
+        this.cartMapper = cartMapper;
+    }
+
+    @Autowired
+    public void setOrderMapper(OrderMapper orderMapper) {
+        this.orderMapper = orderMapper;
+    }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public int addItem(int userId, int itemId, int itemCount, ShoppingCart briefShoppingCart)
