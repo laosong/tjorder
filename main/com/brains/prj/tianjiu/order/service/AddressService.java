@@ -36,7 +36,16 @@ public class AddressService {
 
     @Transactional(readOnly = true)
     public CityInfo getCity(int cityId) {
-        CityInfo cityInfo = addressMapper.getCityInfo(cityId);
+        CityInfo cityInfo = addressMapper.getCityInfoById(cityId);
+        return cityInfo;
+    }
+
+    @Transactional(readOnly = true)
+    public CityInfo getCity(String province, String city, String country) throws CityInfoNotFoundException {
+        CityInfo cityInfo = addressMapper.getCityInfoByName(province, city, country);
+        if (cityInfo == null) {
+            throw new CityInfoNotFoundException();
+        }
         return cityInfo;
     }
 
@@ -61,5 +70,19 @@ public class AddressService {
     @Transactional(readOnly = true)
     public List<UserAddress> getUserAddresses(int userId) {
         return addressMapper.getUserAddresses(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public UserAddress getAddressById(int id) throws UserAddressNotFoundException {
+        UserAddress userAddress = addressMapper.getAddressById(id);
+        if (userAddress == null) {
+            throw new UserAddressNotFoundException();
+        }
+        return userAddress;
+    }
+
+    @Transactional
+    public int saveUserAddress(UserAddress userAddress) {
+        return addressMapper.addUserAddress(userAddress);
     }
 }

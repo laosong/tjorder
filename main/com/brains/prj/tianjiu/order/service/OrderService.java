@@ -25,6 +25,8 @@ public class OrderService {
 
     CartMapper cartMapper;
 
+    ShippingMapper shippingMapper;
+
     DeliveryMapper deliveryMapper;
 
     PaymentMapper paymentMapper;
@@ -37,6 +39,11 @@ public class OrderService {
     @Autowired
     public void setCartMapper(CartMapper cartMapper) {
         this.cartMapper = cartMapper;
+    }
+
+    @Autowired
+    public void setShippingMapper(ShippingMapper shippingMapper) {
+        this.shippingMapper = shippingMapper;
     }
 
     @Autowired
@@ -74,9 +81,20 @@ public class OrderService {
     }
 
     @Transactional
-    public Order submitOrder(Order order) throws ProductStateException {
+    public int submitOrder(Order order) throws CartEmptyException, ProductStateException {
+        ShippingInfo shippingInfo = order.getShippingInfo();
+        if (shippingInfo == null) {
+            return 0;
+        } else {
+            shippingMapper.createShippingInfo(shippingInfo);
+            order.setShippingId(shippingInfo.getId());
+        }
+
         ShoppingCart cart = new ShoppingCart();
         List<CartItem> cartItems = cartMapper.getDetailItemsByUser(order.getUserId());
+        if (cartItems.size() <= 0) {
+            throw new CartEmptyException();
+        }
         cart.setCartItems(cartItems);
 
         for (CartItem cartItem : cartItems) {
@@ -109,7 +127,7 @@ public class OrderService {
             orderMapper.createOrderItem(orderItem);
         }
 
-        return order;
+        return order.getId();
     }
 
     public void updateOrderFee(Order order, OrderFee orderFee) {

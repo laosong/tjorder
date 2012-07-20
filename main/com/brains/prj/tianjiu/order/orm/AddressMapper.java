@@ -18,7 +18,7 @@ public interface AddressMapper {
 
     public List<CityInfo> getAllCityInfo();
 
-    public CityInfo getCityInfo(@Param("id") int id);
+    public CityInfo getCityInfoById(@Param("id") int id);
 
     public List<String> getProvinces();
 
@@ -27,5 +27,13 @@ public interface AddressMapper {
     public List<String> getCityCountries(@Param("province") String province,
                                          @Param("city") String city);
 
+    public CityInfo getCityInfoByName(@Param("province") String province,
+                                      @Param("city") String city,
+                                      @Param("country") String country);
+
     public List<UserAddress> getUserAddresses(@Param("userId") int userId);
+
+    public UserAddress getAddressById(@Param("id") int id);
+
+    public int addUserAddress(UserAddress userAddress);
 }

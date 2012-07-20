@@ -52,10 +52,13 @@ public class OrderController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
+            List<String> provinces = addressService.getProvinces();
+
             List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
 
             ShoppingCart cart = shoppingCartService.getUseCart(user.getUserId());
 
+            rc.putResult("provinces", provinces);
             rc.putResult("userAddresses", userAddresses);
             rc.putResult("cart", cart);
             rc.setViewName("prepareOrder");
@@ -79,6 +82,72 @@ public class OrderController {
     }
 
     public void submitOrder(RequestContext rc) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
+            Order order = new Order();
+            int orderPost = rc.getParameterInt("orderPost");
+            int payment = rc.getParameterInt("payment");
+            int delivery = rc.getParameterInt("delivery");
+
+            UserAddress userAddress = null;
+            ShippingInfo shippingInfo = new ShippingInfo();
+
+            if (orderPost <= 0) {
+                String provinceName = rc.getParameter("provinceName");
+                String cityName = rc.getParameter("cityName");
+                String countryName = rc.getParameter("countryName");
+                String recvName = rc.getParameter("recvName");
+                String address = rc.getParameter("address");
+                String zipCode = rc.getParameter("zipCode");
+                String recvPhone = rc.getParameter("recvPhone");
+
+                CityInfo cityInfo = addressService.getCity(provinceName, cityName, countryName);
+
+                userAddress = new UserAddress();
+                userAddress.setUserId(user.getUserId());
+                userAddress.setCitiesId(cityInfo.getId());
+                userAddress.setAddress(address);
+                userAddress.setZipCode(zipCode);
+                userAddress.setRecvName(recvName);
+                userAddress.setRecvPhone(recvPhone);
+
+                if (true) {
+                    addressService.saveUserAddress(userAddress);
+                }
+            } else {
+                userAddress = addressService.getAddressById(orderPost);
+            }
+
+            shippingInfo.setCitiesId(userAddress.getCitiesId());
+            shippingInfo.setAddress(userAddress.getAddress());
+            shippingInfo.setZipCode(userAddress.getZipCode());
+            shippingInfo.setRecvName(userAddress.getRecvName());
+            shippingInfo.setRecvPhone(userAddress.getRecvPhone());
+
+            order.setUserId(user.getUserId());
+            order.setPaymentId(payment);
+            order.setDeliveryId(delivery);
+            order.setTypes((short) 1);
+
+            order.setShippingInfo(shippingInfo);
+
+            int orderId = orderService.submitOrder(order);
+
+            rc.putResult("orderId", orderId);
+            rc.putResult("order", order);
+            rc.setViewName("createOrderOk");
+
+        } catch (BadParameterException e) {
+            rc.setError(e);
+        } catch (CityInfoNotFoundException e) {
+            rc.setError(e);
+        } catch (UserAddressNotFoundException e) {
+            rc.setError(e);
+        } catch (CartEmptyException e) {
+            rc.setError(e);
+        } catch (ProductStateException e) {
+            rc.setError(e);
+        }
     }
 }

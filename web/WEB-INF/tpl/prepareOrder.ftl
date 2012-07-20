@@ -12,6 +12,7 @@
 <div class="space clear"></div>
 <div style="width: 900px; height:30px;background-color: #c5081c;" class="centered"></div>
 <div class="order_block centered" align="center">
+<form name="prepareOrderForm" id="prepareOrderForm">
     <div class="space clear"></div>
     <div class="space clear"></div>
     <div class="space clear"></div>
@@ -35,8 +36,11 @@
                                     <tr>
                                         <td>&nbsp;</td>
                                         <td align="left">
-                                            <input type="radio" name="orderPost" value="${address.getCitiesId()}">
-                                        ${address.getRecvName()?html} ${address.getAddress()?html} ${address.getZipCode()?html} ${address.getRecvPhone()?html}
+                                            <input type="radio" name="orderPost" value="${address.getId()}">
+                                        ${address.getRecvName()?default("")?html}
+                                        ${address.getAddress()?default("")?html}
+                                        ${address.getZipCode()?default("")?html}
+                                        ${address.getRecvPhone()?default("")?html}
                                         </td>
                                     </tr>
                                     </#list>
@@ -50,7 +54,9 @@
                                                     <input type="radio" name="orderPost" value="0">
                                                 </td>
                                                 <td width="80" align="right">收件人：</td>
-                                                <td width="665" align="left"><input type="text" name="recvName"></td>
+                                                <td width="665" align="left">
+                                                    <input type="text" name="recvName" id="recvNameInput">
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" align="right">地址：</td>
@@ -58,16 +64,20 @@
                                                     <select name="provinceSelect" id="provinceSelect"></select>
                                                     <select name="citySelect" id="citySelect"></select>
                                                     <select name="countrySelect" id="countrySelect"></select>
-                                                    <input type="text" name="address">
+                                                    <input type="text" name="address" id="addressInput">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" align="right">邮编：</td>
-                                                <td align="left"><input type="text" name="zipCode"></td>
+                                                <td align="left">
+                                                    <input type="text" name="zipCode" id="zipCodeInput">
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" align="right">电话：</td>
-                                                <td align="left"><input type="text" name="recvPhone"></td>
+                                                <td align="left">
+                                                    <input type="text" name="recvPhone" id="recvPhoneInput">
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" align="right">
@@ -190,26 +200,32 @@
     </table>
     <div class="space"></div>
     <div class="space"></div>
-    <table width="95%" border="0" cellspacing="0" cellpadding="0">
-        <tbody>
-        <tr>
-            <td height="30" align="left">
-                <button id="adjustCart" style="font-size: 12pt;">调整购物车</button>
-            </td>
-            <td align="right">
-                <button id="submitOrder" style="font-size: 12pt;">提交订单</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="space"></div>
-    <div class="space"></div>
+</form>
+<table width="95%" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+    <tr>
+        <td height="30" align="left">
+            <button id="adjustCart" style="font-size: 12pt;">调整购物车</button>
+        </td>
+        <td align="right">
+            <button id="submitOrder" style="font-size: 12pt;">提交订单</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="space"></div>
+<div class="space"></div>
 </div>
 
 </div>
 
 </@override>
 <@override name="body_footerjs">
+<div id="provinces">
+    <#list provinces as province>
+        <option value="${province?html}">${province?html}</option>
+    </#list>
+</div>
 <script type="text/javascript">
     $(function () {
         $("#adjustCart").button({ icons:{ primary:"ui-icon-cart"}  });
@@ -219,29 +235,12 @@
         var cityO = {oName:"请选择城市", oValue:"0"};
         var countryO = {oName:"请选择区县", oValue:"0"};
 
-        $.callOrderAction("POST", "/orderAction/getProvinces", {respDataType:"json"},
-                function (data) {
-                    var provinceOptions = ['<option value="', provinceO.oValue, '">', provinceO.oName, '</option>'];
-                    var provinces = data.provinces;
-                    var x = -1;
-                    var p = "";
-                    if (provinces) {
-                        for (x in provinces) {
-                            p = provinces[x];
-                            provinceOptions.push('<option value="');
-                            provinceOptions.push(p);
-                            provinceOptions.push('">');
-                            provinceOptions.push(p);
-                            provinceOptions.push('</option>');
-                        }
-                    }
-                    $("#provinceSelect").html(provinceOptions.join(""));
-                    if (x == 0) {
-                        $("#provinceSelect").val(p);
-                    }
-                    provinceSelectChanged();
-                }
-        );
+        var provinceOptStr = $("#provinces").html();
+        if (true) {
+            var provinceOptions = ['<option value="', provinceO.oValue, '">', provinceO.oName, '</option>'];
+            $("#provinceSelect").html(provinceOptions.join("") + provinceOptStr);
+            provinceSelectChanged();
+        }
 
         $("#provinceSelect").change(function (event) {
             provinceSelectChanged();
@@ -323,7 +322,40 @@
         });
 
         $("#submitOrder").click(function (event) {
-
+            var orderPostRadioVal = $("#prepareOrderForm input[name=orderPost]:checked").val();
+            if (orderPostRadioVal == null) {
+                return;
+            }
+            var addressParams = {};
+            if (orderPostRadioVal == "0") {
+                addressParams["provinceName"] = $("#provinceSelect option:selected").val();
+                addressParams["cityName"] = $("#citySelect option:selected").val();
+                addressParams["countryName"] = $("#countrySelect option:selected").val();
+                addressParams["recvName"] = $("#recvNameInput").val();
+                addressParams["address"] = $("#addressInput").val();
+                addressParams["zipCode"] = $("#zipCodeInput").val();
+                addressParams["recvPhone"] = $("#recvPhoneInput").val();
+            }
+            var paymentRadioVal = $("#prepareOrderForm input[name=payment]:checked").val();
+            if (paymentRadioVal == null) {
+                return;
+            }
+            var deliveryRadioVal = $("#prepareOrderForm input[name=delivery]:checked").val();
+            if (deliveryRadioVal == null) {
+                return;
+            }
+            var params = {respDataType:"json", orderPost:orderPostRadioVal, payment:paymentRadioVal, delivery:deliveryRadioVal};
+            if (orderPostRadioVal == "0") {
+                for (var key in addressParams) {
+                    params[key] = addressParams[key];
+                }
+            }
+            $.callOrderAction("POST", "/orderAction/submitOrder", params,
+                    function (data) {
+                        alert(data);
+                    }
+            );
+            return false;
         });
     });
 </script>

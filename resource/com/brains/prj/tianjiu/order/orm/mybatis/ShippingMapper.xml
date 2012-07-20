@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.brains.prj.tianjiu.order.orm.ShippingMapper">
+
+    <parameterMap id="shippingInfoParameterMap" type="com.brains.prj.tianjiu.order.domain.ShippingInfo">
+        <parameter property="citiesId"/>
+        <parameter property="address"/>
+        <parameter property="zipCode"/>
+        <parameter property="recvName"/>
+        <parameter property="recvPhone"/>
+        <parameter property="recvEmail"/>
+    </parameterMap>
+
+    <insert id="createShippingInfo" parameterMap="shippingInfoParameterMap" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO shipping_info(cities_id, address, zip_code, recv_name, recv_phone, recv_email)
+          VALUES(?, ?, ?, ?, ?, ?)
+    </insert>
+
+</mapper>

@@ -18,7 +18,7 @@
     </resultMap>
 
     <select id="getItemList" resultMap="productItemResultMap">
-      SELECT * FROM product_item LIMIT 100
+        SELECT * FROM product_item LIMIT 100
     </select>
 
     <select id="getItemById" resultMap="productItemResultMap">
@@ -28,6 +28,9 @@
     <parameterMap id="orderParameterMap" type="com.brains.prj.tianjiu.order.domain.Order">
         <parameter property="userId"/>
         <parameter property="orderCd"/>
+        <parameter property="paymentId"/>
+        <parameter property="deliveryId"/>
+        <parameter property="shippingId"/>
         <parameter property="types"/>
         <parameter property="sumPrice"/>
         <parameter property="createdDate"/>
@@ -44,7 +47,8 @@
     </parameterMap>
 
     <insert id="createOrder" parameterMap="orderParameterMap" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO orders(user_id, order_cd, types, sum_price, created_date, state) VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO orders(user_id, order_cd, payment_id, delivery_id, shipping_id, types, sum_price, created_date, state)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     </insert>
     <insert id="createOrderItem" parameterMap="orderItemParameterMap">
         INSERT INTO order_item(order_id, item_id, item_type, promotion_id, quantity, base_price, price)

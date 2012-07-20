@@ -100,6 +100,9 @@
         $("#shopping").click(function (event) {
             window.location.href = "/orderAction/showItemList";
         });
+        $("#order").click(function (event) {
+            window.location.href = "/orderAction/submitCart";
+        });
 
         var cart_loading_dialog = $("#cart-loading-dialog");
         var cart_delete_dialog = $("#cart-delete-dialog");
