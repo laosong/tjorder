@@ -15,11 +15,6 @@ import org.apache.ibatis.annotations.Param;
 import com.brains.prj.tianjiu.order.domain.*;
 
 public interface OrderMapper {
-    public int addProductItem(ProductItem productItem);
-
-    public List<ProductItem> getItemList();
-
-    public ProductItem getItemById(@Param("itemId") int itemId);
 
     public int createOrder(Order order);
 
@@ -32,4 +27,6 @@ public interface OrderMapper {
                                   @Param("orderId") int orderId);
 
     public List<OrderItem> getOrderItems(@Param("orderId") int orderId);
+
+    public List<OrderStatus> getOrderStatus(@Param("orderId") int orderId);
 }

@@ -4,27 +4,6 @@
 
 <mapper namespace="com.brains.prj.tianjiu.order.orm.OrderMapper">
 
-    <insert id="addProductItem" parameterType="com.brains.prj.tianjiu.order.domain.ProductItem" useGeneratedKeys="true"
-            keyProperty="id">
-        INSERT INTO product_item(name, img) VALUES(#{name}, #{img})
-    </insert>
-
-    <resultMap id="productItemResultMap" type="com.brains.prj.tianjiu.order.domain.ProductItem">
-        <id property="id" column="id"/>
-        <result property="name" column="name"/>
-        <result property="img" column="img"/>
-        <result property="price" column="price"/>
-        <result property="state" column="state"/>
-    </resultMap>
-
-    <select id="getItemList" resultMap="productItemResultMap">
-        SELECT * FROM product_item LIMIT 100
-    </select>
-
-    <select id="getItemById" resultMap="productItemResultMap">
-        SELECT * FROM product_item WHERE id=#{itemId}
-    </select>
-
     <parameterMap id="orderParameterMap" type="com.brains.prj.tianjiu.order.domain.Order">
         <parameter property="userId"/>
         <parameter property="orderCd"/>
@@ -97,6 +76,18 @@
     <select id="getOrderItems" parameterType="int" resultMap="detailOrderItemResultMap">
         SELECT A.*, B.id AS product_id, B.name AS product_name, B.img AS product_img, B.price AS product_price
          FROM order_item A, product_item B WHERE A.item_id=B.id AND A.order_id=#{orderId}
+    </select>
+
+    <resultMap id="orderStatusResultMap" type="com.brains.prj.tianjiu.order.domain.OrderStatus">
+        <id property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="type" column="type"/>
+        <result property="operator" column="operator"/>
+        <result property="info" column="info"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <select id="getOrderStatus" parameterType="int" resultMap="orderStatusResultMap">
+        SELECT * FROM order_status WHERE order_id=#{orderId}
     </select>
 
 </mapper>
