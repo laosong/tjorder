@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="message" type="java.lang.String" -->
 <@override name="title"><@super/>登录</@override>
 <@override name="head_css">
 <style type="text/css">
@@ -11,7 +12,7 @@
     <div class="space clear"></div>
 
     <div class="error_info">
-        <span><div>${message!}</div></span>
+        <span>${message!("error")}</span>
     </div>
 
     <div class="space clear"></div>

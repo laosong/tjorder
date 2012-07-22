@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="productItems" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.ProductItem>" -->
 <@override name="title"><@super/>产品列表</@override>
 <@override name="head_css">
 <style type="text/css">

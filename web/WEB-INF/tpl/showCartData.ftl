@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="cart" type="com.brains.prj.tianjiu.order.domain.ShoppingCart" -->
 <table width="100%" border="0" cellspacing="2" cellpadding="4" bgcolor="#fefefe">
     <tr class="cart_list_header">
         <td width="15%" align="center"> 编号</td>
@@ -16,11 +17,11 @@
                 <img src="/upload/${productItem.getImg()}" border="0" width="100" height="100" align="middle"/>
             </a> &nbsp;&nbsp;<a href="#">${productItem.getName()?html}</a>
         </td>
-        <td align="right"><span><STRONG>${productItem.getPrice()?string}</STRONG></span></td>
+        <td align="right"><span><STRONG>${productItem.getPrice()?c}</STRONG></span></td>
         <td align="center" class="p-quantity">
             <div class="quantity-form">
                 <a name="decrease_num" class="decrement" href="javascript:void(0);">-</a>
-                <input name="edit_num" class="quantity-text" type="text" value="${cartItem.getQuantity()?string}"/>
+                <input name="edit_num" class="quantity-text" type="text" value="${cartItem.getQuantity()?c}"/>
                 <a name="increase_num" class="increment" href="javascript:void(0);">+</a>
             </div>
         </td>
@@ -30,6 +31,6 @@
     </tr>
 </#list>
     <tr class="row_end">
-        <td colspan="5" align="right">共计 ${cart.getItemSum()?string} 件商品 ${cart.getTotalPrice()?string} 元</td>
+        <td colspan="5" align="right">共计 ${cart.getItemSum()?c} 件商品 ${cart.getTotalPrice()?c} 元</td>
     </tr>
 </table>

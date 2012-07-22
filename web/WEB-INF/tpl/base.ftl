@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="SystemUser" type="com.brains.prj.tianjiu.order.common.SystemUser" -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
