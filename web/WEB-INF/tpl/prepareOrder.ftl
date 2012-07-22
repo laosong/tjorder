@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="userAddresses" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.UserAddress>" -->
 <@override name="title"><@super/>填写订单细节</@override>
 <@override name="head_css">
 <style type="text/css">
@@ -38,6 +39,12 @@
                                         <td align="left">
                                             <input type="radio" name="orderPost" value="${address.getId()}">
                                         ${address.getRecvName()!("")?html}
+                                            <#assign cityInfo = address.getCityInfo()>
+                                        ${cityInfo.getProvince()?html}
+                                            <#if cityInfo.getProvince() != cityInfo.getCity()>
+                                            ${cityInfo.getCity()?html}
+                                            </#if>
+                                        ${cityInfo.getCountry()?html}
                                         ${address.getAddress()!("")?html}
                                         ${address.getZipCode()!("")?html}
                                         ${address.getRecvPhone()!("")?html}
@@ -180,12 +187,12 @@
                                         <td>${cartItem.getItemId()}</td>
                                         <td><a class="list02" href="#">${productItem.getName()?html}</a></td>
                                         <td align="right">${cartItem.getQuantity()?c}</td>
-                                        <td align="right">${productItem.getPrice()?c}</td>
+                                        <td align="right">${productItem.getPrice()}</td>
                                     </tr>
                                     </#list>
                                 <tr>
                                     <td style="font-size:16pt; border-top: 2px double black;" height="35" colspan="4" align="right">
-                                        共${cart.getItemSum()?c}件商品，总价：${cart.getTotalPrice()?c}元&nbsp;
+                                        共${cart.getItemSum()?c}件商品，总价：${cart.getTotalPrice()}元&nbsp;
                                     </td>
                                 </tr>
                                 </tbody>

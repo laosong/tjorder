@@ -35,6 +35,8 @@ public class UserAddress implements Serializable {
      */
     private short state;
 
+    private CityInfo cityInfo;
+
     public int getId() {
         return id;
     }
@@ -105,5 +107,13 @@ public class UserAddress implements Serializable {
 
     public void setState(short state) {
         this.state = state;
+    }
+
+    public CityInfo getCityInfo() {
+        return cityInfo;
+    }
+
+    public void setCityInfo(CityInfo cityInfo) {
+        this.cityInfo = cityInfo;
     }
 }

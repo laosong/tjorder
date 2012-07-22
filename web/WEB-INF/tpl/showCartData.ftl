@@ -17,7 +17,7 @@
                 <img src="/upload/${productItem.getImg()}" border="0" width="100" height="100" align="middle"/>
             </a> &nbsp;&nbsp;<a href="#">${productItem.getName()?html}</a>
         </td>
-        <td align="right"><span><STRONG>${productItem.getPrice()?c}</STRONG></span></td>
+        <td align="right"><span><STRONG>${productItem.getPrice()}</STRONG></span></td>
         <td align="center" class="p-quantity">
             <div class="quantity-form">
                 <a name="decrease_num" class="decrement" href="javascript:void(0);">-</a>
@@ -31,6 +31,6 @@
     </tr>
 </#list>
     <tr class="row_end">
-        <td colspan="5" align="right">共计 ${cart.getItemSum()?c} 件商品 ${cart.getTotalPrice()?c} 元</td>
+        <td colspan="5" align="right">共计 ${cart.getItemSum()?c} 件商品 ${cart.getTotalPrice()} 元</td>
     </tr>
 </table>

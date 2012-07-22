@@ -47,12 +47,22 @@
         <result property="state" column="state"/>
     </resultMap>
 
-    <select id="getUserAddresses" parameterType="int" resultMap="userAddressResultMap" useCache="false">
-        SELECT * FROM usr_address WHERE user_id=#{userId}
-    </select>
-
     <select id="getAddressById" parameterType="int" resultMap="userAddressResultMap">
         SELECT * FROM usr_address WHERE id=#{id}
+    </select>
+
+    <resultMap extends="userAddressResultMap" id="userAddressWithCityResultMap"
+               type="com.brains.prj.tianjiu.order.domain.UserAddress">
+        <association property="cityInfo" javaType="com.brains.prj.tianjiu.order.domain.CityInfo">
+            <id property="id" column="cities_id"/>
+            <result property="province" column="province"/>
+            <result property="city" column="city"/>
+            <result property="country" column="country"/>
+        </association>
+    </resultMap>
+    <select id="getUserAddresses" parameterType="int" resultMap="userAddressWithCityResultMap">
+        SELECT A.*, B.id AS cities_id, B.province AS province, B.city AS city, B.country AS country
+          FROM usr_address A, cities B WHERE A.cities_id=B.id AND user_id=#{userId}
     </select>
 
     <parameterMap id="userAddressParameterMap" type="com.brains.prj.tianjiu.order.domain.UserAddress">
