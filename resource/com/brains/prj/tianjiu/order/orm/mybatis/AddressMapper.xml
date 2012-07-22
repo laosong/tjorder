@@ -4,8 +4,6 @@
 
 <mapper namespace="com.brains.prj.tianjiu.order.orm.AddressMapper">
 
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
-
     <resultMap id="cityResultMap" type="com.brains.prj.tianjiu.order.domain.CityInfo">
         <id property="id" column="id"/>
         <result property="province" column="province"/>
@@ -13,7 +11,7 @@
         <result property="country" column="country"/>
     </resultMap>
 
-    <select id="getAllCityInfo" resultMap="cityResultMap" useCache="true">
+    <select id="getAllCityInfo" resultMap="cityResultMap">
         SELECT * FROM cities WHERE id>0
     </select>
 

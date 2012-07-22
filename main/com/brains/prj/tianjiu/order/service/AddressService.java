@@ -8,13 +8,12 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import java.util.Date;
 import java.util.List;
 
-import com.sun.xml.internal.ws.api.pipe.Tube;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.orm.*;
@@ -49,6 +48,7 @@ public class AddressService {
         return cityInfo;
     }
 
+    @Cacheable(value = "orderCache", key = "'provinces'")
     @Transactional(readOnly = true)
     public List<String> getProvinces() {
         List<String> provinces = addressMapper.getProvinces();

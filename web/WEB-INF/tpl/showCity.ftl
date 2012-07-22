@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="provinces" type="java.lang.String" -->
 <@override name="title"><@super/>城市</@override>
 <@override name="head_css">
 <style type="text/css">
@@ -11,6 +12,9 @@
     <div class="space clear"></div>
 
     <div class="error_info">
+        <#list provinces as p>
+        ${p}
+        </#list>
     </div>
 
     <div class="space clear"></div>
