@@ -56,20 +56,6 @@ public class OrderService {
         this.paymentMapper = paymentMapper;
     }
 
-    @Transactional
-    public int addProductItem(String name, String img) {
-        ProductItem productItem = new ProductItem();
-        productItem.setName(name);
-        productItem.setImg(img);
-        return orderMapper.addProductItem(productItem);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProductItem> getItemList() {
-        return orderMapper.getItemList();
-    }
-
-
     @Transactional(readOnly = true)
     public List<DeliveryInfo> getAvailableDelivery() {
         return deliveryMapper.getDeliveryByState((short) 1);

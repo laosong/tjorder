@@ -23,6 +23,9 @@ import com.brains.prj.tianjiu.order.service.*;
 public class OrderController {
 
     @Autowired
+    ProductService productService;
+
+    @Autowired
     ShoppingCartService shoppingCartService;
 
     @Autowired
@@ -35,14 +38,14 @@ public class OrderController {
         String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
         String img = "test.jpg";
 
-        int itemId = orderService.addProductItem(name, img);
+        int itemId = productService.addProductItem(name, img);
         rc.putResult("itemId", itemId);
         rc.setViewName("showOrder");
         return;
     }
 
     public void getItemList(RequestContext rc) {
-        List<ProductItem> productItems = orderService.getItemList();
+        List<ProductItem> productItems = productService.getItemList();
         rc.putResult("productItems", productItems);
         rc.setViewName("showItemList");
         return;

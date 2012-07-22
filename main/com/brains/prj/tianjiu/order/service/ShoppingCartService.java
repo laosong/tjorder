@@ -25,7 +25,7 @@ public class ShoppingCartService {
 
     CartMapper cartMapper;
 
-    OrderMapper orderMapper;
+    ProductMapper productMapper;
 
     @Autowired
     public void setCartMapper(CartMapper cartMapper) {
@@ -33,14 +33,14 @@ public class ShoppingCartService {
     }
 
     @Autowired
-    public void setOrderMapper(OrderMapper orderMapper) {
-        this.orderMapper = orderMapper;
+    public void setProductMapper(ProductMapper productMapper) {
+        this.productMapper = productMapper;
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public int addItem(int userId, int itemId, int itemCount, ShoppingCart briefShoppingCart)
             throws ProductNotFoundException, ProductStateException, CartFullException {
-        ProductItem productItem = orderMapper.getItemById(itemId);
+        ProductItem productItem = productMapper.getItemById(itemId);
         if (productItem == null) {
             throw new ProductNotFoundException(itemId);
         }
