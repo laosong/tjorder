@@ -41,14 +41,12 @@ public class OrderController {
         int itemId = productService.addProductItem(name, img);
         rc.putResult("itemId", itemId);
         rc.setViewName("showOrder");
-        return;
     }
 
     public void getItemList(RequestContext rc) {
         List<ProductItem> productItems = productService.getItemList();
         rc.putResult("productItems", productItems);
         rc.setViewName("showItemList");
-        return;
     }
 
     public void submitCart(RequestContext rc) {
@@ -69,19 +67,15 @@ public class OrderController {
         } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }
-        return;
     }
 
     public void updateOrderShipInfo(RequestContext rc) {
-        return;
     }
 
     public void updateOrderPayment(RequestContext rc) {
-        return;
     }
 
     public void updateOrderDelivery(RequestContext rc) {
-        return;
     }
 
     public void submitOrder(RequestContext rc) {
@@ -150,6 +144,30 @@ public class OrderController {
         } catch (CartEmptyException e) {
             rc.setError(e);
         } catch (ProductStateException e) {
+            rc.setError(e);
+        }
+    }
+
+    public void getMyOrderDetail(RequestContext rc) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            int orderId = rc.getParameterInt("orderId");
+            Order order = orderService.getUserOrderDetail(user.getUserId(), orderId);
+
+            order.setPaymentInfo(orderService.getPaymentInfo(order.getPaymentId()));
+            order.setDeliveryInfo(orderService.getDeliveryInfo(order.getDeliveryId()));
+
+            rc.putResult("order", order);
+            rc.setViewName("showMyOrder");
+
+        } catch (BadParameterException e) {
+            rc.setError(e);
+        } catch (OrderNotFoundException e) {
+            rc.setError(e);
+        } catch (PaymentNotFoundException e) {
+            rc.setError(e);
+        } catch (DeliveryNotFoundException e) {
             rc.setError(e);
         }
     }

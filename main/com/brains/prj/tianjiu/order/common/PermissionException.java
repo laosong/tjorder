@@ -21,11 +21,11 @@ public class PermissionException extends Exception {
 
     @Override
     public String getMessage() {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("curRole=");
-        stringBuffer.append(curRole);
-        stringBuffer.append(", needRole=");
-        stringBuffer.append(needRole);
-        return stringBuffer.toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("curRole=");
+        stringBuilder.append(curRole);
+        stringBuilder.append(", needRole=");
+        stringBuilder.append(needRole);
+        return stringBuilder.toString();
     }
 }

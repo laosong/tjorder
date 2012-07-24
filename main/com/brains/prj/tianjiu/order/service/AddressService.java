@@ -21,6 +21,7 @@ import com.brains.prj.tianjiu.order.orm.*;
 
 @Service
 public class AddressService {
+    public static final String CACHE_NAME = "orderCache";
 
     AddressMapper addressMapper;
 
@@ -34,7 +35,7 @@ public class AddressService {
         return addressMapper.getAllCityInfo();
     }
 
-    @Cacheable(value = "orderCache", key = "'CityInfo' + #cityId")
+    @Cacheable(value = CACHE_NAME, key = "'CityInfo' + #cityId")
     @Transactional(readOnly = true)
     public CityInfo getCity(int cityId) throws CityInfoNotFoundException {
         CityInfo cityInfo = addressMapper.getCityInfoById(cityId);
@@ -53,28 +54,28 @@ public class AddressService {
         return cityInfo;
     }
 
-    @Cacheable(value = "orderCache", key = "'Provinces'")
+    @Cacheable(value = CACHE_NAME, key = "'Provinces'")
     @Transactional(readOnly = true)
     public List<String> getProvinces() {
         List<String> provinces = addressMapper.getProvinces();
         return provinces;
     }
 
-    @Cacheable(value = "orderCache", key = "'ProvinceCities' + #province")
+    @Cacheable(value = CACHE_NAME, key = "'ProvinceCities' + #province")
     @Transactional(readOnly = true)
     public List<String> getProvinceCities(String province) {
         List<String> provinceCities = addressMapper.getProvinceCities(province);
         return provinceCities;
     }
 
-    @Cacheable(value = "orderCache", key = "'CityCountries' + #province + #city")
+    @Cacheable(value = CACHE_NAME, key = "'CityCountries' + #province + #city")
     @Transactional(readOnly = true)
     public List<String> getCityCountries(String province, String city) {
         List<String> cityCountries = addressMapper.getCityCountries(province, city);
         return cityCountries;
     }
 
-    @Cacheable(value = "orderCache", key = "'UserAddresses' + #userId")
+    @Cacheable(value = CACHE_NAME, key = "'UserAddresses' + #userId")
     @Transactional(readOnly = true)
     public List<UserAddress> getUserAddresses(int userId) {
         return addressMapper.getUserAddresses(userId);
@@ -89,7 +90,7 @@ public class AddressService {
         return userAddress;
     }
 
-    @CacheEvict(value = "orderCache", key = "'UserAddresses' + #userAddress.userId")
+    @CacheEvict(value = CACHE_NAME, key = "'UserAddresses' + #userAddress.userId")
     @Transactional
     public int saveUserAddress(UserAddress userAddress) {
         return addressMapper.addUserAddress(userAddress);

@@ -12,8 +12,12 @@
         <result property="state" column="state"/>
     </resultMap>
 
-    <select id="getDeliveryByState" resultMap="deliveryResultMap">
-      SELECT * FROM delivery_info WHERE state=#{state}
+    <select id="getDeliveriesByState" resultMap="deliveryResultMap">
+        SELECT * FROM delivery_info WHERE state=#{state}
+    </select>
+
+    <select id="getDeliveryById" resultMap="deliveryResultMap">
+        SELECT * FROM delivery_info WHERE id=#{id}
     </select>
 
 </mapper>

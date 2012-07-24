@@ -15,5 +15,8 @@ import org.apache.ibatis.annotations.Param;
 import com.brains.prj.tianjiu.order.domain.*;
 
 public interface DeliveryMapper {
-    List<DeliveryInfo> getDeliveryByState(@Param("state") short state);
+
+    List<DeliveryInfo> getDeliveriesByState(@Param("state") short state);
+
+    DeliveryInfo getDeliveryById(@Param("id") int id);
 }

@@ -45,21 +45,18 @@ public class AddressController {
         } catch (CityInfoNotFoundException e) {
             rc.setError(e);
         }
-        return;
     }
 
     public void getProvinces(RequestContext rc) {
         List<String> provinces = addressService.getProvinces();
         rc.putResult("provinces", provinces);
         rc.setViewName("showCity");
-        return;
     }
 
     public void getProvinceCities(RequestContext rc) {
         String province = rc.getParameter("provinceName");
         List<String> provinceCities = addressService.getProvinceCities(province);
         rc.putResult("provinceCities", provinceCities);
-        return;
     }
 
     public void getCityCountries(RequestContext rc) {
@@ -67,6 +64,5 @@ public class AddressController {
         String city = rc.getParameter("cityName");
         List<String> cityCountries = addressService.getCityCountries(province, city);
         rc.putResult("cityCountries", cityCountries);
-        return;
     }
 }

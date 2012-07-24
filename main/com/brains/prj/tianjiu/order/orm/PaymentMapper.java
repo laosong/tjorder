@@ -15,5 +15,8 @@ import org.apache.ibatis.annotations.Param;
 import com.brains.prj.tianjiu.order.domain.*;
 
 public interface PaymentMapper {
-    List<PaymentInfo> getPaymentByState(@Param("state") short state);
+
+    List<PaymentInfo> getPaymentsByState(@Param("state") short state);
+
+    PaymentInfo getPaymentById(@Param("id") int id);
 }

@@ -22,7 +22,7 @@ public class ShoppingCartController {
     @Autowired
     ShoppingCartService shoppingCartService;
 
-    public int addItem(RequestContext rc) {
+    public void addItem(RequestContext rc) {
         int addResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -51,10 +51,9 @@ public class ShoppingCartController {
         } catch (CartFullException e) {
             rc.setError(e);
         }
-        return addResult;
     }
 
-    public int delItem(RequestContext rc) {
+    public void delItem(RequestContext rc) {
         int delResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -81,10 +80,9 @@ public class ShoppingCartController {
         } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }
-        return delResult;
     }
 
-    public int incItem(RequestContext rc) {
+    public void incItem(RequestContext rc) {
         int incResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -111,10 +109,9 @@ public class ShoppingCartController {
         } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }
-        return incResult;
     }
 
-    public int decItem(RequestContext rc) {
+    public void decItem(RequestContext rc) {
         int decResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -141,10 +138,9 @@ public class ShoppingCartController {
         } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }
-        return decResult;
     }
 
-    public int setItemCount(RequestContext rc) {
+    public void setItemCount(RequestContext rc) {
         int decResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -174,7 +170,6 @@ public class ShoppingCartController {
         } catch (CartItemNotFoundException e) {
             rc.setError(e);
         }
-        return decResult;
     }
 
     public void getCartPage(RequestContext rc) {

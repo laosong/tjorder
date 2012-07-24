@@ -12,8 +12,12 @@
         <result property="state" column="state"/>
     </resultMap>
 
-    <select id="getPaymentByState" resultMap="paymentResultMap">
-      SELECT * FROM payment_info WHERE state=#{state}
+    <select id="getPaymentsByState" resultMap="paymentResultMap">
+        SELECT * FROM payment_info WHERE state=#{state}
+    </select>
+
+    <select id="getPaymentById" resultMap="paymentResultMap">
+        SELECT * FROM payment_info WHERE id=#{id}
     </select>
 
 </mapper>

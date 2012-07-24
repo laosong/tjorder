@@ -12,14 +12,17 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.orm.*;
 
 @Service
 public class OrderService {
+    public static final String CACHE_NAME = "orderCache";
 
     OrderMapper orderMapper;
 
@@ -58,12 +61,12 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<DeliveryInfo> getAvailableDelivery() {
-        return deliveryMapper.getDeliveryByState((short) 1);
+        return deliveryMapper.getDeliveriesByState((short) 1);
     }
 
     @Transactional(readOnly = true)
     public List<PaymentInfo> getAvailablePayment() {
-        return paymentMapper.getPaymentByState((short) 1);
+        return paymentMapper.getPaymentsByState((short) 1);
     }
 
     @Transactional
@@ -117,7 +120,40 @@ public class OrderService {
     }
 
     public void updateOrderFee(Order order, OrderFee orderFee) {
-        return;
+    }
+
+    @Cacheable(value = CACHE_NAME, key = "'PaymentInfo' + #id")
+    @Transactional(readOnly = true)
+    public PaymentInfo getPaymentInfo(int id) throws PaymentNotFoundException {
+        PaymentInfo paymentInfo = paymentMapper.getPaymentById(id);
+        if (paymentInfo == null) {
+            throw new PaymentNotFoundException();
+        }
+        return paymentInfo;
+    }
+
+    @Cacheable(value = CACHE_NAME, key = "'DeliveryInfo' + #id")
+    @Transactional(readOnly = true)
+    public DeliveryInfo getDeliveryInfo(int id) throws DeliveryNotFoundException {
+        DeliveryInfo deliveryInfo = deliveryMapper.getDeliveryById(id);
+        if (deliveryInfo == null) {
+            throw new DeliveryNotFoundException();
+        }
+        return deliveryInfo;
+    }
+
+    @Transactional(readOnly = true)
+    public Order getUserOrderDetail(int userId, int orderId) throws OrderNotFoundException {
+        Order order = orderMapper.getUserOrderInfo(userId, orderId);
+        if (order == null) {
+            throw new OrderNotFoundException();
+        }
+        order.setOrderItems(orderMapper.getOrderItems(order.getId()));
+
+        ShippingInfo shippingInfo = shippingMapper.getShippingInfoById(order.getShippingId());
+        order.setShippingInfo(shippingInfo);
+
+        return order;
     }
 
     public List<ProductItem> getTestItems() {

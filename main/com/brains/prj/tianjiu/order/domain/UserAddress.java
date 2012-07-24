@@ -10,6 +10,9 @@ package com.brains.prj.tianjiu.order.domain;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+
 public class UserAddress implements Serializable {
     private static final long serialVersionUID = -8856203021505806077L;
 
@@ -115,5 +118,22 @@ public class UserAddress implements Serializable {
 
     public void setCityInfo(CityInfo cityInfo) {
         this.cityInfo = cityInfo;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (cityInfo != null) {
+            stringBuilder.append(cityInfo.getProvince());
+            if (!StringUtils.equals(cityInfo.getProvince(), cityInfo.getCity())) {
+                stringBuilder.append(cityInfo.getCity());
+            }
+            stringBuilder.append(cityInfo.getCountry());
+        }
+        stringBuilder.append(ObjectUtils.defaultIfNull(address, ""));
+        stringBuilder.append(ObjectUtils.defaultIfNull(zipCode, ""));
+        stringBuilder.append(ObjectUtils.defaultIfNull(recvPhone, ""));
+
+        return stringBuilder.toString();
     }
 }

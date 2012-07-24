@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="userAddresses" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.UserAddress>" -->
+<#-- @ftlvariable name="cart" type="com.brains.prj.tianjiu.order.domain.ShoppingCart" -->
 <@override name="title"><@super/>填写订单细节</@override>
 <@override name="head_css">
 <style type="text/css">
@@ -8,7 +9,6 @@
 <div class="home_body">
 <div class="space clear"></div>
 <div class="space clear"></div>
-
 <div class="centered" style="width: 900px; height:30px;"><img src="/images/progress_bar_2.png" alt=""></div>
 <div class="space clear"></div>
 <div style="width: 900px; height:30px;background-color: #c5081c;" class="centered"></div>
@@ -38,16 +38,7 @@
                                         <td>&nbsp;</td>
                                         <td align="left">
                                             <input type="radio" name="orderPost" value="${address.getId()}">
-                                        ${address.getRecvName()!("")?html}
-                                            <#assign cityInfo = address.getCityInfo()>
-                                        ${cityInfo.getProvince()?html}
-                                            <#if cityInfo.getProvince() != cityInfo.getCity()>
-                                            ${cityInfo.getCity()?html}
-                                            </#if>
-                                        ${cityInfo.getCountry()?html}
-                                        ${address.getAddress()!("")?html}
-                                        ${address.getZipCode()!("")?html}
-                                        ${address.getRecvPhone()!("")?html}
+                                        ${address.toString()?html}
                                         </td>
                                     </tr>
                                     </#list>
@@ -216,6 +207,7 @@
         </td>
         <td align="right">
             <button id="submitOrder" style="font-size: 12pt;">提交订单</button>
+            <div id="submitOrderHint" class="loading-style1" style="display: none;"><b>正在提交订单......</b></div>
         </td>
     </tr>
     </tbody>
@@ -223,9 +215,7 @@
 <div class="space"></div>
 <div class="space"></div>
 </div>
-
 </div>
-
 </@override>
 <@override name="body_footerjs">
 <div id="provinces">
@@ -357,9 +347,11 @@
                     params[key] = addressParams[key];
                 }
             }
+            $("#submitOrder").hide();
+            $("#submitOrderHint").show();
             $.callOrderAction("POST", "/orderAction/submitOrder", params,
                     function (data) {
-                        alert(data);
+                        window.location.href = "/orderAction/showMyOrder?orderId=" + data["orderId"];
                     }
             );
             return false;

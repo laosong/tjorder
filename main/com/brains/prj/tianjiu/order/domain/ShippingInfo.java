@@ -10,6 +10,9 @@ package com.brains.prj.tianjiu.order.domain;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+
 public class ShippingInfo implements java.io.Serializable {
     private static final long serialVersionUID = -8884434332854624838L;
 
@@ -23,6 +26,8 @@ public class ShippingInfo implements java.io.Serializable {
     private String recvName;
     private String recvPhone;
     private String recvEmail;
+
+    private CityInfo cityInfo;
 
     public int getId() {
         return id;
@@ -78,5 +83,29 @@ public class ShippingInfo implements java.io.Serializable {
 
     public void setRecvEmail(String recvEmail) {
         this.recvEmail = recvEmail;
+    }
+
+    public CityInfo getCityInfo() {
+        return cityInfo;
+    }
+
+    public void setCityInfo(CityInfo cityInfo) {
+        this.cityInfo = cityInfo;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (cityInfo != null) {
+            stringBuilder.append(cityInfo.getProvince());
+            if (!StringUtils.equals(cityInfo.getProvince(), cityInfo.getCity())) {
+                stringBuilder.append(cityInfo.getCity());
+            }
+            stringBuilder.append(cityInfo.getCountry());
+        }
+        stringBuilder.append(ObjectUtils.defaultIfNull(address, ""));
+        stringBuilder.append(ObjectUtils.defaultIfNull(zipCode, ""));
+        stringBuilder.append(ObjectUtils.defaultIfNull(recvPhone, ""));
+        return stringBuilder.toString();
     }
 }
