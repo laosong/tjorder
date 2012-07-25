@@ -28,5 +28,11 @@ public interface OrderMapper {
 
     public List<OrderItem> getOrderItems(@Param("orderId") int orderId);
 
+
+    public int createShippingInfo(ShippingInfo shippingInfo);
+
+    public ShippingInfo getShippingInfoById(@Param("id") int id);
+
+
     public List<OrderStatus> getOrderStatus(@Param("orderId") int orderId);
 }

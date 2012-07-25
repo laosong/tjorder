@@ -78,6 +78,36 @@
          FROM order_item A, product_item B WHERE A.item_id=B.id AND A.order_id=#{orderId}
     </select>
 
+
+    <parameterMap id="shippingInfoParameterMap" type="com.brains.prj.tianjiu.order.domain.ShippingInfo">
+        <parameter property="citiesId"/>
+        <parameter property="address"/>
+        <parameter property="zipCode"/>
+        <parameter property="recvName"/>
+        <parameter property="recvPhone"/>
+        <parameter property="recvEmail"/>
+    </parameterMap>
+
+    <insert id="createShippingInfo" parameterMap="shippingInfoParameterMap" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO shipping_info(cities_id, address, zip_code, recv_name, recv_phone, recv_email)
+          VALUES(?, ?, ?, ?, ?, ?)
+    </insert>
+
+    <resultMap id="shippingInfoResultMap" type="com.brains.prj.tianjiu.order.domain.ShippingInfo">
+        <id property="id" column="id"/>
+        <result property="citiesId" column="cities_id"/>
+        <result property="address" column="address"/>
+        <result property="zipCode" column="zip_code"/>
+        <result property="recvName" column="recv_name"/>
+        <result property="recvPhone" column="recv_phone"/>
+        <result property="recvEmail" column="recv_email"/>
+    </resultMap>
+
+    <select id="getShippingInfoById" parameterType="int" resultMap="shippingInfoResultMap">
+        SELECT * FROM shipping_info WHERE id=#{id}
+    </select>
+
+
     <resultMap id="orderStatusResultMap" type="com.brains.prj.tianjiu.order.domain.OrderStatus">
         <id property="id" column="id"/>
         <result property="orderId" column="order_id"/>

@@ -75,7 +75,7 @@ public class OrderService {
         if (shippingInfo == null) {
             return 0;
         } else {
-            shippingMapper.createShippingInfo(shippingInfo);
+            orderMapper.createShippingInfo(shippingInfo);
             order.setShippingId(shippingInfo.getId());
         }
 
@@ -150,10 +150,16 @@ public class OrderService {
         }
         order.setOrderItems(orderMapper.getOrderItems(order.getId()));
 
-        ShippingInfo shippingInfo = shippingMapper.getShippingInfoById(order.getShippingId());
-        order.setShippingInfo(shippingInfo);
-
         return order;
+    }
+
+    @Transactional(readOnly = true)
+    public ShippingInfo getOrderShippingInfo(int shippingId) throws ShippingNotFoundException {
+        ShippingInfo shippingInfo = orderMapper.getShippingInfoById(shippingId);
+        if (shippingInfo == null) {
+            throw new ShippingNotFoundException();
+        }
+        return shippingInfo;
     }
 
     public List<ProductItem> getTestItems() {

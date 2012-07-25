@@ -33,9 +33,9 @@
     <mapping path="showItemList" bean="orderController" function="getItemList" role="Anonymous"></mapping>
 
     <mapping path="submitCart" bean="orderController" function="submitCart" role="Normal"></mapping>
-    <mapping path="submitOrder" bean="orderController" function="submitOrder" role="Normal"
+    <mapping path="submitOrder" bean="orderController" function="submitOrder" role="Anonymous"
              validator="submitOrderValidator"></mapping>
-    <mapping path="showMyOrder" bean="orderController" function="getMyOrderDetail" role="Normal"
+    <mapping path="showOrder" bean="orderController" function="getOrderDetail" role="Anonymous"
              validator="showOrderValidator"></mapping>
 
     <mapping path="showAllCity" bean="addressController" function="getAllCityInfo"></mapping>

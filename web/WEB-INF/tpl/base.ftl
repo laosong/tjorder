@@ -31,7 +31,7 @@
             <#if (SystemUser.getUserId()<0)>
                 <a href="/orderAction/showLoginPage">[登录]</a> <b>|</b> <a href="javascript:void(0);">[免费注册]</a>
             <#else>
-                <a href="/orderAction/showCart">${SystemUser.getUserName()}</a><b>|</b><a href="/orderAction/logout">[退出]</a>
+                <a href="/orderAction/showCart">${SystemUser.getUserName()!("nobody")}</a><b>|</b><a href="/orderAction/logout">[退出]</a>
             </#if>
         </div>
         <div id="h_3" class=""><a href="/orderAction/showItemList"><img src="/images/top_logo.png" border="0"></a></div>

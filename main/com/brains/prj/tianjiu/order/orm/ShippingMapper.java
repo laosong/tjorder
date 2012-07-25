@@ -15,8 +15,4 @@ import org.apache.ibatis.annotations.Param;
 import com.brains.prj.tianjiu.order.domain.*;
 
 public interface ShippingMapper {
-
-    public int createShippingInfo(ShippingInfo shippingInfo);
-
-    public ShippingInfo getShippingInfoById(@Param("id") int id);
 }

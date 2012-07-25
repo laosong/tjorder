@@ -81,6 +81,7 @@ public class OrderController {
     public void submitOrder(RequestContext rc) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+            user.setUserId(1);
 
             Order order = new Order();
             int orderPost = rc.getParameterInt("orderPost");
@@ -148,9 +149,10 @@ public class OrderController {
         }
     }
 
-    public void getMyOrderDetail(RequestContext rc) {
+    public void getOrderDetail(RequestContext rc) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+            user.setUserId(1);
 
             int orderId = rc.getParameterInt("orderId");
             Order order = orderService.getUserOrderDetail(user.getUserId(), orderId);
@@ -158,8 +160,12 @@ public class OrderController {
             order.setPaymentInfo(orderService.getPaymentInfo(order.getPaymentId()));
             order.setDeliveryInfo(orderService.getDeliveryInfo(order.getDeliveryId()));
 
+            ShippingInfo shippingInfo = orderService.getOrderShippingInfo(order.getShippingId());
+            shippingInfo.setCityInfo(addressService.getCity(shippingInfo.getCitiesId()));
+            order.setShippingInfo(shippingInfo);
+
             rc.putResult("order", order);
-            rc.setViewName("showMyOrder");
+            rc.setViewName("showOrder");
 
         } catch (BadParameterException e) {
             rc.setError(e);
@@ -168,6 +174,10 @@ public class OrderController {
         } catch (PaymentNotFoundException e) {
             rc.setError(e);
         } catch (DeliveryNotFoundException e) {
+            rc.setError(e);
+        } catch (ShippingNotFoundException e) {
+            rc.setError(e);
+        } catch (CityInfoNotFoundException e) {
             rc.setError(e);
         }
     }
