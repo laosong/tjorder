@@ -153,6 +153,7 @@ public class OrderService {
         return order;
     }
 
+    @Cacheable(value = CACHE_NAME, key = "'ShippingInfo' + #shippingId")
     @Transactional(readOnly = true)
     public ShippingInfo getOrderShippingInfo(int shippingId) throws ShippingNotFoundException {
         ShippingInfo shippingInfo = orderMapper.getShippingInfoById(shippingId);

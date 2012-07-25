@@ -108,10 +108,22 @@
     </select>
 
 
+    <parameterMap id="orderStatusParameterMap" type="com.brains.prj.tianjiu.order.domain.OrderStatus">
+        <parameter property="orderId"/>
+        <parameter property="types"/>
+        <parameter property="operator"/>
+        <parameter property="info"/>
+        <parameter property="createTime"/>
+    </parameterMap>
+
+    <insert id="createOrderStatus" parameterMap="orderStatusParameterMap">
+        INSERT INTO order_status(order_id, types, operator, info, create_time) VALUES(?, ?, ?, ?, ?)
+    </insert>
+
     <resultMap id="orderStatusResultMap" type="com.brains.prj.tianjiu.order.domain.OrderStatus">
         <id property="id" column="id"/>
         <result property="orderId" column="order_id"/>
-        <result property="type" column="type"/>
+        <result property="types" column="types"/>
         <result property="operator" column="operator"/>
         <result property="info" column="info"/>
         <result property="createTime" column="create_time"/>

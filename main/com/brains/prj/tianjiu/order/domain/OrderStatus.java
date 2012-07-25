@@ -17,7 +17,7 @@ public class OrderStatus implements Serializable {
 
     private int id;
     private int orderId;
-    private short type;
+    private short types;
     private String operator;
     private String info;
     private Date createTime;
@@ -38,12 +38,12 @@ public class OrderStatus implements Serializable {
         this.orderId = orderId;
     }
 
-    public short getType() {
-        return type;
+    public short getTypes() {
+        return types;
     }
 
-    public void setType(short type) {
-        this.type = type;
+    public void setType(short types) {
+        this.types = types;
     }
 
     public String getOperator() {
