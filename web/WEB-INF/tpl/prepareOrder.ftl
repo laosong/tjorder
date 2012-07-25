@@ -351,7 +351,7 @@
             $("#submitOrderHint").show();
             $.callOrderAction("POST", "/orderAction/submitOrder", params,
                     function (data) {
-                        window.location.href = "/orderAction/showMyOrder?orderId=" + data["orderId"];
+                        window.location.href = "/orderAction/showOrder?orderId=" + data["orderId"];
                     }
             );
             return false;

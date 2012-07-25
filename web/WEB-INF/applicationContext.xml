@@ -89,4 +89,15 @@
     <context:component-scan base-package="com.brains.prj.tianjiu.order.service"/>
 
     <context:component-scan base-package="com.brains.prj.tianjiu.order.web"/>
+
+    <bean id="queueEventManager" class="com.wpl.common.event.impl.QueueEventManager">
+    </bean>
+
+    <bean id="loggerEventListener" class="com.brains.prj.tianjiu.order.edm.LoggerEventListener">
+    </bean>
+
+    <bean id="orderEventManager" class="com.brains.prj.tianjiu.order.common.OrderEventManager">
+        <property name="eventManager" ref="queueEventManager"/>
+        <property name="eventListeners" ref="loggerEventListener"/>
+    </bean>
 </beans>

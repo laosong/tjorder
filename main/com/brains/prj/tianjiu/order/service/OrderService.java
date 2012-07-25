@@ -17,8 +17,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brains.prj.tianjiu.order.common.OrderEventManager;
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.orm.*;
+import com.brains.prj.tianjiu.order.edm.*;
 
 @Service
 public class OrderService {
@@ -33,6 +35,8 @@ public class OrderService {
     DeliveryMapper deliveryMapper;
 
     PaymentMapper paymentMapper;
+
+    OrderEventManager orderEventManager;
 
     @Autowired
     public void setOrderMapper(OrderMapper orderMapper) {
@@ -58,6 +62,13 @@ public class OrderService {
     public void setPaymentMapper(PaymentMapper paymentMapper) {
         this.paymentMapper = paymentMapper;
     }
+
+
+    @Autowired
+    public void setOrderEventManager(OrderEventManager orderEventManager) {
+        this.orderEventManager = orderEventManager;
+    }
+
 
     @Transactional(readOnly = true)
     public List<DeliveryInfo> getAvailableDelivery() {
@@ -115,6 +126,7 @@ public class OrderService {
 
             orderMapper.createOrderItem(orderItem);
         }
+        orderEventManager.invoke(this, new OrderSubmitEventArgs(order.getId()));
 
         return order.getId();
     }
