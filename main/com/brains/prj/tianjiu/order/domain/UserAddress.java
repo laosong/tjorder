@@ -123,13 +123,7 @@ public class UserAddress implements Serializable {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        if (cityInfo != null) {
-            stringBuilder.append(cityInfo.getProvince());
-            if (!StringUtils.equals(cityInfo.getProvince(), cityInfo.getCity())) {
-                stringBuilder.append(cityInfo.getCity());
-            }
-            stringBuilder.append(cityInfo.getCountry());
-        }
+        stringBuilder.append(ObjectUtils.defaultIfNull(cityInfo, ""));
         stringBuilder.append(ObjectUtils.defaultIfNull(address, ""));
         stringBuilder.append(ObjectUtils.defaultIfNull(zipCode, ""));
         stringBuilder.append(ObjectUtils.defaultIfNull(recvPhone, ""));

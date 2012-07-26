@@ -175,14 +175,17 @@ public class OrderService {
         return shippingInfo;
     }
 
-    public List<ProductItem> getTestItems() {
-        List<ProductItem> testItems = new java.util.LinkedList<ProductItem>();
-        for (int i = 0; i < 10; i++) {
-            ProductItem item = new ProductItem();
-            item.setName(org.apache.commons.lang.RandomStringUtils.randomAscii(20));
-            item.setImg("getTestItems.jpg");
-            testItems.add(item);
-        }
-        return testItems;
+    @CacheEvict(value = CACHE_NAME, key = "'OrderStatus' + #orderStatus.orderId")
+    @Transactional
+    public int addOrderStatus(OrderStatus orderStatus) {
+        int add = orderMapper.createOrderStatus(orderStatus);
+        return add;
+    }
+
+    @Cacheable(value = CACHE_NAME, key = "'OrderStatus' + #orderId")
+    @Transactional(readOnly = true)
+    public List<OrderStatus> getOrderStatus(int orderId) {
+        List<OrderStatus> orderStatuses = orderMapper.getOrderStatus(orderId);
+        return orderStatuses;
     }
 }

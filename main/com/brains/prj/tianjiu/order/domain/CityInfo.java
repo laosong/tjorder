@@ -8,6 +8,8 @@ package com.brains.prj.tianjiu.order.domain;
  * To change this template use File | Settings | File Templates.
  */
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.Serializable;
 
 public class CityInfo implements Serializable {
@@ -61,5 +63,16 @@ public class CityInfo implements Serializable {
 
     public void setPayOnShip(short payOnShip) {
         this.payOnShip = payOnShip;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(province);
+        if (!StringUtils.equals(province, city)) {
+            stringBuilder.append(city);
+        }
+        stringBuilder.append(country);
+        return stringBuilder.toString();
     }
 }

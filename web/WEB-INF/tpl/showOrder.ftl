@@ -56,7 +56,7 @@
         </table>
         <div><span>支付方式：</span><span>${order.getPaymentInfo().getPayDesc()?html}</span></div>
         <div><span>快递方式：</span><span>${order.getDeliveryInfo().getDeliverDesc()?html}</span></div>
-        <div><span>送货地址：</span><span>${order.getShippingInfo().toString()?html}</span></div>
+        <div><span>送货地址：</span><span>${order.getShippingInfo()!("")?html}</span></div>
     </div>
 
     <div class="space"></div>

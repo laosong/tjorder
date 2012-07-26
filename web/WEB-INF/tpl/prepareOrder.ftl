@@ -38,7 +38,7 @@
                                         <td>&nbsp;</td>
                                         <td align="left">
                                             <input type="radio" name="orderPost" value="${address.getId()}">
-                                        ${address.toString()?html}
+                                        ${address!("")?html}
                                         </td>
                                     </tr>
                                     </#list>
