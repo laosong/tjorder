@@ -11,6 +11,8 @@ package com.brains.prj.tianjiu.order.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +23,14 @@ import com.brains.prj.tianjiu.order.orm.*;
 @Service
 public class ShoppingCartService {
 
+    public static final String CACHE_NAME = "orderCache";
+    public static final String USER_CART_CACHE_KEY_PREFIX = "UserCartItems";
+
     public static final int MAX_ITEM_COUNT = 10;
 
     CartMapper cartMapper;
 
-    ProductMapper productMapper;
+    ProductService productService;
 
     @Autowired
     public void setCartMapper(CartMapper cartMapper) {
@@ -33,20 +38,14 @@ public class ShoppingCartService {
     }
 
     @Autowired
-    public void setProductMapper(ProductMapper productMapper) {
-        this.productMapper = productMapper;
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
     }
 
+    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
     @Transactional(rollbackFor = RuntimeException.class)
-    public int addItem(int userId, int itemId, int itemCount, ShoppingCart briefShoppingCart)
-            throws ProductNotFoundException, ProductStateException, CartFullException {
-        ProductItem productItem = productMapper.getItemById(itemId);
-        if (productItem == null) {
-            throw new ProductNotFoundException(itemId);
-        }
-        if (productItem.okForSale() == false) {
-            throw new ProductStateException(itemId);
-        }
+    public int addItem(int userId, ProductItem productItem, int itemCount, ShoppingCart shoppingCart)
+            throws CartFullException {
 
         int userCartItemCount = cartMapper.getItemCountByUser(userId);
         if (userCartItemCount > MAX_ITEM_COUNT) {
@@ -54,21 +53,22 @@ public class ShoppingCartService {
         }
         if (itemCount <= 0)
             itemCount = 1;
-        int affectRows = cartMapper.incItemCountIfExist(userId, itemId, itemCount);
+        int affectRows = cartMapper.incItemCountIfExist(userId, productItem.getId(), itemCount);
         if (affectRows <= 0) {
             CartItem cartItem = new CartItem();
             cartItem.setUserId(userId);
-            cartItem.setItemId(itemId);
+            cartItem.setItemId(productItem.getId());
             cartItem.setQuantity(itemCount);
             cartItem.setCreatedDate(new Date());
             affectRows = cartMapper.addItem(cartItem);
         }
-        if (briefShoppingCart != null) {
-            briefShoppingCart.setCartItems(cartMapper.getBriefItemsByUser(userId));
+        if (shoppingCart != null) {
+            shoppingCart.setCartItems(cartMapper.getItemsByUser(userId));
         }
         return affectRows;
     }
 
+    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
     @Transactional
     public int delItem(int userId, int id, int itemId) throws CartItemNotFoundException {
         int affectRows = cartMapper.delItemByTestId(userId, id, itemId);
@@ -78,6 +78,7 @@ public class ShoppingCartService {
         return affectRows;
     }
 
+    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
     @Transactional
     public int incItem(int userId, int id, int itemId) throws CartItemNotFoundException {
         int affectRows = cartMapper.incItemCountByTestId(userId, id, itemId, 1);
@@ -87,6 +88,7 @@ public class ShoppingCartService {
         return affectRows;
     }
 
+    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
     @Transactional
     public int decItem(int userId, int id, int itemId) throws CartItemNotFoundException {
         int affectRows = cartMapper.decItemCountByTestId(userId, id, itemId, 1);
@@ -96,6 +98,7 @@ public class ShoppingCartService {
         return affectRows;
     }
 
+    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
     @Transactional
     public int setItemCount(int userId, int id, int itemId, int itemCount) throws CartItemNotFoundException {
         int affectRows = cartMapper.setItemCountByTestId(userId, id, itemId, itemCount);
@@ -105,10 +108,9 @@ public class ShoppingCartService {
         return affectRows;
     }
 
+    @Cacheable(value = CACHE_NAME, key = "'UserCartItems' + #userId")
     @Transactional(readOnly = true)
-    public ShoppingCart getUseCart(int userId) throws CartItemNotFoundException {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setCartItems(cartMapper.getDetailItemsByUser(userId));
-        return shoppingCart;
+    public List<CartItem> getUserCartItems(int userId) {
+        return cartMapper.getItemsByUser(userId);
     }
 }

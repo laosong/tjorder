@@ -14,7 +14,7 @@
         <td align="center">${cartItem_index+1} - ${productItem.getId()}</td>
         <td>
             <a href="#">
-                <img src="/upload/${productItem.getImg()}" border="0" width="100" height="100" align="middle"/>
+                <img src="/upload/${productItem.getImg()!("")}" border="0" width="100" height="100" align="middle"/>
             </a> &nbsp;&nbsp;<a href="#">${productItem.getName()?html}</a>
         </td>
         <td align="right"><span><STRONG>${productItem.getPrice()}</STRONG></span></td>
@@ -27,7 +27,7 @@
         </td>
         <td align="center"><a name="delete_item" href="javascript:void(0);">删除</a></td>
         <input type="hidden" name="id" value="${cartItem.getId()?c}"/>
-        <input type="hidden" name="itemId" value="${productItem.getId()?c}"/>
+        <input type="hidden" name="itemId" value="${cartItem.getItemId()?c}"/>
     </tr>
 </#list>
     <tr class="row_end">

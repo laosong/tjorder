@@ -16,11 +16,16 @@ import com.brains.prj.tianjiu.order.common.*;
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.service.*;
 
+import java.util.List;
+
 @Controller
 public class ShoppingCartController {
 
     @Autowired
     ShoppingCartService shoppingCartService;
+
+    @Autowired
+    CompositeService compositeService;
 
     public void addItem(RequestContext rc) {
         int addResult = 0;
@@ -36,7 +41,7 @@ public class ShoppingCartController {
             }
 
             ShoppingCart briefShoppingCart = new ShoppingCart();
-            addResult = shoppingCartService.addItem(user.getUserId(), itemId, itemCount, briefShoppingCart);
+            addResult = compositeService.addCartItem(user.getUserId(), itemId, itemCount, briefShoppingCart);
 
             rc.putResult("itemSum", briefShoppingCart.getItemSum());
             rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
@@ -72,7 +77,7 @@ public class ShoppingCartController {
             delResult = shoppingCartService.delItem(user.getUserId(), id, itemId);
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+            detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             rc.putResult("cart", detailShoppingCart);
             rc.setViewName("showCartData");
@@ -101,7 +106,7 @@ public class ShoppingCartController {
             incResult = shoppingCartService.incItem(user.getUserId(), id, itemId);
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+            detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             rc.putResult("cart", detailShoppingCart);
             rc.setViewName("showCartData");
@@ -130,7 +135,7 @@ public class ShoppingCartController {
             decResult = shoppingCartService.decItem(user.getUserId(), id, itemId);
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+            detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             rc.putResult("cart", detailShoppingCart);
             rc.setViewName("showCartData");
@@ -160,7 +165,7 @@ public class ShoppingCartController {
             decResult = shoppingCartService.setItemCount(user.getUserId(), id, itemId, itemCount);
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+            detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             rc.putResult("cart", detailShoppingCart);
             rc.setViewName("showCartData");
@@ -179,14 +184,15 @@ public class ShoppingCartController {
     public void getCart(RequestContext rc) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+            user.setUserId(1);
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = shoppingCartService.getUseCart(user.getUserId());
+            detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             rc.putResult("cart", detailShoppingCart);
             rc.setViewName("showCartData");
 
-        } catch (CartItemNotFoundException e) {
+        } catch (IllegalArgumentException e) {
             rc.setError(e);
         }
     }

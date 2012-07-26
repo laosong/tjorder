@@ -53,41 +53,17 @@
         </if>
     </update>
 
-    <resultMap id="briefCartItemResultMap" type="com.brains.prj.tianjiu.order.domain.CartItem">
-        <id property="id" column="id"/>
-        <result property="userId" column="user_id"/>
-        <result property="itemId" column="item_id"/>
-        <result property="quantity" column="quantity"/>
-        <result property="state" column="state"/>
-        <association property="productItem" javaType="com.brains.prj.tianjiu.order.domain.ProductItem">
-            <id property="id" column="product_id"/>
-            <result property="price" column="product_price"/>
-        </association>
-    </resultMap>
-
-    <select id="getBriefItemsByUser" resultMap="briefCartItemResultMap">
-        SELECT A.*, B.id AS product_id, B.price AS product_price
-         FROM cart_item A, product_item B WHERE A.item_id=B.id AND user_id=#{userId}
-    </select>
-
-    <resultMap id="detailCartItemResultMap" type="com.brains.prj.tianjiu.order.domain.CartItem">
+    <resultMap id="cartItemResultMap" type="com.brains.prj.tianjiu.order.domain.CartItem">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="itemId" column="item_id"/>
         <result property="quantity" column="quantity"/>
         <result property="createdDate" column="created_date"/>
         <result property="state" column="state"/>
-        <association property="productItem" javaType="com.brains.prj.tianjiu.order.domain.ProductItem">
-            <id property="id" column="product_id"/>
-            <result property="name" column="product_name"/>
-            <result property="img" column="product_img"/>
-            <result property="price" column="product_price"/>
-        </association>
     </resultMap>
 
-    <select id="getDetailItemsByUser" resultMap="detailCartItemResultMap">
-        SELECT A.*, B.id AS product_id, B.name AS product_name, B.img AS product_img, B.price AS product_price
-         FROM cart_item A, product_item B WHERE A.item_id=B.id AND user_id=#{userId}
+    <select id="getItemsByUser" resultMap="cartItemResultMap">
+        SELECT * FROM cart_item WHERE user_id=#{userId}
     </select>
 
 </mapper>

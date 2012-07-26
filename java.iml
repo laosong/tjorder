@@ -55,6 +55,7 @@
     <orderEntry type="library" scope="PROVIDED" name="slf4j-api-1.6.2" level="project" />
     <orderEntry type="library" name="jQuery-1.7.2" level="application" />
     <orderEntry type="library" name="jQuery UI-1.8.17" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="aspectj-1.7.0" level="project" />
   </component>
 </module>
 

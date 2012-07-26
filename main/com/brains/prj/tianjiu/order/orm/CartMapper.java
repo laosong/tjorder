@@ -44,7 +44,5 @@ public interface CartMapper {
                                     @Param("itemCount") int itemCount);
 
 
-    public List<CartItem> getBriefItemsByUser(@Param("userId") int userId);
-
-    public List<CartItem> getDetailItemsByUser(@Param("userId") int userId);
+    public List<CartItem> getItemsByUser(@Param("userId") int userId);
 }

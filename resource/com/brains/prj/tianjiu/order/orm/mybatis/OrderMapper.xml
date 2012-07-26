@@ -55,7 +55,7 @@
         SELECT * FROM orders WHERE id=#{orderId} AND user_id=#{userId}
     </select>
 
-    <resultMap id="detailOrderItemResultMap" type="com.brains.prj.tianjiu.order.domain.OrderItem">
+    <resultMap id="orderItemResultMap" type="com.brains.prj.tianjiu.order.domain.OrderItem">
         <id property="id" column="id"/>
         <result property="orderId" column="order_id"/>
         <result property="userId" column="user_id"/>
@@ -65,19 +65,20 @@
         <result property="quantity" column="quantity"/>
         <result property="basePrice" column="base_price"/>
         <result property="price" column="price"/>
-        <association property="productItem" javaType="com.brains.prj.tianjiu.order.domain.ProductItem">
-            <id property="id" column="product_id"/>
-            <result property="name" column="product_name"/>
-            <result property="img" column="product_img"/>
-            <result property="price" column="product_price"/>
-        </association>
     </resultMap>
 
-    <select id="getOrderItems" parameterType="int" resultMap="detailOrderItemResultMap">
-        SELECT A.*, B.id AS product_id, B.name AS product_name, B.img AS product_img, B.price AS product_price
-         FROM order_item A, product_item B WHERE A.item_id=B.id AND A.order_id=#{orderId}
+    <select id="getOrderItems" parameterType="int" resultMap="orderItemResultMap">
+        SELECT * FROM order_item WHERE order_id=#{orderId}
     </select>
 
+    <resultMap extends="orderInfoResultMap" id="orderWithItemsResultMap"
+               type="com.brains.prj.tianjiu.order.domain.Order">
+        <collection property="orderItems" resultMap="orderItemResultMap"/>
+    </resultMap>
+
+    <select id="getUserOrderWithItems" resultMap="orderWithItemsResultMap">
+        SELECT * FROM orders A, order_item B WHERE A.id=B.order_id AND A.id=#{orderId} AND A.user_id=#{userId}
+    </select>
 
     <parameterMap id="shippingInfoParameterMap" type="com.brains.prj.tianjiu.order.domain.ShippingInfo">
         <parameter property="citiesId"/>
@@ -130,6 +131,10 @@
     </resultMap>
     <select id="getOrderStatus" parameterType="int" resultMap="orderStatusResultMap">
         SELECT * FROM order_status WHERE order_id=#{orderId}
+    </select>
+
+    <select id="getUserOrders" resultMap="orderInfoResultMap">
+        SELECT * FROM orders WHERE user_id=#{userId} limit 100 offset 100000
     </select>
 
 </mapper>

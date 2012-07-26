@@ -24,6 +24,7 @@ import com.brains.prj.tianjiu.order.edm.*;
 
 @Service
 public class OrderService {
+
     public static final String CACHE_NAME = "orderCache";
 
     OrderMapper orderMapper;
@@ -35,6 +36,8 @@ public class OrderService {
     DeliveryMapper deliveryMapper;
 
     PaymentMapper paymentMapper;
+
+    ProductService productService;
 
     OrderEventManager orderEventManager;
 
@@ -63,6 +66,10 @@ public class OrderService {
         this.paymentMapper = paymentMapper;
     }
 
+    @Autowired
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
+    }
 
     @Autowired
     public void setOrderEventManager(OrderEventManager orderEventManager) {
@@ -80,8 +87,28 @@ public class OrderService {
         return paymentMapper.getPaymentsByState((short) 1);
     }
 
+    @Cacheable(value = CACHE_NAME, key = "'PaymentInfo' + #id")
+    @Transactional(readOnly = true)
+    public PaymentInfo getPaymentInfo(int id) throws PaymentNotFoundException {
+        PaymentInfo paymentInfo = paymentMapper.getPaymentById(id);
+        if (paymentInfo == null) {
+            throw new PaymentNotFoundException();
+        }
+        return paymentInfo;
+    }
+
+    @Cacheable(value = CACHE_NAME, key = "'DeliveryInfo' + #id")
+    @Transactional(readOnly = true)
+    public DeliveryInfo getDeliveryInfo(int id) throws DeliveryNotFoundException {
+        DeliveryInfo deliveryInfo = deliveryMapper.getDeliveryById(id);
+        if (deliveryInfo == null) {
+            throw new DeliveryNotFoundException();
+        }
+        return deliveryInfo;
+    }
+
     @Transactional
-    public int submitOrder(Order order) throws CartEmptyException, ProductStateException {
+    public int submitOrder(Order order, ShoppingCart shoppingCart) throws CartEmptyException, ProductStateException {
         ShippingInfo shippingInfo = order.getShippingInfo();
         if (shippingInfo == null) {
             return 0;
@@ -90,20 +117,18 @@ public class OrderService {
             order.setShippingId(shippingInfo.getId());
         }
 
-        ShoppingCart cart = new ShoppingCart();
-        List<CartItem> cartItems = cartMapper.getDetailItemsByUser(order.getUserId());
-        if (cartItems.size() <= 0) {
+        if (shoppingCart == null || shoppingCart.getCartItems().size() <= 0) {
             throw new CartEmptyException();
         }
-        cart.setCartItems(cartItems);
-
+        List<CartItem> cartItems = shoppingCart.getCartItems();
         for (CartItem cartItem : cartItems) {
             ProductItem productItem = cartItem.getProductItem();
             if (productItem.okForSale() == false) {
                 throw new ProductStateException(productItem.getId());
             }
         }
-        float itemFee = cart.getTotalPrice();
+
+        float itemFee = shoppingCart.getTotalPrice();
         OrderFee orderFee = order.calcOrderFee(itemFee);
 
         order.setOrderCd(org.apache.commons.lang.RandomStringUtils.randomAscii(20));
@@ -128,38 +153,19 @@ public class OrderService {
         }
         orderEventManager.invoke(this, new OrderSubmitEventArgs(order.getId()));
 
-        return order.getId();
+        return createResult;
     }
 
     public void updateOrderFee(Order order, OrderFee orderFee) {
     }
 
-    @Cacheable(value = CACHE_NAME, key = "'PaymentInfo' + #id")
     @Transactional(readOnly = true)
-    public PaymentInfo getPaymentInfo(int id) throws PaymentNotFoundException {
-        PaymentInfo paymentInfo = paymentMapper.getPaymentById(id);
-        if (paymentInfo == null) {
-            throw new PaymentNotFoundException();
-        }
-        return paymentInfo;
-    }
-
-    @Cacheable(value = CACHE_NAME, key = "'DeliveryInfo' + #id")
-    @Transactional(readOnly = true)
-    public DeliveryInfo getDeliveryInfo(int id) throws DeliveryNotFoundException {
-        DeliveryInfo deliveryInfo = deliveryMapper.getDeliveryById(id);
-        if (deliveryInfo == null) {
-            throw new DeliveryNotFoundException();
-        }
-        return deliveryInfo;
-    }
-
-    @Transactional(readOnly = true)
-    public Order getUserOrderDetail(int userId, int orderId) throws OrderNotFoundException {
+    public Order getUserOrderWithItem(int userId, int orderId) throws OrderNotFoundException {
         Order order = orderMapper.getUserOrderInfo(userId, orderId);
         if (order == null) {
             throw new OrderNotFoundException();
         }
+        List<OrderItem> orderItems = orderMapper.getOrderItems(order.getId());
         order.setOrderItems(orderMapper.getOrderItems(order.getId()));
 
         return order;
@@ -175,14 +181,12 @@ public class OrderService {
         return shippingInfo;
     }
 
-    @CacheEvict(value = CACHE_NAME, key = "'OrderStatus' + #orderStatus.orderId")
     @Transactional
     public int addOrderStatus(OrderStatus orderStatus) {
         int add = orderMapper.createOrderStatus(orderStatus);
         return add;
     }
 
-    @Cacheable(value = CACHE_NAME, key = "'OrderStatus' + #orderId")
     @Transactional(readOnly = true)
     public List<OrderStatus> getOrderStatus(int orderId) {
         List<OrderStatus> orderStatuses = orderMapper.getOrderStatus(orderId);

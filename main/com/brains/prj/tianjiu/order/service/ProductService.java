@@ -12,14 +12,25 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.orm.*;
 
 @Service
 public class ProductService {
+    public static final String CACHE_NAME = "productCache";
+
+    final static ProductItem nobodyItem;
+
+    static {
+        nobodyItem = new ProductItem();
+        nobodyItem.setState(-1);
+        nobodyItem.setName("nobody");
+    }
 
     ProductMapper productMapper;
 
@@ -39,5 +50,15 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<ProductItem> getItemList() {
         return productMapper.getItemList();
+    }
+
+    @Cacheable(value = CACHE_NAME, key = "'ProductItem' + #id")
+    @Transactional(readOnly = true)
+    public ProductItem getProductItem(int id) {
+        ProductItem productItem = productMapper.getItemById(id);
+        if (productItem == null) {
+            productItem = nobodyItem;
+        }
+        return productItem;
     }
 }

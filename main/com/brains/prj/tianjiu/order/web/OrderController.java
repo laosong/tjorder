@@ -34,6 +34,9 @@ public class OrderController {
     @Autowired
     AddressService addressService;
 
+    @Autowired
+    CompositeService compositeService;
+
     public void addProductItem(RequestContext rc) {
         String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
         String img = "test.jpg";
@@ -57,14 +60,14 @@ public class OrderController {
 
             List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
 
-            ShoppingCart cart = shoppingCartService.getUseCart(user.getUserId());
+            ShoppingCart cart = compositeService.getUserCart(user.getUserId());
 
             rc.putResult("provinces", provinces);
             rc.putResult("userAddresses", userAddresses);
             rc.putResult("cart", cart);
             rc.setViewName("prepareOrder");
 
-        } catch (CartItemNotFoundException e) {
+        } catch (IllegalArgumentException e) {
             rc.setError(e);
         }
     }
@@ -81,7 +84,6 @@ public class OrderController {
     public void submitOrder(RequestContext rc) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
-            user.setUserId(1);
 
             Order order = new Order();
             int orderPost = rc.getParameterInt("orderPost");
@@ -130,9 +132,13 @@ public class OrderController {
 
             order.setShippingInfo(shippingInfo);
 
-            int orderId = orderService.submitOrder(order);
+            order.setDeliveryInfo(orderService.getDeliveryInfo(delivery));
 
-            rc.putResult("orderId", orderId);
+            ShoppingCart shoppingCart = compositeService.getUserCart(user.getUserId());
+
+            int result = orderService.submitOrder(order, shoppingCart);
+
+            rc.putResult("orderId", order.getId());
             rc.putResult("order", order);
             rc.setViewName("createOrderOk");
 
@@ -141,6 +147,8 @@ public class OrderController {
         } catch (CityInfoNotFoundException e) {
             rc.setError(e);
         } catch (UserAddressNotFoundException e) {
+            rc.setError(e);
+        } catch (DeliveryNotFoundException e) {
             rc.setError(e);
         } catch (CartEmptyException e) {
             rc.setError(e);
@@ -152,10 +160,9 @@ public class OrderController {
     public void getOrderDetail(RequestContext rc) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
-            user.setUserId(1);
 
             int orderId = rc.getParameterInt("orderId");
-            Order order = orderService.getUserOrderDetail(user.getUserId(), orderId);
+            Order order = compositeService.getUserOrderDetail(user.getUserId(), orderId);
 
             order.setPaymentInfo(orderService.getPaymentInfo(order.getPaymentId()));
             order.setDeliveryInfo(orderService.getDeliveryInfo(order.getDeliveryId()));
@@ -180,5 +187,9 @@ public class OrderController {
         } catch (CityInfoNotFoundException e) {
             rc.setError(e);
         }
+    }
+
+    public void getMyOrders() {
+
     }
 }
