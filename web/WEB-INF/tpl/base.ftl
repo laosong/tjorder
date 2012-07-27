@@ -7,6 +7,7 @@
 <@block name="include_css">
     <style type="text/css">
         @import "/css/jquery/blitzer/jquery-ui-1.8.16.custom.css";
+        @import "/css/home/data_table.css";
         @import "/needim-noty/css/jquery.noty.css";
         @import "/needim-noty/css/noty_theme_default.css";
         @import "/css/home/home.css";
@@ -18,6 +19,7 @@
 <@block name="include_js">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/needim-noty/js/jquery.noty.js"></script>
     <script type="text/javascript" src="/js/laosong.js"></script>
 </@block>
@@ -31,7 +33,9 @@
             <#if (SystemUser.getUserId()<0)>
                 <a href="/orderAction/showLoginPage">[登录]</a> <b>|</b> <a href="javascript:void(0);">[免费注册]</a>
             <#else>
-                <a href="/orderAction/showCart">${SystemUser.getUserName()!("nobody")}</a><b>|</b><a href="/orderAction/logout">[退出]</a>
+                <a href="/orderAction/showCart">${SystemUser.getUserName()!("nobody")}</a><b>|</b>
+                <a href="/orderAction/showMyOrders">我的订单</a><b>|</b>
+                <a href="/orderAction/logout">[退出]</a>
             </#if>
         </div>
         <div id="h_3" class=""><a href="/orderAction/showItemList"><img src="/images/top_logo.png" border="0"></a></div>

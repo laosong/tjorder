@@ -28,8 +28,12 @@ public interface OrderMapper {
 
     public List<OrderItem> getOrderItems(@Param("orderId") int orderId);
 
-    public Order getUserOrderWithItems(@Param("userId") int userId,
-                                       @Param("orderId") int orderId);
+    public List<Order> getUserOrders(@Param("userId") int userId);
+
+    public List<OrderItem> getOrdersItems(List<Integer> ids);
+
+    public List<Order> getUserOrdersByState(@Param("userId") int userId,
+                                            @Param("states") Integer[] states);
 
 
     public int createShippingInfo(ShippingInfo shippingInfo);
@@ -40,6 +44,4 @@ public interface OrderMapper {
     public int createOrderStatus(OrderStatus orderStatus);
 
     public List<OrderStatus> getOrderStatus(@Param("orderId") int orderId);
-
-    public List<Order> getUserOrders(@Param("userId") int userId);
 }

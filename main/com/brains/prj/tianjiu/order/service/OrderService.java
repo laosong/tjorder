@@ -10,6 +10,9 @@ package com.brains.prj.tianjiu.order.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,15 +163,49 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public Order getUserOrderWithItem(int userId, int orderId) throws OrderNotFoundException {
+    public Order getUserOrder(int userId, int orderId) throws OrderNotFoundException {
         Order order = orderMapper.getUserOrderInfo(userId, orderId);
         if (order == null) {
             throw new OrderNotFoundException();
         }
-        List<OrderItem> orderItems = orderMapper.getOrderItems(order.getId());
-        order.setOrderItems(orderMapper.getOrderItems(order.getId()));
-
+        List<OrderItem> orderItems = orderMapper.getOrderItems(orderId);
+        order.setOrderItems(orderItems);
         return order;
+    }
+
+    @Transactional(readOnly = true)
+    public void fillOrdersItems(List<Order> orders) {
+        List<Integer> ids = new ArrayList<Integer>(orders.size());
+        Map<Integer, Order> map = new HashMap<Integer, Order>();
+        for (Order order : orders) {
+            order.setOrderItems(new ArrayList<OrderItem>());
+            ids.add(order.getId());
+            map.put(order.getId(), order);
+        }
+        if (ids.size() > 0) {
+            List<OrderItem> orderItems = orderMapper.getOrdersItems(ids);
+            for (OrderItem orderItem : orderItems) {
+                Order order = map.get(orderItem.getOrderId());
+                if (order != null) {
+                    order.getOrderItems().add(orderItem);
+                }
+            }
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> getUserOrders(int userId) {
+        List<Order> orders = orderMapper.getUserOrders(userId);
+        fillOrdersItems(orders);
+        return orders;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> getUserCompleteOrders(int userId) {
+        Integer[] complete_state = {4};
+        List<Order> orders = orderMapper.getUserOrdersByState(userId, complete_state);
+        fillOrdersItems(orders);
+        return orders;
     }
 
     @Cacheable(value = CACHE_NAME, key = "'ShippingInfo' + #shippingId")

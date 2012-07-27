@@ -66,10 +66,30 @@ public class CompositeService {
     }
 
     public Order getUserOrderDetail(int userId, int orderId) throws OrderNotFoundException {
-        Order order = orderService.getUserOrderWithItem(userId, orderId);
+        Order order = orderService.getUserOrder(userId, orderId);
         for (OrderItem orderItem : order.getOrderItems()) {
             orderItem.setProductItem(productService.getProductItem(orderItem.getItemId()));
         }
         return order;
+    }
+
+    public List<Order> getUserOrders(int userId) throws OrderNotFoundException {
+        List<Order> orders = orderService.getUserOrders(userId);
+        for (Order order : orders) {
+            for (OrderItem orderItem : order.getOrderItems()) {
+                orderItem.setProductItem(productService.getProductItem(orderItem.getItemId()));
+            }
+        }
+        return orders;
+    }
+
+    public List<Order> getUserCompleteOrders(int userId) throws OrderNotFoundException {
+        List<Order> orders = orderService.getUserCompleteOrders(userId);
+        for (Order order : orders) {
+            for (OrderItem orderItem : order.getOrderItems()) {
+                orderItem.setProductItem(productService.getProductItem(orderItem.getItemId()));
+            }
+        }
+        return orders;
     }
 }

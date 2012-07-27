@@ -33,7 +33,8 @@
         INSERT INTO order_item(order_id, item_id, item_type, promotion_id, quantity, base_price, price)
           VALUES(?, ?, ?, ?, ?, ?, ?)
     </insert>
-    <update id="updateOrderPriceById" parameterType="int">
+
+    <update id="updateOrderPriceById">
         UPDATE order SET sum_price=#{sumPrice} WHERE id=#{id}
     </update>
 
@@ -56,9 +57,8 @@
     </select>
 
     <resultMap id="orderItemResultMap" type="com.brains.prj.tianjiu.order.domain.OrderItem">
-        <id property="id" column="id"/>
+        <id property="id" column="oid"/>
         <result property="orderId" column="order_id"/>
-        <result property="userId" column="user_id"/>
         <result property="itemId" column="item_id"/>
         <result property="itemType" column="item_type"/>
         <result property="promotionId" column="promotion_id"/>
@@ -68,16 +68,21 @@
     </resultMap>
 
     <select id="getOrderItems" parameterType="int" resultMap="orderItemResultMap">
-        SELECT * FROM order_item WHERE order_id=#{orderId}
+        SELECT *, id AS oid FROM order_item WHERE order_id=#{orderId}
     </select>
 
-    <resultMap extends="orderInfoResultMap" id="orderWithItemsResultMap"
-               type="com.brains.prj.tianjiu.order.domain.Order">
-        <collection property="orderItems" resultMap="orderItemResultMap"/>
-    </resultMap>
+    <select id="getUserOrders" parameterType="int" resultMap="orderInfoResultMap">
+        SELECT * FROM orders WHERE user_id=#{userId} limit 20
+    </select>
 
-    <select id="getUserOrderWithItems" resultMap="orderWithItemsResultMap">
-        SELECT * FROM orders A, order_item B WHERE A.id=B.order_id AND A.id=#{orderId} AND A.user_id=#{userId}
+    <select id="getOrdersItems" resultMap="orderItemResultMap">
+        SELECT *, id AS oid FROM order_item WHERE order_id in
+        <foreach collection="list" open="(" separator="," close=")" item="oid">#{oid}</foreach>
+    </select>
+
+    <select id="getUserOrdersByState" resultMap="orderInfoResultMap">
+        SELECT * FROM orders WHERE user_id=#{userId} AND state in
+        <foreach collection="states" open="(" separator="," close=")" item="s">#{s}</foreach>
     </select>
 
     <parameterMap id="shippingInfoParameterMap" type="com.brains.prj.tianjiu.order.domain.ShippingInfo">
@@ -131,10 +136,6 @@
     </resultMap>
     <select id="getOrderStatus" parameterType="int" resultMap="orderStatusResultMap">
         SELECT * FROM order_status WHERE order_id=#{orderId}
-    </select>
-
-    <select id="getUserOrders" resultMap="orderInfoResultMap">
-        SELECT * FROM orders WHERE user_id=#{userId} limit 100 offset 100000
     </select>
 
 </mapper>

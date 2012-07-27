@@ -189,7 +189,63 @@ public class OrderController {
         }
     }
 
-    public void getMyOrders() {
+    public void getMyOrders(RequestContext rc) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
+            List<Order> orders = compositeService.getUserOrders(user.getUserId());
+
+            rc.putResult("orders", orders);
+            rc.setViewName("showMyOrders");
+
+        } catch (OrderNotFoundException e) {
+            rc.setError(e);
+        }
+    }
+
+    public void getMyCompleteOrders(RequestContext rc) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            List<Order> orders = compositeService.getUserCompleteOrders(user.getUserId());
+
+            rc.putResult("orders", orders);
+            rc.setViewName("showMyCompleteOrders");
+
+        } catch (OrderNotFoundException e) {
+            rc.setError(e);
+        }
+    }
+
+    public void getMyOrderDetail(RequestContext rc) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            int orderId = rc.getParameterInt("orderId");
+            Order order = compositeService.getUserOrderDetail(user.getUserId(), orderId);
+
+            order.setPaymentInfo(orderService.getPaymentInfo(order.getPaymentId()));
+            order.setDeliveryInfo(orderService.getDeliveryInfo(order.getDeliveryId()));
+
+            ShippingInfo shippingInfo = orderService.getOrderShippingInfo(order.getShippingId());
+            shippingInfo.setCityInfo(addressService.getCity(shippingInfo.getCitiesId()));
+            order.setShippingInfo(shippingInfo);
+
+            rc.putResult("order", order);
+            rc.setViewName("showMyOrderData");
+
+        } catch (BadParameterException e) {
+            rc.setError(e);
+        } catch (OrderNotFoundException e) {
+            rc.setError(e);
+        } catch (PaymentNotFoundException e) {
+            rc.setError(e);
+        } catch (DeliveryNotFoundException e) {
+            rc.setError(e);
+        } catch (ShippingNotFoundException e) {
+            rc.setError(e);
+        } catch (CityInfoNotFoundException e) {
+            rc.setError(e);
+        }
     }
 }
