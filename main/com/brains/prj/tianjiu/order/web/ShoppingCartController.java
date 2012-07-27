@@ -184,7 +184,6 @@ public class ShoppingCartController {
     public void getCart(RequestContext rc) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
-            user.setUserId(1);
 
             ShoppingCart detailShoppingCart = null;
             detailShoppingCart = compositeService.getUserCart(user.getUserId());

@@ -53,11 +53,11 @@
     </bean>
 
     <bean id="orderDataSource" class="com.brains.prj.tianjiu.order.common.OrderDataSource">
-        <property name="defaultTargetDataSource" ref="lazyDataSource"></property>
+        <property name="defaultTargetDataSource" ref="c3p0DataSource"></property>
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <entry key="com.brains.prj.tianjiu.order.service.AddressService.getAllCityInfo"
-                       value-ref="myDataSource"/>
+                       value-ref="lazyDataSource"/>
             </map>
         </property>
     </bean>
