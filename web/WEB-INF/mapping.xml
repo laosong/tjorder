@@ -35,8 +35,7 @@
     <mapping path="submitCart" bean="orderController" function="submitCart" role="Normal"></mapping>
     <mapping path="submitOrder" bean="orderController" function="submitOrder" role="Normal"
              validator="submitOrderValidator"></mapping>
-    <mapping path="showOrder" bean="orderController" function="getOrderDetail" role="Normal"
-             validator="showOrderValidator"></mapping>
+    <mapping path="payOrder" bean="orderController" function="payOrder" role="Normal"></mapping>
 
     <mapping path="showMyOrders" bean="orderController" function="getMyOrders" role="Normal"></mapping>
     <mapping path="showMyCompleteOrders" bean="orderController" function="getMyCompleteOrders" role="Normal"></mapping>
@@ -49,4 +48,7 @@
     <mapping path="getProvinces" bean="addressController" function="getProvinces"></mapping>
     <mapping path="getProvinceCities" bean="addressController" function="getProvinceCities"></mapping>
     <mapping path="getCityCountries" bean="addressController" function="getCityCountries"></mapping>
+    <mapping path="getUserAddress" bean="addressController" function="getUserAddress" role="Normal"></mapping>
+    <mapping path="addUserAddress" bean="addressController" function="addUserAddress" role="Normal"></mapping>
+    <mapping path="delUserAddress" bean="addressController" function="delUserAddress" role="Normal"></mapping>
 </mappings>

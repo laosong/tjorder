@@ -1,112 +1,59 @@
 <#-- @ftlvariable name="SystemUser" type="com.brains.prj.tianjiu.order.common.SystemUser" -->
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<#assign product_img_root="/images/product/">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title><@block name="title">天酒商城-</@block></title>
     <meta http-equiv=Content-Type content="text/html; charset=utf-8">
 <@block name="include_css">
-    <style type="text/css">
-        @import "/css/jquery/blitzer/jquery-ui-1.8.16.custom.css";
-        @import "/css/home/data_table.css";
-        @import "/needim-noty/css/jquery.noty.css";
-        @import "/needim-noty/css/noty_theme_default.css";
-        @import "/css/home/home.css";
-        @import "/css/home/laosong.css";
-    </style>
+    <link rel="stylesheet" type="text/css" href="/css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/buy.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/laosong.css"/>
 </@block>
 <@block name="head_css">
 </@block>
 <@block name="include_js">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="/needim-noty/js/jquery.noty.js"></script>
+    <script type="text/javascript" src="/js/popwindow.js"></script>
     <script type="text/javascript" src="/js/laosong.js"></script>
 </@block>
 </head>
 <body>
-<div id="top_container" class="">
+<div id="container">
 <@block name="body_head">
-    <div class="header_bar">
-        <div id="h_1" class=""></div>
-        <div id="h_2" class=""> 欢迎：
-            <#if (SystemUser.getUserId()<0)>
-                <a href="/orderAction/showLoginPage">[登录]</a> <b>|</b> <a href="javascript:void(0);">[免费注册]</a>
-            <#else>
-                <a href="/orderAction/showCart">${SystemUser.getUserName()!("nobody")}</a><b>|</b>
-                <a href="/orderAction/showMyOrders">我的订单</a><b>|</b>
-                <a href="/orderAction/logout">[退出]</a>
-            </#if>
+    <div id="header" class="ebHeader clearfix">
+        <div class="mainlogo left">
+            <a href="/main.html"><img src="/images/logo.png" alt="天酒商城"/></a>
         </div>
-        <div id="h_3" class=""><a href="/orderAction/showItemList"><img src="/images/top_logo.png" border="0"></a></div>
-        <div id="h_4" class=""><img src="/images/slogan-1.png" alt="" border="0"></div>
-        <div class="clear"></div>
-        <div id="h_21" class=""><a href="#">喝好酒，上天酒</a></div>
-        <div id="h_22" class=""><img src="/images/top_search01.jpg" alt=""></div>
-        <div id="h_23" class=""><input id=keyword type="text" name="keyword"></div>
-        <div id="h_24" class=""><img src="/images/top_search02.jpg" alt=""></div>
-        <div id="h_25" class=""><img src="/images/top_search_btn.jpg" alt=""></div>
-        <div id="h_26" class=""><a href="#">茅台</a> <b>|</b> <a href="#">10年陈</a> <b>|</b> <a href="#">五粮液</a></div>
+        <div class="header_tool right">
+            <div class="header_help right"><a href="#" target="_blank">帮助中心</a></div>
+            <div class="header_login right">
+                <#if (SystemUser.getUserId()<0)>
+                    <a href="/orderAction/showLoginPage">登录</a><span>|</span><a href="javascript:void(0);">注册</a>
+                <#else>
+                    <a href="/orderAction/showCart">${SystemUser.getUserName()!("nobody")}</a><span>|</span>
+                    <a href="/orderAction/showMyOrders">我的订单</a><span>|</span>
+                    <a href="/orderAction/logout">[退出]</a>
+                </#if>
+            </div>
+        </div>
     </div>
 </@block>
 <@block name="body_content">
 </@block>
-    <div class="space clear"></div>
-    <div class="space clear"></div>
 <@block name="body_footer">
-    <div class="footer_bar">
-        <div class="services">
-            <div class="services_block float_l">
-                <div class="title">支付方式</div>
-                <ul>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                </ul>
-            </div>
-            <div class="services_block float_l">
-                <div class="title">支付方式</div>
-                <ul>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                </ul>
-            </div>
-            <div class="services_block float_l">
-                <div class="title">支付方式</div>
-                <ul>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                </ul>
-            </div>
-            <div class="services_block float_l">
-                <div class="title">支付方式</div>
-                <ul>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                </ul>
-            </div>
-            <div class="services_block float_l">
-                <div class="title">支付方式</div>
-                <ul>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                    <li><a href="#">xxxx</a></li>
-                </ul>
-            </div>
+    <div id="footer_sim">
+        <div class="f_link">
+            <a href="#" target="_blank">关于我们</a><i>|</i>
+            <a href="#" target="_blank">网站地图</a><i>|</i>
+            <a href="#" target="_blank">联系我们</a><i>|</i>
+            <a href="#" target="_blank">友情链接</a>
         </div>
-        <div align="center" class="clear">© 天酒商城 36519.com All Rights Reserved <br>京ICP备20997897987号-1 京公网安备11010500000
-        </div>
+        <p class="copyright fcor_gray">Copyright&nbsp;&copy;&nbsp;2012, All Rights Reserved <a href="#" target="_blank">京ICP证000000号</a>
+        </p>
     </div>
 </@block>
-</div>
 <@block name="body_footerjs">
 </@block>
 </body>

@@ -93,11 +93,15 @@ public class OrderControlServlet extends HttpServlet {
             try {
                 if (role.compareTo(user.getUserRole()) > 0) {
                     if (requestContext.isJsonReq()) {
-                        resp.setContentType("text/html;charset=utf-8");
-                        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        resp.setContentType("text/json;charset=utf-8");
+                        requestContext.putResult("success", false);
+                        requestContext.setViewName("loginFrame");
+                        requestContext.putResult("loginFrame", "loginFrame");
+                        objectMapper.writeValue(resp.getOutputStream(), requestContext.getResult());
                     } else {
                         resp.setContentType("text/html;charset=utf-8");
-                        requestContext.setViewName("login");
+                        requestContext.putResult("success", false);
+                        requestContext.setViewName("loginPage");
                         TemplateRender.process(requestContext.getViewTemplateFile(), requestContext.getResult(), resp.getWriter());
                     }
                 } else {

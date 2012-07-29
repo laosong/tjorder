@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="product_img_root" type="java.lang.String" -->
 <#-- @ftlvariable name="orders" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.Order>" -->
 <#assign page_name = "allorders">
 
@@ -24,11 +25,11 @@
         <tr>
             <td>${order_index+1}</td>
             <td>${order.getId()}</td>
-            <td>2012/09/01</td>
+            <td>${order.getCreatedDate()?datetime}</td>
             <td>
                 <#list order.getOrderItems() as order_item>
-                    <img src="/upload/${order_item.getProductItem().getImg()!("")}"" width="60" height="60" border="0"
-                    align="middle"/>${order_item.getProductItem().getName()}<br/>
+                    <img src="${product_img_root}${order_item.getProductItem().getImg()!("")}"" width="60" height="60"
+                    border="0" align="middle"/>${order_item.getProductItem().getName()}<br/>
                 </#list>
             </td>
             <td>${order.getSumPrice()}</td>

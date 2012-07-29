@@ -58,14 +58,11 @@ public class OrderController {
 
             List<String> provinces = addressService.getProvinces();
 
-            List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
-
             ShoppingCart cart = compositeService.getUserCart(user.getUserId());
 
             rc.putResult("provinces", provinces);
-            rc.putResult("userAddresses", userAddresses);
             rc.putResult("cart", cart);
-            rc.setViewName("prepareOrder");
+            rc.setViewName("checkOrder");
 
         } catch (IllegalArgumentException e) {
             rc.setError(e);
@@ -153,6 +150,26 @@ public class OrderController {
         } catch (CartEmptyException e) {
             rc.setError(e);
         } catch (ProductStateException e) {
+            rc.setError(e);
+        }
+    }
+
+    public void payOrder(RequestContext rc) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            int orderId = rc.getParameterInt("orderId");
+            Order order = orderService.getUserOrder(user.getUserId(), orderId);
+
+            if (order.getPaymentId() == 1) {
+                rc.setViewName("orderDone");
+            } else if (order.getPaymentId() == 2) {
+                rc.setViewName("payOrder");
+            }
+
+        } catch (BadParameterException e) {
+            rc.setError(e);
+        } catch (OrderNotFoundException e) {
             rc.setError(e);
         }
     }

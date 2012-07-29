@@ -65,4 +65,12 @@ public class AddressController {
         List<String> cityCountries = addressService.getCityCountries(province, city);
         rc.putResult("cityCountries", cityCountries);
     }
+
+    public void getUserAddress(RequestContext rc) {
+        com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+        List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
+
+        rc.putResult("userAddresses", userAddresses);
+        rc.setViewName("userAddress");
+    }
 }

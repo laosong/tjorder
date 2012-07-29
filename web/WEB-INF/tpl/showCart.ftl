@@ -4,40 +4,30 @@
 </style>
 </@override>
 <@override name="body_content">
-<div class="home_body">
-    <div class="space clear"></div>
-    <div class="space clear"></div>
-
-    <div class="centered" style="width: 900px; height:50px;" align="center">
-        <img src="/images/progress_bar_1.png" alt=""></div>
-    <div class="space clear"></div>
-    <div class="cart_list_block centered" align="center" id="cartData">
-        <div class="cart-inner cart-loading">
-            <div class="loading-style1"><b></b>加载中,请稍候...</div>
-        </div>
+<div id="content">
+    <div class="shopcarbread eb_step1 ebBg fb">
+        <span class="stepCur">1.我的购物车</span><span>2.填写核对订单信息</span><span>3.支付订单</span><span>4.完成</span>
     </div>
-    <div class="centered" align="center">
-        <table width="99%" border="0" cellspacing="2" cellpadding="2">
-            <tr>
-                <td height="10">&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td width="25%" align="left">
-                    <button id="shopping" style="font-size: 12pt;">继续购物</button>
-                </td>
-                <td width="50%" align="center">&nbsp;</td>
-                <td width="25%" align="right">
-                    <button id="order" style="font-size: 12pt;">去结账</button>
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-        </table>
+    <div class="ebCon_wrap mart10">
+        <div class="ebCon">
+            <h2 class="ecartTitle f14px fb">您的购物车中已有物品：</h2>
+
+            <div id="cartData">
+                <div class="cart-inner cart-loading">
+                    <div class="loading-style1">加载中,请稍候...</div>
+                </div>
+            </div>
+            <div class="eb_cart mart10">
+                <ul class="ecart_pro payOrderBtn f14px fb mart20 clearfix">
+                    <li class="left">
+                        <a href="javascript:void(0);" id="shopping" class="btnCom btnCom_gray"><span>继续购物</span></a>
+                    </li>
+                    <li id="payMethod_enter" class="right">
+                        <a href="javascript:void(0);" id="order" class="btnCom btnCom_reb"><span>去结算</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 </@override>
@@ -94,8 +84,6 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        $("#shopping").button({ icons:{ primary:"ui-icon-triangle-1-w"}  });
-        $("#order").button({ icons:{ primary:"ui-icon-script"}  });
 
         $("#shopping").click(function (event) {
             window.location.href = "/orderAction/showItemList";
