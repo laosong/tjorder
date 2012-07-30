@@ -96,4 +96,10 @@ public class AddressService {
     public int saveUserAddress(UserAddress userAddress) {
         return addressMapper.addUserAddress(userAddress);
     }
+
+    @CacheEvict(value = CACHE_NAME, key = "'UserAddresses' + #userId")
+    @Transactional
+    public int delUserAddress(int userId, int id) {
+        return addressMapper.delUserAddress(userId, id);
+    }
 }

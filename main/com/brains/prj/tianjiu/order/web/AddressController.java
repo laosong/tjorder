@@ -70,7 +70,72 @@ public class AddressController {
         com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
         List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
 
+        int checkAddress = 0;
+        for (UserAddress userAddress : userAddresses) {
+            checkAddress = userAddress.getId();
+            break;
+        }
+        rc.putResult("checkAddress", checkAddress);
         rc.putResult("userAddresses", userAddresses);
         rc.setViewName("userAddress");
+    }
+
+    public void addUserAddress(RequestContext rc) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            String provinceName = rc.getParameter("provinceName");
+            String cityName = rc.getParameter("cityName");
+            String countryName = rc.getParameter("countryName");
+            String recvName = rc.getParameter("recvName");
+            String address = rc.getParameter("address");
+            String zipCode = rc.getParameter("zipCode");
+            String recvPhone = rc.getParameter("recvPhone");
+
+            CityInfo cityInfo = addressService.getCity(provinceName, cityName, countryName);
+
+            UserAddress userAddress = new UserAddress();
+            userAddress.setUserId(user.getUserId());
+            userAddress.setCitiesId(cityInfo.getId());
+            userAddress.setAddress(address);
+            userAddress.setZipCode(zipCode);
+            userAddress.setRecvName(recvName);
+            userAddress.setRecvPhone(recvPhone);
+            addressService.saveUserAddress(userAddress);
+
+            List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
+
+            int checkAddress = 0;
+            checkAddress = userAddress.getId();
+            rc.putResult("checkAddress", checkAddress);
+            rc.putResult("userAddresses", userAddresses);
+            rc.setViewName("userAddress");
+
+        } catch (CityInfoNotFoundException e) {
+            rc.setError(e);
+        }
+    }
+
+    public void delUserAddress(RequestContext rc) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            int addressId = rc.getParameterInt("addressId");
+            addressService.delUserAddress(user.getUserId(), addressId);
+
+            List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
+
+            int checkAddress = 0;
+            for (UserAddress userAddress : userAddresses) {
+                checkAddress = userAddress.getId();
+                break;
+            }
+            rc.putResult("checkAddress", checkAddress);
+            rc.putResult("userAddresses", userAddresses);
+            rc.setViewName("userAddress");
+
+        } catch (BadParameterException e) {
+            rc.setError(e);
+        }
     }
 }

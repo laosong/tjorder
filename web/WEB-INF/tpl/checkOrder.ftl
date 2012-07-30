@@ -61,7 +61,8 @@
                             </tr>
                         </table>
                         <div class="saveAddress">
-                            <a href="javascript:void(0);" class="btnCom btnCom_reb"><span>保存收货人信息</span></a></div>
+                            <a href="javascript:void(0);" class="btnCom btnCom_reb" id="saveAddressBtn"><span>保存收货人信息</span></a>
+                        </div>
                     </div>
                 </div>
                 <div class="eb_checkOrder_cul mart20">
@@ -131,7 +132,17 @@
     $(function () {
 
         function updateUserAddress(result) {
+            $("#userAddress").empty();
             $("#userAddress").html(result);
+
+            $("#userAddress a[name=delAddress]").click(function () {
+                var addressId = $(this).find("input[name=addressId]").val();
+                $.callOrderAction("POST", "/orderAction/delUserAddress", {addressId:addressId},
+                        function (data) {
+                            updateUserAddress(data);
+                        }
+                );
+            });
         }
 
         $.callOrderAction("POST", "/orderAction/getUserAddress", null,
@@ -226,6 +237,23 @@
             }
         }
 
+        $("#saveAddressBtn").click(function () {
+            var addressParams = {};
+            addressParams["provinceName"] = $("#provinceSelect option:selected").val();
+            addressParams["cityName"] = $("#citySelect option:selected").val();
+            addressParams["countryName"] = $("#countrySelect option:selected").val();
+            addressParams["recvName"] = $("#recvNameInput").val();
+            addressParams["address"] = $("#addressInput").val();
+            addressParams["zipCode"] = $("#zipCodeInput").val();
+            addressParams["recvPhone"] = $("#recvPhoneInput").val();
+
+            $.callOrderAction("POST", "/orderAction/addUserAddress", addressParams,
+                    function (data) {
+                        updateUserAddress(data);
+                    }
+            );
+        });
+
         $("#adjustCart").click(function (event) {
             window.location.href = "/orderAction/showCart";
         });
@@ -234,16 +262,6 @@
             var orderPostRadioVal = $("#prepareOrderForm input[name=orderPost]:checked").val();
             if (orderPostRadioVal == null) {
                 return;
-            }
-            var addressParams = {};
-            if (orderPostRadioVal == "0") {
-                addressParams["provinceName"] = $("#provinceSelect option:selected").val();
-                addressParams["cityName"] = $("#citySelect option:selected").val();
-                addressParams["countryName"] = $("#countrySelect option:selected").val();
-                addressParams["recvName"] = $("#recvNameInput").val();
-                addressParams["address"] = $("#addressInput").val();
-                addressParams["zipCode"] = $("#zipCodeInput").val();
-                addressParams["recvPhone"] = $("#recvPhoneInput").val();
             }
             var paymentRadioVal = $("#prepareOrderForm input[name=payment]:checked").val();
             if (paymentRadioVal == null) {
@@ -254,11 +272,7 @@
                 return;
             }
             var params = {respDataType:"json", orderPost:orderPostRadioVal, payment:paymentRadioVal, delivery:deliveryRadioVal};
-            if (orderPostRadioVal == "0") {
-                for (var key in addressParams) {
-                    params[key] = addressParams[key];
-                }
-            }
+
             $("#submitOrder").hide();
             $("#submitOrderHint").show();
             $.callOrderAction("POST", "/orderAction/submitOrder", params,

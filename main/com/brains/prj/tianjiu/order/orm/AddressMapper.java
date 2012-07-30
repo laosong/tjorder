@@ -36,4 +36,7 @@ public interface AddressMapper {
     public UserAddress getAddressById(@Param("id") int id);
 
     public int addUserAddress(UserAddress userAddress);
+
+    public int delUserAddress(@Param("userId") int userId,
+                              @Param("id") int id);
 }

@@ -81,4 +81,8 @@
           VALUES(?, ?, ?, ?, ?, ?, ?, ?)
     </insert>
 
+    <delete id="delUserAddress">
+        DELETE FROM usr_address WHERE user_id=#{userId} AND id=#{id}
+    </delete>
+
 </mapper>

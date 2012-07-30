@@ -94,8 +94,10 @@ public class OrderControlServlet extends HttpServlet {
             try {
                 if (role.compareTo(user.getUserRole()) > 0) {
                     StringBuffer requestUrl = req.getRequestURL();
-                    requestUrl.append('?');
-                    requestUrl.append(req.getQueryString());
+                    if (req.getQueryString() != null) {
+                        requestUrl.append('?');
+                        requestUrl.append(req.getQueryString());
+                    }
 
                     if (requestContext.isJsonReq()) {
                         resp.setContentType("text/json;charset=utf-8");

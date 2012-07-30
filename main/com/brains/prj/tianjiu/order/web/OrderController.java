@@ -87,35 +87,9 @@ public class OrderController {
             int payment = rc.getParameterInt("payment");
             int delivery = rc.getParameterInt("delivery");
 
-            UserAddress userAddress = null;
+            UserAddress userAddress = addressService.getAddressById(orderPost);
+
             ShippingInfo shippingInfo = new ShippingInfo();
-
-            if (orderPost <= 0) {
-                String provinceName = rc.getParameter("provinceName");
-                String cityName = rc.getParameter("cityName");
-                String countryName = rc.getParameter("countryName");
-                String recvName = rc.getParameter("recvName");
-                String address = rc.getParameter("address");
-                String zipCode = rc.getParameter("zipCode");
-                String recvPhone = rc.getParameter("recvPhone");
-
-                CityInfo cityInfo = addressService.getCity(provinceName, cityName, countryName);
-
-                userAddress = new UserAddress();
-                userAddress.setUserId(user.getUserId());
-                userAddress.setCitiesId(cityInfo.getId());
-                userAddress.setAddress(address);
-                userAddress.setZipCode(zipCode);
-                userAddress.setRecvName(recvName);
-                userAddress.setRecvPhone(recvPhone);
-
-                if (true) {
-                    addressService.saveUserAddress(userAddress);
-                }
-            } else {
-                userAddress = addressService.getAddressById(orderPost);
-            }
-
             shippingInfo.setCitiesId(userAddress.getCitiesId());
             shippingInfo.setAddress(userAddress.getAddress());
             shippingInfo.setZipCode(userAddress.getZipCode());
@@ -140,8 +114,6 @@ public class OrderController {
             rc.setViewName("createOrderOk");
 
         } catch (BadParameterException e) {
-            rc.setError(e);
-        } catch (CityInfoNotFoundException e) {
             rc.setError(e);
         } catch (UserAddressNotFoundException e) {
             rc.setError(e);
