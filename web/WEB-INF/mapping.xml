@@ -15,40 +15,53 @@
     <mapping path="logout" bean="loginController" function="logout"></mapping>
 
 
-    <mapping path="showCart" bean="shoppingCartController" function="getCartPage" role="Normal"></mapping>
-    <mapping path="showCartData" bean="shoppingCartController" function="getCart" role="Normal"></mapping>
+    <mapping path="showCart" bean="shoppingCartController" function="getCartPage"
+             role="Normal"></mapping>
+    <mapping path="showCartData" bean="shoppingCartController" function="getCart"
+             role="Normal"></mapping>
 
-    <mapping path="addCartItem" bean="shoppingCartController" function="addItem" role="Normal"
-             validator="addCartItemValidator"></mapping>
-    <mapping path="delCartItem" bean="shoppingCartController" function="delItem" role="Normal"
-             validator="comCartItemValidator"></mapping>
-    <mapping path="incCartItem" bean="shoppingCartController" function="incItem" role="Normal"
-             validator="comCartItemValidator"></mapping>
-    <mapping path="decCartItem" bean="shoppingCartController" function="decItem" role="Normal"
-             validator="comCartItemValidator"></mapping>
-    <mapping path="setCartItemCount" bean="shoppingCartController" function="setItemCount" role="Normal"
-             validator="setCartItemValidator"></mapping>
+    <mapping path="addCartItem" bean="shoppingCartController" function="addItem"
+             role="Normal" validator="addCartItemValidator"></mapping>
+    <mapping path="delCartItem" bean="shoppingCartController" function="delItem"
+             role="Normal" validator="comCartItemValidator"></mapping>
+    <mapping path="incCartItem" bean="shoppingCartController" function="incItem"
+             role="Normal" validator="comCartItemValidator"></mapping>
+    <mapping path="decCartItem" bean="shoppingCartController" function="decItem"
+             role="Normal" validator="comCartItemValidator"></mapping>
+    <mapping path="setCartItemCount" bean="shoppingCartController" function="setItemCount"
+             role="Normal" validator="setCartItemValidator"></mapping>
 
-    <mapping path="addProductItem" bean="orderController" function="addProductItem" role="Anonymous"></mapping>
-    <mapping path="showItemList" bean="orderController" function="getItemList" role="Anonymous"></mapping>
+    <mapping path="addProductItem" bean="orderController" function="addProductItem"
+             role="Anonymous"></mapping>
+    <mapping path="showItemList" bean="orderController" function="getItemList"
+             role="Anonymous"></mapping>
 
-    <mapping path="submitCart" bean="orderController" function="submitCart" role="Normal"></mapping>
-    <mapping path="submitOrder" bean="orderController" function="submitOrder" role="Normal"
-             validator="submitOrderValidator"></mapping>
-    <mapping path="payOrder" bean="orderController" function="payOrder" role="Normal"></mapping>
+    <mapping path="submitCart" bean="orderController" function="submitCart"
+             role="Normal"></mapping>
+    <mapping path="submitOrder" bean="orderController" function="submitOrder"
+             role="Normal" validator="submitOrderValidator"></mapping>
+    <mapping path="payOrder" bean="orderController" function="payOrder"
+             role="Normal"></mapping>
 
-    <mapping path="showMyOrders" bean="orderController" function="getMyOrders" role="Normal"></mapping>
-    <mapping path="showMyCompleteOrders" bean="orderController" function="getMyCompleteOrders" role="Normal"></mapping>
+    <mapping path="showMyOrders" bean="orderController" function="getMyOrders"
+             role="Normal"></mapping>
+    <mapping path="showMyCompleteOrders" bean="orderController" function="getMyCompleteOrders"
+             role="Normal"></mapping>
 
-    <mapping path="showMyOrderDetail" bean="orderController" function="getMyOrderDetail" role="Normal"
-             validator="showOrderValidator"></mapping>
+    <mapping path="showMyOrderDetail" bean="orderController" function="getMyOrderDetail"
+             role="Normal" validator="showOrderValidator">
+    </mapping>
 
     <mapping path="showAllCity" bean="addressController" function="getAllCityInfo"></mapping>
     <mapping path="showCity" bean="addressController" function="getCityInfo"></mapping>
     <mapping path="getProvinces" bean="addressController" function="getProvinces"></mapping>
     <mapping path="getProvinceCities" bean="addressController" function="getProvinceCities"></mapping>
     <mapping path="getCityCountries" bean="addressController" function="getCityCountries"></mapping>
-    <mapping path="getUserAddress" bean="addressController" function="getUserAddress" role="Normal"></mapping>
-    <mapping path="addUserAddress" bean="addressController" function="addUserAddress" role="Normal"></mapping>
-    <mapping path="delUserAddress" bean="addressController" function="delUserAddress" role="Normal"></mapping>
+
+    <mapping path="getUserAddress" bean="addressController" function="getUserAddress"
+             role="Normal"></mapping>
+    <mapping path="addUserAddress" bean="addressController" function="addUserAddress"
+             role="Normal"></mapping>
+    <mapping path="delUserAddress" bean="addressController" function="delUserAddress"
+             role="Normal"></mapping>
 </mappings>

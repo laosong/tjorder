@@ -28,13 +28,19 @@ public class HandlerMappingConfig {
         Document document = documentBuilder.parse(configFile);
         Element mappingsEle = document.getDocumentElement();
         NodeList nodeList = mappingsEle.getElementsByTagName("mapping");
-        System.out.print(nodeList.getLength());
-        for(int i=0; i<nodeList.getLength(); i++) {
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
             NamedNodeMap namedNodeMap = nodeList.item(i).getAttributes();
-            System.out.print(namedNodeMap);
+
             String path = namedNodeMap.getNamedItem("path").getNodeValue();
             String bean = namedNodeMap.getNamedItem("bean").getNodeValue();
             String function = namedNodeMap.getNamedItem("function").getNodeValue();
+
+            HandlerMapping mapping = new HandlerMapping();
+            mapping.setPath(path);
+            mapping.setBean(bean);
+            mapping.setFunction(function);
+
             String role = null;
             Node node = namedNodeMap.getNamedItem("role");
             if (node != null) {
@@ -45,10 +51,6 @@ public class HandlerMappingConfig {
             if (node != null) {
                 validator = node.getNodeValue();
             }
-            HandlerMapping mapping = new HandlerMapping();
-            mapping.setPath(path);
-            mapping.setBean(bean);
-            mapping.setFunction(function);
             mapping.setRole(role);
             mapping.setValidator(validator);
 
@@ -58,7 +60,7 @@ public class HandlerMappingConfig {
 
     public HandlerMapping getMapping(String path) {
         HandlerMapping mapping = null;
-        if(mappingMap.containsKey(path)) {
+        if (mappingMap.containsKey(path)) {
             mapping = mappingMap.get(path);
         }
         return mapping;

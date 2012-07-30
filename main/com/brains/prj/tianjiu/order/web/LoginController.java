@@ -11,6 +11,7 @@ package com.brains.prj.tianjiu.order.web;
 import java.util.List;
 
 import com.brains.prj.tianjiu.order.common.BadParameterException;
+import com.brains.prj.tianjiu.order.common.StringConvert;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,20 +21,31 @@ import com.brains.prj.tianjiu.order.mvc.RequestContext;
 @Controller
 public class LoginController {
 
+    public static final String DEFAULT_REDIRECT = "/main.html";
+
     public void showLoginPage(RequestContext rc) {
-        rc.setViewName("login");
+        rc.putResult("redirect", DEFAULT_REDIRECT);
+        rc.setViewName("loginPage");
     }
 
     public void login(RequestContext rc) {
 
         try {
-            int userId = rc.getParameterInt("userId");
+            String userName = rc.getParameter("username");
+            String userPwd = rc.getParameter("userpwd");
+            String redirect = rc.getParameter("redirect");
+
+            int userId = rc.getParameterInt("username");
 
             SystemUser user = new SystemUser();
             user.setUserId(userId);
-            user.setUserName("songchunwen" + userId);
+            user.setUserName("User" + userId);
             user.setUserRole(SystemUser.UserRole.Normal);
+
             rc.setSystemUser(user);
+            if (redirect == null)
+                redirect = DEFAULT_REDIRECT;
+            rc.putResult("redirect", redirect);
 
             rc.setViewName("loginOk");
         } catch (BadParameterException e) {

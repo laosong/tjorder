@@ -9,8 +9,9 @@ package com.brains.prj.tianjiu.order.mvc;
  */
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.util.*;
+import java.lang.reflect.*;
+import java.net.URLEncoder;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -92,15 +93,20 @@ public class OrderControlServlet extends HttpServlet {
 
             try {
                 if (role.compareTo(user.getUserRole()) > 0) {
+                    StringBuffer requestUrl = req.getRequestURL();
+                    requestUrl.append('?');
+                    requestUrl.append(req.getQueryString());
+
                     if (requestContext.isJsonReq()) {
                         resp.setContentType("text/json;charset=utf-8");
                         requestContext.putResult("success", false);
+                        requestContext.putResult("loginFrame", requestURI);
                         requestContext.setViewName("loginFrame");
-                        requestContext.putResult("loginFrame", "loginFrame");
                         objectMapper.writeValue(resp.getOutputStream(), requestContext.getResult());
                     } else {
                         resp.setContentType("text/html;charset=utf-8");
                         requestContext.putResult("success", false);
+                        requestContext.putResult("redirect", requestUrl.toString());
                         requestContext.setViewName("loginPage");
                         TemplateRender.process(requestContext.getViewTemplateFile(), requestContext.getResult(), resp.getWriter());
                     }

@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="product_img_root" type="java.lang.String" -->
 <#-- @ftlvariable name="productItems" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.ProductItem>" -->
 <@override name="title"><@super/>产品列表</@override>
 <@override name="head_css">
@@ -54,7 +55,7 @@
                     <td align="center">${productItem_index+1} - ${productItem.getId()}</td>
                     <td>
                         <a href="#">
-                            <img src="/upload/${productItem.getImg()}" border="0" width="100" height="100" align="middle"/>
+                            <img src="${product_img_root}${productItem.getImg()}" border="0" width="100" height="100" align="middle"/>
                         </a> &nbsp;&nbsp;<a href="#">${productItem.getName()?html}</a>
                     </td>
                     <td align="right"><span><STRONG>${productItem.getPrice()}</STRONG></span></td>

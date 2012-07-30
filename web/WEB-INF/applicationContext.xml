@@ -34,8 +34,7 @@
 
     <bean id="c3p0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl"
-                  value="jdbc:mysql://192.168.1.169:3306/tjdb?useUnicode=true&amp;characterEncoding=utf-8"/>
+        <property name="jdbcUrl" value="jdbc:mysql://192.168.1.169:3306/tjdb?useUnicode=true&amp;characterEncoding=utf-8"/>
         <property name="user" value="laosong"/>
         <property name="password" value="123456"/>
         <property name="initialPoolSize" value="10"/>
@@ -56,8 +55,7 @@
         <property name="defaultTargetDataSource" ref="c3p0DataSource"></property>
         <property name="targetDataSources">
             <map key-type="java.lang.String">
-                <entry key="com.brains.prj.tianjiu.order.service.AddressService.getAllCityInfo"
-                       value-ref="lazyDataSource"/>
+                <entry key="com.brains.prj.tianjiu.order.service.AddressService.getAllCityInfo" value-ref="lazyDataSource"/>
             </map>
         </property>
     </bean>
