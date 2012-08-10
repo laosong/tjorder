@@ -58,6 +58,7 @@ public class LoginController {
         user.setUserId(-1);
         user.setUserRole(SystemUser.UserRole.Anonymous);
         rc.setSystemUser(user);
+
         rc.setViewName("loginOk");
     }
 }

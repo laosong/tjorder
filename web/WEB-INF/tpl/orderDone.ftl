@@ -14,10 +14,11 @@
 
         <div class="ebCon">
             <div class="orderFinish_wrap">
-                <div class="orderFinish f14px">订单&nbsp;<span class="fred fb">184945906</span>&nbsp;已支付完成， 正前往天酒商城首页。
+                <div class="orderFinish f14px">订单&nbsp;<span class="fred fb">184945906</span>&nbsp;已支付完成，您可以。
                 </div>
                 <p class="orderFinish_skip">
-                    <span class="fred" id="time">5s</span>，如果5S后系统未自动完成跳转，请&nbsp;<a href="/main.html">点击此处</a></p>
+                    <a href="/orderAction/showMyOrders">去我的订单</a><span style="width: 50px"></span><a href="/main.html">去商城首页</a>
+                </p>
             </div>
         </div>
         <span class="sFillet ht5 ebBg ebFillet990_b"></span>

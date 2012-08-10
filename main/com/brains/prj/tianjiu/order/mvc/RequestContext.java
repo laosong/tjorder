@@ -8,9 +8,13 @@ package com.brains.prj.tianjiu.order.mvc;
  * To change this template use File | Settings | File Templates.
  */
 
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.*;
+import com.brains.groundwork.domain.User;
+import com.brains.groundwork.support.UserSupport;
 
 import com.brains.prj.tianjiu.order.common.*;
 
@@ -19,6 +23,8 @@ public class RequestContext {
 
     private Map<String, String[]> requestParametersMap;
     private Map<String, Object> resultMap;
+
+    private SystemUser systemUser;
 
     private String viewName;
     private Exception actionError;
@@ -57,22 +63,27 @@ public class RequestContext {
     }
 
     public void setSystemUser(SystemUser systemUser) {
-        HttpSession session = request.getSession();
-        session.setAttribute("__SystemUser", systemUser);
+        User user = new User();
+        user.setId((long) systemUser.getUserId());
+        user.setLogin_name(systemUser.getUserName());
+        UserSupport.saveCurrentUser(request, user);
     }
 
     public SystemUser getSystemUser() {
-        HttpSession session = request.getSession();
-        Object obUser = session.getAttribute("__SystemUser");
-        if (obUser == null || !(obUser instanceof SystemUser)) {
-            SystemUser unknownUser = new SystemUser();
-            unknownUser.setUserId(-1);
-            unknownUser.setUserRole(SystemUser.UserRole.Anonymous);
-
-            obUser = unknownUser;
-            session.setAttribute("__SystemUser", unknownUser);
+        if (systemUser == null) {
+            systemUser = new SystemUser();
+            systemUser.setUserId(-1);
+            User user = UserSupport.getCurrentUser(request);
+            if (user != null) {
+                systemUser.setUserId(user.getId().intValue());
+                systemUser.setUserName(user.getLogin_name());
+                systemUser.setUserRole(SystemUser.UserRole.Normal);
+            }
+            if (systemUser.getUserId() < 0) {
+                systemUser.setUserRole(SystemUser.UserRole.Anonymous);
+            }
         }
-        return (SystemUser) obUser;
+        return systemUser;
     }
 
     public void putResult(String key, Object value) {

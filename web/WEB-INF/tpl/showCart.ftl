@@ -1,4 +1,4 @@
-<@override name="title"><@super/>购物车</@override>
+<@override name="title">购物车_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
 </style>
@@ -17,6 +17,7 @@
                     <div class="loading-style1">加载中,请稍候...</div>
                 </div>
             </div>
+
             <div class="eb_cart mart10">
                 <ul class="ecart_pro payOrderBtn f14px fb mart20 clearfix">
                     <li class="left">

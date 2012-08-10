@@ -1,13 +1,16 @@
-<#-- @ftlvariable name="SystemUser" type="com.brains.prj.tianjiu.order.common.SystemUser" -->
-<#assign product_img_root="/images/product/">
+<#-- @ftlvariable name="systemUser" type="com.brains.prj.tianjiu.order.common.SystemUser" -->
+<#assign SystemUser = "com.brains.prj.tianjiu.order.web.SystemUserDirective"?new()>
+<#assign product_img_root = "/images/product/">
+<@SystemUser />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><@block name="title">天酒商城-</@block></title>
+    <title><@block name="title">天酒商城</@block></title>
     <meta http-equiv=Content-Type content="text/html; charset=utf-8">
 <@block name="include_css">
     <link rel="stylesheet" type="text/css" href="/css/base.css"/>
     <link rel="stylesheet" type="text/css" href="/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/register.css"/>
     <link rel="stylesheet" type="text/css" href="/css/buy.css"/>
     <link rel="stylesheet" type="text/css" href="/css/laosong.css"/>
 </@block>
@@ -29,10 +32,10 @@
         <div class="header_tool right">
             <div class="header_help right"><a href="#" target="_blank">帮助中心</a></div>
             <div class="header_login right">
-                <#if (SystemUser.getUserId()<0)>
+                <#if (systemUser.getUserId()<0)>
                     <a href="/orderAction/showLoginPage">登录</a><span>|</span><a href="javascript:void(0);">注册</a>
                 <#else>
-                    <a href="/orderAction/showCart">${SystemUser.getUserName()!("nobody")}</a><span>|</span>
+                    <a href="/orderAction/showCart">${systemUser.getUserName()!("nobody")}</a><span>|</span>
                     <a href="/orderAction/showMyOrders">我的订单</a><span>|</span>
                     <a href="/orderAction/logout">[退出]</a>
                 </#if>

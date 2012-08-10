@@ -28,7 +28,7 @@ import com.brains.prj.tianjiu.order.common.*;
 
 public class OrderControlServlet extends HttpServlet {
 
-    private static final String UTF_8 = "utf-8";
+    public static final String UTF_8 = "utf-8";
 
     HandlerMappingConfig mappingConfig = new HandlerMappingConfig();
 
@@ -85,20 +85,13 @@ public class OrderControlServlet extends HttpServlet {
         HandlerMapping handlerMapping = mappingConfig.getMapping(parts[1]);
         if (handlerMapping != null) {
             RequestContext requestContext = new RequestContext(req);
+            ContextUtils.setCurrentRequestContext(requestContext);
 
             SystemUser user = requestContext.getSystemUser();
             SystemUser.UserRole role = SystemUser.fromString(handlerMapping.getRole());
 
-            requestContext.putResult("SystemUser", user);
-
             try {
                 if (role.compareTo(user.getUserRole()) > 0) {
-                    StringBuffer requestUrl = req.getRequestURL();
-                    if (req.getQueryString() != null) {
-                        requestUrl.append('?');
-                        requestUrl.append(req.getQueryString());
-                    }
-
                     if (requestContext.isJsonReq()) {
                         resp.setContentType("text/json;charset=utf-8");
                         requestContext.putResult("success", false);
@@ -106,9 +99,14 @@ public class OrderControlServlet extends HttpServlet {
                         requestContext.setViewName("loginFrame");
                         objectMapper.writeValue(resp.getOutputStream(), requestContext.getResult());
                     } else {
+                        String redirect = requestURI;
+                        if (req.getQueryString() != null) {
+                            redirect += "?";
+                            redirect += req.getQueryString();
+                        }
                         resp.setContentType("text/html;charset=utf-8");
                         requestContext.putResult("success", false);
-                        requestContext.putResult("redirect", requestUrl.toString());
+                        requestContext.putResult("redirect", redirect);
                         requestContext.setViewName("loginPage");
                         TemplateRender.process(requestContext.getViewTemplateFile(), requestContext.getResult(), resp.getWriter());
                     }
@@ -154,6 +152,8 @@ public class OrderControlServlet extends HttpServlet {
                 throw new ServletException("InvocationTargetException", e);
             } catch (freemarker.template.TemplateException e) {
                 throw new ServletException("TemplateException", e);
+            } finally {
+                ContextUtils.setCurrentRequestContext(null);
             }
         } else {
             throw new ServletException("no handlerMapping");

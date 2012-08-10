@@ -48,7 +48,7 @@
     </resultMap>
 
     <select id="getAddressById" parameterType="int" resultMap="userAddressResultMap">
-        SELECT * FROM usr_address WHERE id=#{id}
+        SELECT * FROM user_address WHERE id=#{id}
     </select>
 
     <resultMap extends="userAddressResultMap" id="userAddressWithCityResultMap"
@@ -62,7 +62,7 @@
     </resultMap>
     <select id="getUserAddresses" parameterType="int" resultMap="userAddressWithCityResultMap">
         SELECT A.*, B.id AS cities_id, B.province AS province, B.city AS city, B.country AS country
-          FROM usr_address A, cities B WHERE A.cities_id=B.id AND user_id=#{userId}
+          FROM user_address A, cities B WHERE A.cities_id=B.id AND user_id=#{userId}
     </select>
 
     <parameterMap id="userAddressParameterMap" type="com.brains.prj.tianjiu.order.domain.UserAddress">
@@ -77,12 +77,12 @@
     </parameterMap>
 
     <insert id="addUserAddress" parameterMap="userAddressParameterMap" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO usr_address(user_id, cities_id, address, zip_code, recv_name, recv_phone, recv_email, state)
+        INSERT INTO user_address(user_id, cities_id, address, zip_code, recv_name, recv_phone, recv_email, state)
           VALUES(?, ?, ?, ?, ?, ?, ?, ?)
     </insert>
 
     <delete id="delUserAddress">
-        DELETE FROM usr_address WHERE user_id=#{userId} AND id=#{id}
+        DELETE FROM user_address WHERE user_id=#{userId} AND id=#{id}
     </delete>
 
 </mapper>

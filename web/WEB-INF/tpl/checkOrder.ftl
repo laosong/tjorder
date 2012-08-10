@@ -26,7 +26,7 @@
                         <p class="fb">新建收货人</p>
                         <table summary="新增收货人信息">
                             <tr>
-                                <td class="t_r" width="12%"><span>*</span><label for="recvNameInput">收货人姓名：</label></td>
+                                <td class="t_r" width="13%"><span>*</span><label for="recvNameInput">收货人姓名：</label></td>
                                 <td><input type="text" size="20" name="recvName" id="recvNameInput"></td>
                             </tr>
                             <tr>
@@ -123,7 +123,7 @@
 </div>
 </@override>
 <@override name="body_footerjs">
-<div id="provinces">
+<div id="provinces" style="display: none;">
     <#list provinces as province>
         <option value="${province?html}">${province?html}</option>
     </#list>

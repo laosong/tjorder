@@ -1,0 +1,50 @@
+@charset "utf-8";
+/* CSS Document */
+/*
+创建时间：2012.08.04
+创建原因：个人中心
+*/
+/*产品详细*/
+.s190_per_til{background:url("../images/nav_rex.png") repeat-x scroll 0 0 transparent; color:#FFFFFF; font-size:14px;}
+.per_nav dl{padding-bottom:10px;}
+.per_nav dt{background-color:#f0f0f0; font-weight:bold; line-height:28px; margin-bottom:6px; padding-left:10px;}
+.per_nav dd{padding-left:25px; line-height:26px;}
+.per_nav .curNav{font-weight:bold;}
+.personal_del table{width:100%;}
+.personal_order td{padding-left:6px; padding-right:6px;}
+.personal_order td img{border:1px solid #dadada;}
+.personal_order .t_l{text-align:left;}
+.personal_order .o_l a{margin:0 5px;}
+.personal_order .o_l a:link,.personal_order .o_l a:visited{color:#369;}
+.per_tab li{height:26px; line-height:26px;}
+.pCmt_del{padding:10px;}
+.pCmt_p_img{border:1px solid #dadada; margin-right:20px;}
+.pCmt_p_intro li{line-height:24px;}
+.pCmt_p_intro li a:link,.pCmt_p_intro li a:visited{color:#369;}
+.pCmt_txt{background-color:#f0f0f0; border:1px solid #dadada; padding:15px;}
+.pCmt_area label span{color:red; font-size:12px; font-weight:normal; padding-right:5px;}
+.pCmt_stars,.pCmt_textarea,.pCmt_submit{margin-left:12px;}
+.pCmt_stars li,.pCmt_stars li input,.pCmt_stars .cmt_stars{float:left; display:inline;}
+.pCmt_stars li input,.pCmt_stars .cmt_stars{margin-top:3px;}
+.pCmt_stars li{margin-right:35px;}
+.pCmt_stars .cmt_stars{margin-left:5px; margin-right:5px;}
+.pCmt_textarea{display:block; padding:4px; width:96%;}
+.pCmt_submit a{display:block; background-position:-110px -430px; color:#fff; font-size:14px; font-weight:bold; width:82px; height:35px; line-height:35px; text-align:center;}
+.pCmt_submit a:hover{background-position:-110px -465px; color:#fff;}
+.per_area{padding-bottom:8px;}
+.per_area label{display:inline-block; line-height:30px; width:100px; text-align:right;}
+.per_area input{border:1px solid #ccc; font-size:12px; padding:5px; width:220px;}
+.per_submit{margin-left:106px;}
+.personal_del .usedAddress td{border-bottom:1px dotted #dadada; padding:6px 3px;}
+.personal_del .usedAddress td a{margin:0 8px;}
+.personal_del .newAddress td{padding:3px;}
+.per_mycenter a{margin-left:40px;}
+.per_mycenter a:link,.per_mycenter a:visited{color:#369;}
+.per_mycollect .c_til{background-color:#f0f0f0; border-top:2px solid #dadada; font-weight:bold; line-height:30px; padding-left:10px;}
+.per_mycollect .m_p li{border:none; text-align:center; width:170px;}
+.per_mycollect ul{border-bottom:1px solid #dadada; padding-bottom:10px;}
+.per_service{padding:0 10px 10px;}
+.per_service dt{padding-top:10px;}
+.per_service dd a:link,.per_service dd a:visited{color:#369;}
+.per_welcome{padding-left:12px;}
+.per_welcome span{font-family:"Arial", "Helvetica", "sans-serif"; font-size:18px;}

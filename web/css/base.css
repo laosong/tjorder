@@ -1,0 +1,67 @@
+@charset "utf-8";
+/* CSS Document */
+/*
+创建时间：2009.12.30
+创 建 者：meihua
+创建原因：基本公用样式
+*/
+
+/******* base style *******/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,table,th,td{margin:0; padding:0;}
+html{border:0; width:100%;}
+body{color:#333; font-family:"宋体","Arial,verdana"; font-size:12px; line-height:160%;}
+img{border:none;}
+input,img,select{vertical-align:middle;}
+ul,ol{list-style:none;}
+table,td,th,tr{border-collapse:collapse; border-spacing:0;}
+td{font-size:12px;}
+a:link,a:visited{color:#333; text-decoration:none;}
+a:hover,a:active{color:#be0000; text-decoration:underline;}
+h1,h2,h3,h4,h5,h6 {font-size:12px; font-weight:normal;}
+/* font Color */
+.fwhite{color:#fff;}
+.fred{color:#be0000;}
+.f666{color:#666;}
+.f999{color:#999;}
+/* Font */
+.fb{font-weight:bold;}
+.f12px{font-size:12px;}
+.f14px{font-size:14px;}
+.f16px{font-size:16px;}
+.lh140{line-height:140%}
+.lh180{line-height:180%}
+.lh200{line-height:200%}
+/*link*/
+.link_white a:link,.link_white a:visited{color:#fff; text-decoration:none;}
+.link_white a:hover,.link_white a:active{color:#fff; text-decoration:underline;}
+.link_red a:link,.link_red a:visited{color:#be0000; text-decoration:none;}
+.link_red a:hover,.link_red a:active{text-decoration:underline;}
+.link_btn a:link,.link_btn a:visited,.link_btn a:hover,.link_btn a:active{text-decoration:none;}
+.link_underl a:link,.link_underl a:visited,.link_underl a:hover,.link_underl a:active{text-decoration:underline;}
+/* width/height */
+.ht5{height:5px;}
+.ht10{height:10px;}
+.ht15{height:15px;}
+/* Other */
+.clear{clear:both; font-size:1px; width:1px; height:0; visibility:hidden; line-height:0; margin:0; padding:0;}
+.clearfix:after{content:".";display:block; height:0; clear:both; visibility:hidden; font-size:0;}
+.clearfix{display:inline-block;}
+*html .clearfix{height:1%;}
+.clearfix{display:block;}
+.left{float:left; display:inline;}
+.right{float:right; display:inline;}
+.pr{position:relative; zoom:1;}
+.hidden{display:none;}
+.noborder{border:none!important;}
+.mart5{margin-top:5px;}
+.mart10{margin-top:10px;}
+.mart15{margin-top:15px;}
+.mart20{margin-top:20px;}
+.mart30{margin-top:30px;}
+.txtcenter{text-align:center;}
+.txtright{text-align:right;}
+/* table style */
+.tablestyle table{background-color:#fff;}
+.tablestyle td {padding:6px 0; text-align:center;}
+.tablestyle th{background-color:#eaeaea; height:24px;}
+.tablestyle table,.tablestyle td ,.tablestyle th{border:1px solid #aaa; border-collapse:collapse;}

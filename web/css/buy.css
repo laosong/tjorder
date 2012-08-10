@@ -1,0 +1,96 @@
+/* CSS Document */
+/*
+创建时间：2012.07.29
+创建原因：电子商务各流程样式表
+*/
+
+.ebBg{background-image:url(../images/ecart/ecartBg.png); background-repeat:no-repeat; background-position:0 0;}
+/* 简版头部 */
+.ebHeader{border-bottom:1px solid #999999; margin-top:5px; padding-bottom:8px;}
+.ebHeader .mainlogo{margin-left:0;}
+.ebHeader .header_tool{padding-top:30px; margin-top:0;}
+.ebHeader .header_login{margin-top:0; margin-right:60px;}
+.ebHeader .header_login span{padding:0 8px;}
+.ebHeader .header_login .l_user{font-family:"Arial", "Helvetica", "sans-serif"; margin-right:8px;}
+.header_tool a:link,.header_tool a:visited{color:#369;}
+/* ebtable */
+.ebtable th{background-color:#f0f0f0; font-weight:normal; padding:6px 0;}
+.ebtable th span{display:block; line-height:16px; border-right:1px solid #aaa;}
+.ebtable td{padding:15px 8px; border-bottom:1px solid #e7e7e7; text-align:center;}
+.ebtable .t_left{text-align:left;}
+/* ebtable2 */
+.ebtable2 tr{border-left:1px solid #e7e7e7; border-right:1px solid #e7e7e7;}
+.ebtable2 th{background-color:#eeeeee; border-top:1px solid #e7e7e7; border-bottom:1px solid #e7e7e7; color:#003960; font-weight:normal; padding:6px 0;}
+.ebtable2 th span{display:block; line-height:16px; border-right:1px solid #003960;}
+.ebtable2 td{padding:10px 8px; border-bottom:1px solid #e7e7e7;}
+/* content */
+.ebFillet990_t{background-position:0 -105px;}
+.ebFillet990_b{background-position:0 -115px;}
+.shopcarbread{height:30px; line-height:30px;}
+.shopcarbread span{color:#666; padding:0 20px;}
+.shopcarbread a:link,.shopcarbread a:visited{color:#999999; text-decoration:none;}
+.shopcarbread a:hover,.shopcarbread a:active{text-decoration:underline;}
+.eb_step1,.eb_step2,.eb_step3,.eb_step4{width:485px;}
+.noeb_step2,.noeb_step3{width:381px;}
+.eb_step1{background-position:0 0;}
+.eb_step2{background-position:0 -35px;}
+.eb_step3{background-position:-495px 0;}
+.eb_step4{background-position:-495px -35px;}
+.noeb_step2{background-position:-111px 0;}
+.noeb_step3{background-position:-502px 0;}
+.shopcarbread .stepCur{color:#ffffff;}
+.ebCon{background-color:#fff; border:1px solid #dadada; height:100%; padding:5px 25px 20px 25px;}
+.ebCon table{width:100%;}
+.eb_bank td{padding:8px 7px;}
+.eb_bank td input{margin-right:6px;}
+a.nextBtn{float:right; width:112px; margin-right:10px; background-position:-202px -125px;}
+a.nextBtn:hover{background-position:-202px -165px;}
+.ebCon input{font-family:"Tahoma","sans-serif"; font-size:12px;}
+/* 购物车 */
+.ecartTitle{padding:27px 0 10px 0; margin-bottom:5px; background:#fff url(../images/ecart/ecart.jpg) no-repeat top right;}
+.payOrderTotal{padding:12px; background-color:#f0f0f0;}
+.payOrderTotal p{padding-top:3px;}
+.payOrderTotal a{font-size:12px; font-weight:normal;}
+.eb_cart_num i{display:inline-block; background-color:#fff; border:1px solid #dadada; font-family:Arial, Helvetica, sans-serif; font-style:normal; height:14px; line-height:14px; width:14px; text-align:center; cursor:pointer;}
+.eb_cart_num input{display:inline-block; background-color:#fff; border:1px solid #aaaaaa; font-size:12px; margin:-4px 5px 0 5px; padding:2px 5px; width:30px; text-align:center;}
+.ebtable a:link,.ebtable a:visited{color:#369;}
+.payOrderTotal_num{padding-right:20px;}
+.payOrderTotal span{font-family:"Arial", "Helvetica", "sans-serif"; font-size:16px;}
+.payOrderTotal_num em{color:#be0000; font-style:normal; padding:0 5px;}
+/* 核对订单 */
+.eb_checkOrder_cul table{width:100%;}
+.eb_checkOrder_cul td{padding:3px;}
+.eb_checkOrder h3{ background-color:#f0f0f0; border-bottom:1px solid #dadada; line-height:30px; margin-bottom:5px; padding-left:15px;}
+.usedAddress{margin:10px 15px;}
+.eb_checkOrder_cul .usedAddress td{border-bottom:1px dotted #dadada; padding:6px 3px;}
+.usedAddress td a:link,.usedAddress td a:visited{color:#369;}
+.newAddress{margin:10px 15px 0;}
+.newAddress .t_r{text-align:right;}
+.newAddress td span{color:#be0000; padding:0 4px;}
+.newAddress td input{padding:2px 3px;}
+.newAddress td select{margin-right:10px;}
+.newAddress td label{padding:0 6px 0 15px;}
+.saveAddress{margin-left:102px; margin-top:15px;}
+.eb_checkOrder_cul dl{margin-left:15px; margin-right:15px;}
+.eb_checkOrder_cul dt{line-height:22px; font-weight:bold;}
+.eb_checkOrder_cul dd{padding:3px 0;}
+.eb_checkOrder_cul dd input{margin-right:5px;}
+.eb_checkOrder_cul .payBank{margin:8px 0 0 18px;}
+.eb_checkOrder .ebtable tr{border-left:1px solid #dadada; border-right:1px solid #dadada;}
+.eb_checkOrder .ebtable th{border-top:1px solid #dadada; border-bottom:1px solid #dadada;}
+.eb_checkOrder .ebtable td{padding:10px 8px; border-bottom:1px solid #dadada;}
+.eb_checkOrder .remove{background-position:-1013px 2px; padding-left:20px; margin:20px 0 5px 0;}
+
+/*支付订单*/
+.payOrder_succeed{border-bottom:1px solid #dadada; padding:40px 0;}
+.payOrder_succeed dl{padding-left:65px; background-position:-980px 0;}
+.payOrder_succeed dt{font-size:20px; font-family:'Microsoft YaHei','微软雅黑',SimSun,'宋体',sans-serif; color:#009900;}
+.payOrder_succeed dd{color:#666; margin-top:15px;}
+.payOrder_succeed dd span{color:#aaa; padding:0 15px;}
+.succeed_price{font-style:normal; font-family:"Arial", "Helvetica", "sans-serif";}
+
+/* 完成订单 */
+.orderFinish_wrap{margin:50px 0 180px 0; padding:3px 0 0 175px; background:url(../images/ecart/ecart_yes.jpg) no-repeat 80px 0;}
+.orderFinish{line-height:50px; margin-left:60px;}
+.orderFinish_skip{padding-top:10px; text-indent:65px;}
+.orderFinish_skip a:link,.orderFinish_skip a:visited{color:#369;}

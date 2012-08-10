@@ -1,0 +1,311 @@
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+.clearfix:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+.dialog {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+}
+
+.dialog .dialog-outer {
+    background-color: #FFFFFF;
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+
+.dialog .dialog-inner {
+    border: 1px solid #C4C4C4;
+}
+
+.dialog .dialog-toolbar {
+    background-color: #F3F3F3;
+    border-bottom: 1px solid #C4C4C4;
+    border-top: 1px solid #FFFFFF;
+    height: 25px;
+    padding: 0 10px;
+}
+
+.dialog .dialog-title {
+    float: left;
+    line-height: 25px;
+}
+
+.dialog .dialog-close {
+    background: url("/images/laosong/dialog-close.gif") no-repeat scroll 0 0 transparent;
+    float: right;
+    height: 13px;
+    line-height: 0;
+    margin-top: 6px;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 13px;
+}
+
+.dialog .dialog-bump {
+    position: absolute;
+    text-align: center;
+    z-index: 1002;
+}
+
+.dialog .dialog-bump .dialog-arrow {
+    display: block;
+    font-size: 0;
+    line-height: 0;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.dialog .dialog-bg {
+    display: block;
+    font-size: 0;
+    height: 4px;
+    line-height: 0;
+    position: absolute;
+    width: 4px;
+    z-index: 1001;
+}
+
+.dialog .dialog-bg-n, .dialog .dialog-bg-s {
+    background: url("/images/laosong/dialog-x.png") repeat scroll 0 0 transparent;
+    left: 0;
+    width: 100%;
+}
+
+.dialog .dialog-bg-e, .dialog .dialog-bg-w {
+    background: url("/images/laosong/dialog-y.png") repeat scroll 0 0 transparent;
+    height: 100%;
+    top: 0;
+}
+
+.dialog .dialog-bg-ne, .dialog .dialog-bg-se, .dialog .dialog-bg-sw, .dialog .dialog-bg-nw {
+    background: url("/images/laosong/dialog-bg.png") repeat scroll 0 0 transparent;
+}
+
+.dialog .dialog-bg-ne {
+    background-position: -4px 0;
+    right: -4px;
+    top: -4px;
+}
+
+.dialog .dialog-bg-se {
+    background-position: -4px -4px;
+    bottom: -4px;
+    right: -4px;
+}
+
+.dialog .dialog-bg-sw {
+    background-position: 0 -4px;
+    bottom: -4px;
+    left: -4px;
+}
+
+.dialog .dialog-bg-nw {
+    background-position: 0 0;
+    left: -4px;
+    top: -4px;
+}
+
+.dialog .dialog-bg-n {
+    background-position: 0 -6px;
+    top: -4px;
+}
+
+.dialog .dialog-bg-s {
+    background-position: 0 -10px;
+    bottom: -4px;
+}
+
+.dialog .dialog-bg-e {
+    background-position: -10px 0;
+    right: -4px;
+}
+
+.dialog .dialog-bg-w {
+    background-position: -6px 0;
+    left: -4px;
+}
+
+* html .dialog .dialog-bg {
+    background: none repeat scroll 0 0 transparent !important;
+}
+
+.dialog .dialog-content {
+    padding: 10px;
+}
+
+.dialog .btn {
+    background: transparent url("/images/laosong/btn-bg-1.png") no-repeat scroll 100% -63px;
+    display: block;
+    float: left;
+    font-size: 12px;
+    line-height: normal;
+    margin-right: 5px;
+    overflow: hidden;
+    padding-right: 10px;
+    position: relative;
+}
+
+.dialog .btn .btn-text {
+    background: transparent url("/images/laosong/btn-bg-1.png") no-repeat scroll 0 0;
+    display: block;
+    float: left;
+    height: 21px;
+    line-height: 22px;
+    overflow: hidden;
+    padding: 0 0 0 10px;
+    text-align: left;
+}
+
+.cart-tooltip .dialog-outer {
+    background-color: #FFFDEE;
+}
+
+.cart-tooltip .dialog-inner {
+    border: 1px solid #EDD28B;
+    padding: 5px;
+}
+
+.cart-tooltip .dialog-bump {
+    bottom: -10px;
+    height: 11px;
+    left: 0;
+    width: 100%;
+}
+
+.cart-tooltip .dialog-arrow {
+    background: url("/images/laosong/dialog-arrow-bg.png") no-repeat scroll 0 0 transparent;
+    height: 11px;
+    width: 18px;
+}
+
+.cart-tooltip .dialog-message {
+    line-height: 22px;
+    text-align: center;
+}
+
+.cart-tooltip .dialog-message span {
+    color: #CC0000;
+    font-family: Verdana, Arial;
+}
+
+.cart-tooltip .dialog-message a, .cart-tooltip .dialog-message a:visited, .cart-tooltip .dialog-message a:hover {
+    color: #005EA7;
+}
+
+.cart-tooltip .dialog-notice {
+    color: #CC0000;
+    line-height: 22px;
+    text-align: center;
+}
+
+.cart-tooltip-notice .dialog-outer {
+    background-color: #FFE8E8;
+}
+
+.cart-tooltip-notice .dialog-inner {
+    border: 1px solid #DB9A9A;
+}
+
+.cart-tooltip-notice .dialog-arrow {
+    background-position: 0 -11px;
+}
+
+* html .cart-tooltip .dialog-arrow {
+    background: none repeat scroll 0 0 transparent !important;
+}
+
+* html .cart-tooltip-notice .dialog-arrow {
+}
+
+#cart-delete-dialog .cart-delete {
+    color: #CC0000;
+    line-height: 22px;
+    text-align: center;
+}
+
+#cart-delete-dialog .btns {
+    padding: 10px 0 0 65px;
+}
+
+.loading-style1 {
+    color: #999999;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.loading-style1 b {
+    display: block;
+    height: 24px;
+    margin: 0 auto 5px;
+    width: 24px;
+}
+
+.loading-style1 b, .loading-style2 {
+    background: url("/images/laosong/loading.gif") no-repeat scroll 50% 50% transparent;
+}
+
+.p-quantity .quantity-form {
+    height: 22px;
+    margin: 0 auto;
+    overflow: hidden;
+    text-align: left;
+    width: 84px;
+}
+
+.p-quantity a {
+    background: url("/images/laosong/amount-bg.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    float: left;
+    height: 13px;
+    line-height: 100px;
+    margin-top: 3px;
+    overflow: hidden;
+    width: 18px;
+}
+
+.p-quantity a.decrement {
+    background-position: 0 0;
+    margin-right: 5px;
+}
+
+.p-quantity a.increment {
+    background-position: 0 -13px;
+    float: right;
+}
+
+.p-quantity .quantity-form .quantity-text {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #FFFFFF;
+    border-color: #AAAAAA #DDDDDD #DDDDDD #AAAAAA;
+    border-right: 1px solid #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 12px;
+    height: 18px;
+    overflow: hidden;
+    text-align: center;
+    width: 35px;
+}
+
+.menu_main {
+    width: 79%;
+    min-height: 500px;
+    margin: 4px 1px 4px 1px;
+    padding: 4px 10px 4px 10px;
+    overflow: hidden;
+}
