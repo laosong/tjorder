@@ -2,51 +2,47 @@
 <#-- @ftlvariable name="orders" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.Order>" -->
 <#assign page_name = "allorders">
 
-<@override name="title"><@super/>我的订单</@override>
+<@override name="title">所有订单_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
 </style>
 </@override>
 <@override name="my_body_content">
-<h1>所有订单</h1>
-<table cellpadding="0" cellspacing="0" border="0" class="display" id="dt_1">
-    <thead>
-    <tr>
-        <th width="5%"></th>
-        <th width="15%">订单编号</th>
-        <th width="15%">下单日期</th>
-        <th width="35%">商品名称</th>
-        <th width="15%">总价</th>
-        <th width="10%">状态</th>
-    </tr>
-    </thead>
-    <tbody>
-        <#list orders as order>
+<h3 class="con_til">所有订单</h3>
+<div class="personal_del tablestyle mart10">
+    <table summary="所有订单" class="personal_order">
+        <tbody>
         <tr>
-            <td>${order_index+1}</td>
-            <td>${order.getId()}</td>
-            <td>${order.getCreatedDate()?datetime}</td>
-            <td>
-                <#list order.getOrderItems() as order_item>
-                    <img src="${product_img_root}${order_item.getProductItem().getImg()!("")}"" width="60" height="60"
-                    border="0" align="middle"/>${order_item.getProductItem().getName()}<br/>
-                </#list>
-            </td>
-            <td>${order.getSumPrice()}</td>
-            <td>${order.getState()}</td>
+            <th width="12%">订单编号</th>
+            <th width="12%">更新日期</th>
+            <th>订单商品</th>
+            <th width="12%">订单金额</th>
+            <th width="10%">状态</th>
+            <th width="15%">操作</th>
         </tr>
-        </#list>
-    </tbody>
-</table>
+            <#list orders as order>
+            <tr>
+                <td>${order.getId()}</td>
+                <td class="f999">${order.getCreatedDate()?datetime}</td>
+                <td class="t_l">
+                    <#list order.getOrderItems() as order_item>
+                        <a href="#" target="_blank" title="${order_item.getProductItem().getName()}">
+                            <img src="${product_img_root}${order_item.getProductItem().getImg()!("")}" width="42" height="42" border="0" align="middle">
+                        </a>
+                    </#list>
+                </td>
+                <td>${order.getSumPrice()}</td>
+                <td class="f999">${order.getState()}</td>
+                <td class="o_l"><a href="#">继续订单</a><a href="#">删除</a></td>
+            </tr>
+            </#list>
+        </tbody>
+    </table>
+</div>
 </@override>
 <@override name="body_footerjs">
 <script type="text/javascript">
-    $(function () {
-        oTable = $('#dt_1').dataTable({
-            "bJQueryUI":true, "bPaginate":false,
-            "oLanguage":{ "sInfo":"本页共 _TOTAL_ 条", "sInfoEmpty":"本页共  0 条", "sZeroRecords":"未找到匹配记录", "sSearch":"搜索:"}
-        });
-    });
+
 </script>
 </@override>
 <@extends name="mybase.ftl"/>

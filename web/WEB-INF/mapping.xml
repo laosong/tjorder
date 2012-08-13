@@ -44,11 +44,14 @@
     <mapping path="payOrder" bean="orderController" function="payOrder"
              role="Normal"></mapping>
 
+    <mapping path="showMyHome" bean="orderController" function="getMyHomeInfo"
+             role="Normal"></mapping>
     <mapping path="showMyOrders" bean="orderController" function="getMyOrders"
+             role="Normal"></mapping>
+    <mapping path="showMyUnCompleteOrders" bean="orderController" function="getMyUnCompleteOrders"
              role="Normal"></mapping>
     <mapping path="showMyCompleteOrders" bean="orderController" function="getMyCompleteOrders"
              role="Normal"></mapping>
-
     <mapping path="showMyOrderDetail" bean="orderController" function="getMyOrderDetail"
              role="Normal" validator="showOrderValidator">
     </mapping>

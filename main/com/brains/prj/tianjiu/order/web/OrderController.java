@@ -39,18 +39,26 @@ public class OrderController {
     CompositeService compositeService;
 
     public void addProductItem(RequestContext rc, ResultContext result) {
-        String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
-        String img = "test.jpg";
+        try {
+            String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
+            String img = "test.jpg";
 
-        int itemId = productService.addProductItem(name, img);
-        result.putResult("itemId", itemId);
-        result.setViewName("showOrder");
+            int itemId = productService.addProductItem(name, img);
+            result.putResult("itemId", itemId);
+            result.setViewName("showOrder");
+        } catch (IllegalArgumentException e) {
+            result.setError(e);
+        }
     }
 
     public void getItemList(RequestContext rc, ResultContext result) {
-        List<ProductItem> productItems = productService.getItemList();
-        result.putResult("productItems", productItems);
-        result.setViewName("showItemList");
+        try {
+            List<ProductItem> productItems = productService.getItemList();
+            result.putResult("productItems", productItems);
+            result.setViewName("showItemList");
+        } catch (IllegalArgumentException e) {
+            result.setError(e);
+        }
     }
 
     public void submitCart(RequestContext rc, ResultContext result) {
@@ -64,7 +72,6 @@ public class OrderController {
             result.putResult("provinces", provinces);
             result.putResult("cart", cart);
             result.setViewName("checkOrder");
-
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }
@@ -113,7 +120,6 @@ public class OrderController {
             result.putResult("orderId", order.getId());
             result.putResult("order", order);
             result.setViewName("createOrderOk");
-
         } catch (BadParameterException e) {
             result.setError(e);
         } catch (UserAddressNotFoundException e) {
@@ -139,7 +145,6 @@ public class OrderController {
             } else if (order.getPaymentId() == 2) {
                 result.setViewName("payOrder");
             }
-
         } catch (BadParameterException e) {
             result.setError(e);
         } catch (OrderNotFoundException e) {
@@ -147,34 +152,18 @@ public class OrderController {
         }
     }
 
-    public void getOrderDetail(RequestContext rc, ResultContext result) {
+    protected void fillOrderDetail(Order order) {
+        for (OrderItem orderItem : order.getOrderItems()) {
+            orderItem.setProductItem(productService.getProductItem(orderItem.getItemId()));
+        }
+    }
+
+    public void getMyHomeInfo(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            int orderId = rc.getParameterInt("orderId");
-            Order order = compositeService.getUserOrderDetail(user.getUserId(), orderId);
-
-            order.setPaymentInfo(orderService.getPaymentInfo(order.getPaymentId()));
-            order.setDeliveryInfo(orderService.getDeliveryInfo(order.getDeliveryId()));
-
-            ShippingInfo shippingInfo = orderService.getOrderShippingInfo(order.getShippingId());
-            shippingInfo.setCityInfo(addressService.getCity(shippingInfo.getCitiesId()));
-            order.setShippingInfo(shippingInfo);
-
-            result.putResult("order", order);
-            result.setViewName("showOrder");
-
-        } catch (BadParameterException e) {
-            result.setError(e);
-        } catch (OrderNotFoundException e) {
-            result.setError(e);
-        } catch (PaymentNotFoundException e) {
-            result.setError(e);
-        } catch (DeliveryNotFoundException e) {
-            result.setError(e);
-        } catch (ShippingNotFoundException e) {
-            result.setError(e);
-        } catch (CityInfoNotFoundException e) {
+            result.setViewName("showMyHome");
+        } catch (IllegalArgumentException e) {
             result.setError(e);
         }
     }
@@ -183,12 +172,30 @@ public class OrderController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            List<Order> orders = compositeService.getUserOrders(user.getUserId());
+            List<Order> orders = orderService.getUserOrders(user.getUserId());
+            for (Order order : orders) {
+                fillOrderDetail(order);
+            }
 
             result.putResult("orders", orders);
             result.setViewName("showMyOrders");
+        } catch (IllegalArgumentException e) {
+            result.setError(e);
+        }
+    }
 
-        } catch (OrderNotFoundException e) {
+    public void getMyUnCompleteOrders(RequestContext rc, ResultContext result) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            List<Order> orders = orderService.getUserUnCompleteOrders(user.getUserId());
+            for (Order order : orders) {
+                fillOrderDetail(order);
+            }
+
+            result.putResult("orders", orders);
+            result.setViewName("showMyUnCompleteOrders");
+        } catch (IllegalArgumentException e) {
             result.setError(e);
         }
     }
@@ -197,12 +204,14 @@ public class OrderController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            List<Order> orders = compositeService.getUserCompleteOrders(user.getUserId());
+            List<Order> orders = orderService.getUserCompleteOrders(user.getUserId());
+            for (Order order : orders) {
+                fillOrderDetail(order);
+            }
 
             result.putResult("orders", orders);
             result.setViewName("showMyCompleteOrders");
-
-        } catch (OrderNotFoundException e) {
+        } catch (IllegalArgumentException e) {
             result.setError(e);
         }
     }
@@ -212,7 +221,8 @@ public class OrderController {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
             int orderId = rc.getParameterInt("orderId");
-            Order order = compositeService.getUserOrderDetail(user.getUserId(), orderId);
+            Order order = orderService.getUserOrder(user.getUserId(), orderId);
+            fillOrderDetail(order);
 
             order.setPaymentInfo(orderService.getPaymentInfo(order.getPaymentId()));
             order.setDeliveryInfo(orderService.getDeliveryInfo(order.getDeliveryId()));
@@ -223,7 +233,6 @@ public class OrderController {
 
             result.putResult("order", order);
             result.setViewName("showMyOrderData");
-
         } catch (BadParameterException e) {
             result.setError(e);
         } catch (OrderNotFoundException e) {

@@ -1,13 +1,13 @@
 <#-- @ftlvariable name="orders" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.Order>" -->
-<#assign page_name = "comporders">
+<#assign page_name = "uncomporders">
 
-<@override name="title">已结束订单_<@super/></@override>
+<@override name="title">未结束订单_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
 </style>
 </@override>
 <@override name="my_body_content">
-<h3 class="con_til">已结束订单</h3>
+<h3 class="con_til">未结束订单</h3>
 <div class="personal_del tablestyle mart10">
     <table summary="所有订单" class="personal_order">
         <tbody>

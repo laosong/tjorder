@@ -201,6 +201,14 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    public List<Order> getUserUnCompleteOrders(int userId) {
+        Integer[] complete_state = {0, 1, 2, 3, 5};
+        List<Order> orders = orderMapper.getUserOrdersByState(userId, complete_state);
+        fillOrdersItems(orders);
+        return orders;
+    }
+
+    @Transactional(readOnly = true)
     public List<Order> getUserCompleteOrders(int userId) {
         Integer[] complete_state = {4};
         List<Order> orders = orderMapper.getUserOrdersByState(userId, complete_state);
