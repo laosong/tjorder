@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="message" type="java.lang.String" -->
-<@override name="title"><@super/>错误</@override>
+<@override name="title">错误_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
     .error_info {

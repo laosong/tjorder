@@ -1,18 +1,16 @@
 <#-- @ftlvariable name="redirect" type="java.lang.String" -->
-<@override name="title"><@super/>登录</@override>
+<@override name="title">登录_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
 </style>
 </@override>
 <@override name="body_content">
 <div id="content">
-
     <div id="login">
         <div class="log_container">
             <div class="log_con clearfix">
                 <div class="ebLog left">
                     <h2 class="reg_til">用户登录</h2>
-
                     <div class="log_field ebLog_form">
                         <form onsubmit="return false">
                             <div class="info_input clearfix">
@@ -29,7 +27,6 @@
                                 <div class="easyformfield codeInput">
                                     <input type="text" size="4" class="left" name="vc" id="valid_code" maxlength="4" tabindex="3"/>
                                     <img class="left" <img src="/verify_code.jpg" alt="验证码" id="valid_code_img"/>
-
                                     <p class="f666">看不清？点击图片换一张！</p>
                                 </div>
                                 <div class="A_directions clearfix" id="checkCode_check_msg"></div>
@@ -40,7 +37,8 @@
                                     <label for="rememberCheck">记住登录状态</label>
                                 </div>
                                 <p class="left">
-                                    <a href="{- $web_grade_base_url -}/user/getpwd/" target="_blank">忘记密码？</a></p>
+                                    <a href="{- $web_grade_base_url -}/user/getpwd/" target="_blank">忘记密码？</a>
+                                </p>
                             </div>
                             <div class="login_submit mart20">
                                 <input class="btn ebsmbbtn" type="submit" name="submit" id="login_btn" value="登 录" onMouseOver="this.className='btn ebsmbbtn ebbtnhv'" onMouseOut="this.className='btn ebsmbbtn'" tabIndex="5"/>
@@ -50,9 +48,7 @@
                 </div>
                 <div class="ebReg right">
                     <h2 class="f14px fb">还不是天酒商城用户？</h2>
-
                     <p class="mart10">现在免费注册成为天酒商城用户，便能立刻享受便宜又放心的购物乐趣。</p>
-
                     <div class="payOrderBtn"><a href="注册.html" class="ebregbtn btn">新用户注册</a></div>
                 </div>
             </div>
@@ -86,4 +82,4 @@
     });
 </script>
 </@override>
-<@extends name="base.ftl"/>
+<@extends name="buybase.ftl"/>

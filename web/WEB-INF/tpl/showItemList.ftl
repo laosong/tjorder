@@ -13,7 +13,7 @@
         top: 0;
         width: 205px;
         height: 29px;
-        background: url("/images/bg_spirit.png") no-repeat scroll -774px -56px transparent;
+        background: url("/images/laosong/bg_spirit.png") no-repeat scroll -774px -56px transparent;
     }
 
     #scrollCart.fixed {
@@ -66,7 +66,8 @@
                         <button id="plus-3" class="ui-button ui-widget ui-state-default">
                             <span class="ui-icon ui-icon-plus"></span></button>
                     </td>
-                    <td align="center"><a href="/orderAction/addCartItem?itemId=${productItem.getId()}&itemCount=1">加入购物车</a>
+                    <td align="center">
+                        <a href="/orderAction/addCartItem?itemId=${productItem.getId()}&itemCount=1">加入购物车</a>
                     </td>
                 </tr>
             </#list>

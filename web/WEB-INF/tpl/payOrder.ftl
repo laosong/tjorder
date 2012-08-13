@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="order" type="com.brains.prj.tianjiu.order.domain.Order" -->
-<@override name="title"><@super/>支付订单</@override>
+<@override name="title">支付订单_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
 </style>
@@ -133,4 +133,4 @@
     });
 </script>
 </@override>
-<@extends name="base.ftl"/>
+<@extends name="buybase.ftl"/>

@@ -23,9 +23,9 @@
         <td>现货</td>
         <td class="p-quantity">
             <div class="quantity-form">
-                <a name="decrease_num" class="decrement" href="javascript:void(0);">-</a>
+                <a name="decrease_num" class="decrement" href="javascript:void(0);" title="减少数量">-</a>
                 <input name="edit_num" class="quantity-text" type="text" value="${cartItem.getQuantity()?c}"/>
-                <a name="increase_num" class="increment" href="javascript:void(0);">+</a>
+                <a name="increase_num" class="increment" href="javascript:void(0);" title="增加数量">+</a>
             </div>
         </td>
         <td><a name="delete_item" href="javascript:void(0);">删除</a></td>
