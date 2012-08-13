@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.brains.prj.tianjiu.order.common.BadParameterException;
 import com.brains.prj.tianjiu.order.mvc.RequestContext;
+import com.brains.prj.tianjiu.order.mvc.ResultContext;
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.service.*;
 
@@ -28,45 +29,45 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    public void getAllCityInfo(RequestContext rc) {
+    public void getAllCityInfo(RequestContext rc, ResultContext result) {
         List<CityInfo> allCityInfo = addressService.getAllCityInfo();
-        rc.setViewName("showCity");
+        result.setViewName("showCity");
     }
 
-    public void getCityInfo(RequestContext rc) {
+    public void getCityInfo(RequestContext rc, ResultContext result) {
         try {
             int id = rc.getParameterInt("id");
             CityInfo cityInfo = addressService.getCity(id);
 
-            rc.putResult("city", cityInfo);
-            rc.setViewName("showCity");
+            result.putResult("city", cityInfo);
+            result.setViewName("showCity");
         } catch (BadParameterException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (CityInfoNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void getProvinces(RequestContext rc) {
+    public void getProvinces(RequestContext rc, ResultContext result) {
         List<String> provinces = addressService.getProvinces();
-        rc.putResult("provinces", provinces);
-        rc.setViewName("showCity");
+        result.putResult("provinces", provinces);
+        result.setViewName("showCity");
     }
 
-    public void getProvinceCities(RequestContext rc) {
+    public void getProvinceCities(RequestContext rc, ResultContext result) {
         String province = rc.getParameter("provinceName");
         List<String> provinceCities = addressService.getProvinceCities(province);
-        rc.putResult("provinceCities", provinceCities);
+        result.putResult("provinceCities", provinceCities);
     }
 
-    public void getCityCountries(RequestContext rc) {
+    public void getCityCountries(RequestContext rc, ResultContext result) {
         String province = rc.getParameter("provinceName");
         String city = rc.getParameter("cityName");
         List<String> cityCountries = addressService.getCityCountries(province, city);
-        rc.putResult("cityCountries", cityCountries);
+        result.putResult("cityCountries", cityCountries);
     }
 
-    public void getUserAddress(RequestContext rc) {
+    public void getUserAddress(RequestContext rc, ResultContext result) {
         com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
         List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
 
@@ -75,12 +76,12 @@ public class AddressController {
             checkAddress = userAddress.getId();
             break;
         }
-        rc.putResult("checkAddress", checkAddress);
-        rc.putResult("userAddresses", userAddresses);
-        rc.setViewName("userAddress");
+        result.putResult("checkAddress", checkAddress);
+        result.putResult("userAddresses", userAddresses);
+        result.setViewName("userAddress");
     }
 
-    public void addUserAddress(RequestContext rc) {
+    public void addUserAddress(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -107,16 +108,16 @@ public class AddressController {
 
             int checkAddress = 0;
             checkAddress = userAddress.getId();
-            rc.putResult("checkAddress", checkAddress);
-            rc.putResult("userAddresses", userAddresses);
-            rc.setViewName("userAddress");
+            result.putResult("checkAddress", checkAddress);
+            result.putResult("userAddresses", userAddresses);
+            result.setViewName("userAddress");
 
         } catch (CityInfoNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void delUserAddress(RequestContext rc) {
+    public void delUserAddress(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -130,12 +131,12 @@ public class AddressController {
                 checkAddress = userAddress.getId();
                 break;
             }
-            rc.putResult("checkAddress", checkAddress);
-            rc.putResult("userAddresses", userAddresses);
-            rc.setViewName("userAddress");
+            result.putResult("checkAddress", checkAddress);
+            result.putResult("userAddresses", userAddresses);
+            result.setViewName("userAddress");
 
         } catch (BadParameterException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 }

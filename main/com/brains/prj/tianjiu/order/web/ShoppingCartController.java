@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.brains.prj.tianjiu.order.mvc.RequestContext;
+import com.brains.prj.tianjiu.order.mvc.ResultContext;
 import com.brains.prj.tianjiu.order.common.*;
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.service.*;
@@ -27,7 +28,7 @@ public class ShoppingCartController {
     @Autowired
     CompositeService compositeService;
 
-    public void addItem(RequestContext rc) {
+    public void addItem(RequestContext rc, ResultContext result) {
         int addResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -43,22 +44,22 @@ public class ShoppingCartController {
             ShoppingCart briefShoppingCart = new ShoppingCart();
             addResult = compositeService.addCartItem(user.getUserId(), itemId, itemCount, briefShoppingCart);
 
-            rc.putResult("itemSum", briefShoppingCart.getItemSum());
-            rc.putResult("totalPrice", briefShoppingCart.getTotalPrice());
-            rc.setViewName("addCartItemOk");
+            result.putResult("itemSum", briefShoppingCart.getItemSum());
+            result.putResult("totalPrice", briefShoppingCart.getTotalPrice());
+            result.setViewName("addCartItemOk");
 
         } catch (BadParameterException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (ProductNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (ProductStateException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (CartFullException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void delItem(RequestContext rc) {
+    public void delItem(RequestContext rc, ResultContext result) {
         int delResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -79,15 +80,15 @@ public class ShoppingCartController {
             ShoppingCart detailShoppingCart = null;
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
-            rc.putResult("cart", detailShoppingCart);
-            rc.setViewName("showCartData");
+            result.putResult("cart", detailShoppingCart);
+            result.setViewName("showCartData");
 
         } catch (CartItemNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void incItem(RequestContext rc) {
+    public void incItem(RequestContext rc, ResultContext result) {
         int incResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -108,15 +109,15 @@ public class ShoppingCartController {
             ShoppingCart detailShoppingCart = null;
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
-            rc.putResult("cart", detailShoppingCart);
-            rc.setViewName("showCartData");
+            result.putResult("cart", detailShoppingCart);
+            result.setViewName("showCartData");
 
         } catch (CartItemNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void decItem(RequestContext rc) {
+    public void decItem(RequestContext rc, ResultContext result) {
         int decResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -137,15 +138,15 @@ public class ShoppingCartController {
             ShoppingCart detailShoppingCart = null;
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
-            rc.putResult("cart", detailShoppingCart);
-            rc.setViewName("showCartData");
+            result.putResult("cart", detailShoppingCart);
+            result.setViewName("showCartData");
 
         } catch (CartItemNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void setItemCount(RequestContext rc) {
+    public void setItemCount(RequestContext rc, ResultContext result) {
         int decResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -167,32 +168,32 @@ public class ShoppingCartController {
             ShoppingCart detailShoppingCart = null;
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
-            rc.putResult("cart", detailShoppingCart);
-            rc.setViewName("showCartData");
+            result.putResult("cart", detailShoppingCart);
+            result.setViewName("showCartData");
 
         } catch (BadParameterException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (CartItemNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void getCartPage(RequestContext rc) {
-        rc.setViewName("showCart");
+    public void getCartPage(RequestContext rc, ResultContext result) {
+        result.setViewName("showCart");
     }
 
-    public void getCart(RequestContext rc) {
+    public void getCart(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
             ShoppingCart detailShoppingCart = null;
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
-            rc.putResult("cart", detailShoppingCart);
-            rc.setViewName("showCartData");
+            result.putResult("cart", detailShoppingCart);
+            result.setViewName("showCartData");
 
         } catch (IllegalArgumentException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 }

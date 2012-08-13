@@ -11,7 +11,6 @@ package com.brains.prj.tianjiu.order.mvc;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
-import java.net.URLEncoder;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -34,12 +33,9 @@ public class OrderControlServlet extends HttpServlet {
 
     ApplicationContext applicationContext;
 
-    org.codehaus.jackson.map.ObjectMapper objectMapper;
-
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-
         String webRootPath = config.getServletContext().getRealPath("/");
         try {
             applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
@@ -48,10 +44,12 @@ public class OrderControlServlet extends HttpServlet {
 
             Validator.initialize(webRootPath + "/WEB-INF/validator.xml");
 
-            objectMapper = new org.codehaus.jackson.map.ObjectMapper();
+            JsonObjectMapper.initConfig(null, UTF_8);
 
             TemplateRender.initConfig(webRootPath + "/WEB-INF/tpl", UTF_8);
-
+            OrderControlDirective orderControlDirective = new OrderControlDirective();
+            orderControlDirective.init(mappingConfig, applicationContext);
+            TemplateRender.addSharedVariable("OrderControl", orderControlDirective);
         } catch (Exception e) {
             throw new ServletException(e);
         }
@@ -81,11 +79,13 @@ public class OrderControlServlet extends HttpServlet {
             requestURI = requestURI.substring(0, jPos);
         }
         String[] parts = StringUtils.split(requestURI, '/');
-
-        HandlerMapping handlerMapping = mappingConfig.getMapping(parts[1]);
+        String path = parts[1];
+        HandlerMapping handlerMapping = mappingConfig.getMapping(path);
         if (handlerMapping != null) {
-            RequestContext requestContext = new RequestContext(req);
-            ContextUtils.setCurrentRequestContext(requestContext);
+            ContextUtils.setContext(req, resp);
+
+            RequestContext requestContext = new RequestContext(req, resp);
+            ResultContext resultContext = new ResultContext();
 
             SystemUser user = requestContext.getSystemUser();
             SystemUser.UserRole role = SystemUser.fromString(handlerMapping.getRole());
@@ -94,10 +94,10 @@ public class OrderControlServlet extends HttpServlet {
                 if (role.compareTo(user.getUserRole()) > 0) {
                     if (requestContext.isJsonReq()) {
                         resp.setContentType("text/json;charset=utf-8");
-                        requestContext.putResult("success", false);
-                        requestContext.putResult("loginFrame", requestURI);
-                        requestContext.setViewName("loginFrame");
-                        objectMapper.writeValue(resp.getOutputStream(), requestContext.getResult());
+                        resultContext.putResult("success", false);
+                        resultContext.putResult("loginFrame", requestURI);
+                        resultContext.setViewName("loginFrame");
+                        JsonObjectMapper.process(resultContext.getViewTemplateFile(), resultContext.getResult(), resp.getWriter());
                     } else {
                         String redirect = requestURI;
                         if (req.getQueryString() != null) {
@@ -105,10 +105,10 @@ public class OrderControlServlet extends HttpServlet {
                             redirect += req.getQueryString();
                         }
                         resp.setContentType("text/html;charset=utf-8");
-                        requestContext.putResult("success", false);
-                        requestContext.putResult("redirect", redirect);
-                        requestContext.setViewName("loginPage");
-                        TemplateRender.process(requestContext.getViewTemplateFile(), requestContext.getResult(), resp.getWriter());
+                        resultContext.putResult("success", false);
+                        resultContext.putResult("redirect", redirect);
+                        resultContext.setViewName("loginPage");
+                        TemplateRender.process(resultContext.getViewTemplateFile(), resultContext.getResult(), resp.getWriter());
                     }
                 } else {
                     List<com.easyvalidation.dto.Error> validateErrors = null;
@@ -123,7 +123,7 @@ public class OrderControlServlet extends HttpServlet {
                         validateErrors = Validator.checkValidations(handlerMapping.getValidator(), reqParametersMap);
                     }
                     if (validateErrors != null && validateErrors.size() > 0) {
-                        requestContext.setError(new ValidateException(validateErrors));
+                        resultContext.setError(new ValidateException(validateErrors));
                     } else {
                         Object controller = applicationContext.getBean(handlerMapping.getBean());
                         if (controller == null) {
@@ -131,16 +131,16 @@ public class OrderControlServlet extends HttpServlet {
                         }
 
                         Class clazz = controller.getClass();
-                        Method handler = ClassUtils.getMethod(clazz, handlerMapping.getFunction(), RequestContext.class);
-                        handler.invoke(controller, requestContext);
+                        Method handler = ClassUtils.getMethod(clazz, handlerMapping.getFunction(), RequestContext.class, ResultContext.class);
+                        handler.invoke(controller, requestContext, resultContext);
                     }
 
-                    if (requestContext.needJsonResp() || (requestContext.isJsonReq() && requestContext.hasError())) {
+                    if (requestContext.needJsonResp() || (requestContext.isJsonReq() && resultContext.hasError())) {
                         resp.setContentType("text/json;charset=utf-8");
-                        objectMapper.writeValue(resp.getOutputStream(), requestContext.getResult());
+                        JsonObjectMapper.process(resultContext.getViewTemplateFile(), resultContext.getResult(), resp.getWriter());
                     } else {
                         resp.setContentType("text/html;charset=utf-8");
-                        TemplateRender.process(requestContext.getViewTemplateFile(), requestContext.getResult(), resp.getWriter());
+                        TemplateRender.process(resultContext.getViewTemplateFile(), resultContext.getResult(), resp.getWriter());
                     }
                 }
 
@@ -153,7 +153,7 @@ public class OrderControlServlet extends HttpServlet {
             } catch (freemarker.template.TemplateException e) {
                 throw new ServletException("TemplateException", e);
             } finally {
-                ContextUtils.setCurrentRequestContext(null);
+                ContextUtils.resetContext();
             }
         } else {
             throw new ServletException("no handlerMapping");

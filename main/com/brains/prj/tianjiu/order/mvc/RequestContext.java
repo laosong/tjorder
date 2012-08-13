@@ -10,8 +10,10 @@ package com.brains.prj.tianjiu.order.mvc;
 
 import java.util.Map;
 import java.util.HashMap;
-import javax.servlet.http.HttpSession;
+import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.brains.groundwork.domain.User;
 import com.brains.groundwork.support.UserSupport;
@@ -19,20 +21,19 @@ import com.brains.groundwork.support.UserSupport;
 import com.brains.prj.tianjiu.order.common.*;
 
 public class RequestContext {
-    private HttpServletRequest request;
+    HttpServletRequest httpServletRequest;
+    HttpServletResponse httpServletResponse;
 
-    private Map<String, String[]> requestParametersMap;
-    private Map<String, Object> resultMap;
+    Map<String, String[]> requestParametersMap;
 
-    private SystemUser systemUser;
+    public RequestContext(HttpServletRequest request, HttpServletResponse response) {
+        this.httpServletRequest = request;
+        this.httpServletResponse = response;
+        requestParametersMap = request.getParameterMap();
+    }
 
-    private String viewName;
-    private Exception actionError;
-
-    public RequestContext(HttpServletRequest req) {
-        request = req;
-        requestParametersMap = req.getParameterMap();
-        resultMap = new HashMap<String, Object>();
+    public RequestContext(String queryString) {
+        this.requestParametersMap = parseQueryString(queryString);
     }
 
     public String[] getParameters(String paraName) {
@@ -62,18 +63,29 @@ public class RequestContext {
         return result;
     }
 
+    private HttpServletRequest getRequest() {
+        if (this.httpServletRequest == null) {
+            this.httpServletRequest = ContextUtils.getThreadHttpServletRequest();
+        }
+        return this.httpServletRequest;
+    }
+
+    private SystemUser systemUser;
+
     public void setSystemUser(SystemUser systemUser) {
+        this.systemUser = null;
+
         User user = new User();
         user.setId((long) systemUser.getUserId());
         user.setLogin_name(systemUser.getUserName());
-        UserSupport.saveCurrentUser(request, user);
+        UserSupport.saveCurrentUser(getRequest(), user);
     }
 
     public SystemUser getSystemUser() {
         if (systemUser == null) {
             systemUser = new SystemUser();
             systemUser.setUserId(-1);
-            User user = UserSupport.getCurrentUser(request);
+            User user = UserSupport.getCurrentUser(getRequest());
             if (user != null) {
                 systemUser.setUserId(user.getId().intValue());
                 systemUser.setUserName(user.getLogin_name());
@@ -81,53 +93,80 @@ public class RequestContext {
             }
             if (systemUser.getUserId() < 0) {
                 systemUser.setUserRole(SystemUser.UserRole.Anonymous);
+            } else if (systemUser.getUserId() > 1000) {
+                systemUser.setUserRole(SystemUser.UserRole.Admin);
             }
         }
         return systemUser;
     }
 
-    public void putResult(String key, Object value) {
-        resultMap.put(key, value);
-    }
-
-    public Map<String, Object> getResult() {
-        return resultMap;
-    }
-
     public boolean isJsonReq() {
-        return "json".equals(request.getParameter("reqDataType"));
+        return "json".equals(getParameter("reqDataType"));
     }
 
     public boolean needJsonResp() {
-        return "json".equals(request.getParameter("respDataType"));
+        return "json".equals(getParameter("respDataType"));
     }
 
-    public void setViewName(String viewName) {
-        this.viewName = viewName;
-    }
+    private static HashMap<String, String[]> parseQueryString(String s) {
+        String[] valArray = null;
 
-    public String getViewTemplateFile() {
-        if (actionError != null) {
-            return "actionError.ftl";
-        } else {
-            return viewName + ".ftl";
+        if (s == null) {
+            throw new IllegalArgumentException();
         }
-    }
-
-    public void setError(Exception e) {
-        if (e != null) {
-            actionError = e;
-
-            putResult("success", false);
-            String message = actionError.getMessage();
-            if (message == null) {
-                message = actionError.getClass().getName();
+        HashMap<String, String[]> ht = new HashMap<String, String[]>();
+        StringBuilder sb = new StringBuilder();
+        StringTokenizer st = new StringTokenizer(s, "&");
+        while (st.hasMoreTokens()) {
+            String pair = st.nextToken();
+            int pos = pair.indexOf('=');
+            if (pos == -1) {
+                throw new IllegalArgumentException();
             }
-            putResult("message", message);
+            String key = parseName(pair.substring(0, pos), sb);
+            String val = parseName(pair.substring(pos + 1, pair.length()), sb);
+            if (ht.containsKey(key)) {
+                String[] oldValues = (String[]) ht.get(key);
+                valArray = new String[oldValues.length + 1];
+                for (int i = 0; i < oldValues.length; i++)
+                    valArray[i] = oldValues[i];
+                valArray[oldValues.length] = val;
+            } else {
+                valArray = new String[1];
+                valArray[0] = val;
+            }
+            ht.put(key, valArray);
         }
+        return ht;
     }
 
-    public boolean hasError() {
-        return actionError != null;
+    private static String parseName(String s, StringBuilder sb) {
+        sb.setLength(0);
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '+':
+                    sb.append(' ');
+                    break;
+                case '%':
+                    try {
+                        sb.append((char) Integer.parseInt(s.substring(i + 1, i + 3), 16));
+
+                        i += 2;
+                    } catch (NumberFormatException e) {
+                        throw new IllegalArgumentException();
+                    } catch (StringIndexOutOfBoundsException e) {
+                        String rest = s.substring(i);
+                        sb.append(rest);
+                        if (rest.length() == 2) {
+                            i++;
+                        }
+                    }
+
+                default:
+                    sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 }

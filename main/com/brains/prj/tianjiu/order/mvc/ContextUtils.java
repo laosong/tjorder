@@ -1,5 +1,8 @@
 package com.brains.prj.tianjiu.order.mvc;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Created with IntelliJ IDEA.
  * User: songchunwen
@@ -8,13 +11,24 @@ package com.brains.prj.tianjiu.order.mvc;
  * To change this template use File | Settings | File Templates.
  */
 public class ContextUtils {
-    private static final ThreadLocal<RequestContext> localRequestContext = new ThreadLocal<RequestContext>();
+    static final ThreadLocal<HttpServletRequest> localRequest = new ThreadLocal<HttpServletRequest>();
+    static final ThreadLocal<HttpServletResponse> localResponse = new ThreadLocal<HttpServletResponse>();
 
-    public static void setCurrentRequestContext(RequestContext requestContext) {
-        localRequestContext.set(requestContext);
+    public static void setContext(HttpServletRequest request, HttpServletResponse response) {
+        localRequest.set(request);
+        localResponse.set(response);
     }
 
-    public static RequestContext getCurrentRequestContext() {
-        return localRequestContext.get();
+    public static void resetContext() {
+        localRequest.remove();
+        localResponse.remove();
+    }
+
+    public static HttpServletRequest getThreadHttpServletRequest() {
+        return localRequest.get();
+    }
+
+    public static HttpServletResponse getThreadHttpServletResponse() {
+        return localResponse.get();
     }
 }

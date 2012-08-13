@@ -13,6 +13,7 @@ import java.io.StringWriter;
 
 import java.util.Locale;
 
+import freemarker.template.TemplateDirectiveModel;
 import cn.org.rapid_framework.freemarker.directive.*;
 
 public class TemplateRender {
@@ -28,6 +29,10 @@ public class TemplateRender {
         ftConfig.setSharedVariable("override", new OverrideDirective());
         ftConfig.setSharedVariable("extends", new ExtendsDirective());
         ftConfig.setSharedVariable("super", new SuperDirective());
+    }
+
+    public static void addSharedVariable(String name, TemplateDirectiveModel templateDirectiveModel) {
+        ftConfig.setSharedVariable(name, templateDirectiveModel);
     }
 
     public static void process(String templateFile, Object rootMap, Writer writer)

@@ -17,18 +17,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.brains.prj.tianjiu.order.common.SystemUser;
 import com.brains.prj.tianjiu.order.mvc.RequestContext;
+import com.brains.prj.tianjiu.order.mvc.ResultContext;
 
 @Controller
 public class LoginController {
 
     public static final String DEFAULT_REDIRECT = "/main.html";
 
-    public void showLoginPage(RequestContext rc) {
-        rc.putResult("redirect", DEFAULT_REDIRECT);
-        rc.setViewName("loginPage");
+    public void getSystemUser(RequestContext rc, ResultContext result) {
+        result.putResult("systemUser", rc.getSystemUser());
     }
 
-    public void login(RequestContext rc) {
+    public void showLoginPage(RequestContext rc, ResultContext result) {
+        result.putResult("redirect", DEFAULT_REDIRECT);
+        result.setViewName("loginPage");
+    }
+
+    public void login(RequestContext rc, ResultContext result) {
 
         try {
             String userName = rc.getParameter("username");
@@ -45,20 +50,20 @@ public class LoginController {
             rc.setSystemUser(user);
             if (redirect == null)
                 redirect = DEFAULT_REDIRECT;
-            rc.putResult("redirect", redirect);
+            result.putResult("redirect", redirect);
 
-            rc.setViewName("loginOk");
+            result.setViewName("loginOk");
         } catch (BadParameterException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void logout(RequestContext rc) {
+    public void logout(RequestContext rc, ResultContext result) {
         SystemUser user = new SystemUser();
         user.setUserId(-1);
         user.setUserRole(SystemUser.UserRole.Anonymous);
         rc.setSystemUser(user);
 
-        rc.setViewName("loginOk");
+        result.setViewName("loginOk");
     }
 }

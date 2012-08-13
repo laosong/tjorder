@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.brains.prj.tianjiu.order.common.BadParameterException;
 import com.brains.prj.tianjiu.order.mvc.RequestContext;
+import com.brains.prj.tianjiu.order.mvc.ResultContext;
 
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.service.*;
@@ -37,22 +38,22 @@ public class OrderController {
     @Autowired
     CompositeService compositeService;
 
-    public void addProductItem(RequestContext rc) {
+    public void addProductItem(RequestContext rc, ResultContext result) {
         String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
         String img = "test.jpg";
 
         int itemId = productService.addProductItem(name, img);
-        rc.putResult("itemId", itemId);
-        rc.setViewName("showOrder");
+        result.putResult("itemId", itemId);
+        result.setViewName("showOrder");
     }
 
-    public void getItemList(RequestContext rc) {
+    public void getItemList(RequestContext rc, ResultContext result) {
         List<ProductItem> productItems = productService.getItemList();
-        rc.putResult("productItems", productItems);
-        rc.setViewName("showItemList");
+        result.putResult("productItems", productItems);
+        result.setViewName("showItemList");
     }
 
-    public void submitCart(RequestContext rc) {
+    public void submitCart(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -60,25 +61,25 @@ public class OrderController {
 
             ShoppingCart cart = compositeService.getUserCart(user.getUserId());
 
-            rc.putResult("provinces", provinces);
-            rc.putResult("cart", cart);
-            rc.setViewName("checkOrder");
+            result.putResult("provinces", provinces);
+            result.putResult("cart", cart);
+            result.setViewName("checkOrder");
 
         } catch (IllegalArgumentException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void updateOrderShipInfo(RequestContext rc) {
+    public void updateOrderShipInfo(RequestContext rc, ResultContext result) {
     }
 
-    public void updateOrderPayment(RequestContext rc) {
+    public void updateOrderPayment(RequestContext rc, ResultContext result) {
     }
 
-    public void updateOrderDelivery(RequestContext rc) {
+    public void updateOrderDelivery(RequestContext rc, ResultContext result) {
     }
 
-    public void submitOrder(RequestContext rc) {
+    public void submitOrder(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -107,26 +108,26 @@ public class OrderController {
 
             ShoppingCart shoppingCart = compositeService.getUserCart(user.getUserId());
 
-            int result = orderService.submitOrder(order, shoppingCart);
+            int submitResult = orderService.submitOrder(order, shoppingCart);
 
-            rc.putResult("orderId", order.getId());
-            rc.putResult("order", order);
-            rc.setViewName("createOrderOk");
+            result.putResult("orderId", order.getId());
+            result.putResult("order", order);
+            result.setViewName("createOrderOk");
 
         } catch (BadParameterException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (UserAddressNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (DeliveryNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (CartEmptyException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (ProductStateException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void payOrder(RequestContext rc) {
+    public void payOrder(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -134,19 +135,19 @@ public class OrderController {
             Order order = orderService.getUserOrder(user.getUserId(), orderId);
 
             if (order.getPaymentId() == 1) {
-                rc.setViewName("orderDone");
+                result.setViewName("orderDone");
             } else if (order.getPaymentId() == 2) {
-                rc.setViewName("payOrder");
+                result.setViewName("payOrder");
             }
 
         } catch (BadParameterException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (OrderNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void getOrderDetail(RequestContext rc) {
+    public void getOrderDetail(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -160,53 +161,53 @@ public class OrderController {
             shippingInfo.setCityInfo(addressService.getCity(shippingInfo.getCitiesId()));
             order.setShippingInfo(shippingInfo);
 
-            rc.putResult("order", order);
-            rc.setViewName("showOrder");
+            result.putResult("order", order);
+            result.setViewName("showOrder");
 
         } catch (BadParameterException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (OrderNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (PaymentNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (DeliveryNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (ShippingNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (CityInfoNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void getMyOrders(RequestContext rc) {
+    public void getMyOrders(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
             List<Order> orders = compositeService.getUserOrders(user.getUserId());
 
-            rc.putResult("orders", orders);
-            rc.setViewName("showMyOrders");
+            result.putResult("orders", orders);
+            result.setViewName("showMyOrders");
 
         } catch (OrderNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void getMyCompleteOrders(RequestContext rc) {
+    public void getMyCompleteOrders(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
             List<Order> orders = compositeService.getUserCompleteOrders(user.getUserId());
 
-            rc.putResult("orders", orders);
-            rc.setViewName("showMyCompleteOrders");
+            result.putResult("orders", orders);
+            result.setViewName("showMyCompleteOrders");
 
         } catch (OrderNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 
-    public void getMyOrderDetail(RequestContext rc) {
+    public void getMyOrderDetail(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -220,21 +221,21 @@ public class OrderController {
             shippingInfo.setCityInfo(addressService.getCity(shippingInfo.getCitiesId()));
             order.setShippingInfo(shippingInfo);
 
-            rc.putResult("order", order);
-            rc.setViewName("showMyOrderData");
+            result.putResult("order", order);
+            result.setViewName("showMyOrderData");
 
         } catch (BadParameterException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (OrderNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (PaymentNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (DeliveryNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (ShippingNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         } catch (CityInfoNotFoundException e) {
-            rc.setError(e);
+            result.setError(e);
         }
     }
 }
