@@ -8,25 +8,23 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.brains.prj.tianjiu.order.domain.*;
-import com.brains.prj.tianjiu.order.orm.*;
 
 @Service
 public class CompositeService {
 
-    private ProductService productService;
+    private GoodsService goodsService;
     private ShoppingCartService shoppingCartService;
     private OrderService orderService;
 
     @Autowired
-    public void setProductService(ProductService productService) {
-        this.productService = productService;
+    public void setGoodsService(GoodsService goodsService) {
+        this.goodsService = goodsService;
     }
 
     @Autowired
@@ -40,16 +38,16 @@ public class CompositeService {
     }
 
     public int addCartItem(int userId, int itemId, int itemCount, ShoppingCart shoppingCart)
-            throws ProductNotFoundException, ProductStateException, CartFullException {
+            throws GoodsNotFoundException, GoodsStateException, CartFullException {
 
-        ProductItem productItem = productService.getProductItem(itemId);
-        if (productItem.okForSale() == false) {
-            throw new ProductStateException(itemId);
+        GoodsItem goodsItem = goodsService.getGoodsItem(itemId);
+        if (goodsItem.okForSale() == false) {
+            throw new GoodsStateException(goodsItem);
         }
-        int add = shoppingCartService.addItem(userId, productItem, itemCount, shoppingCart);
+        int add = shoppingCartService.addItem(userId, goodsItem, itemCount, shoppingCart);
         if (shoppingCart != null) {
             for (CartItem cartItem : shoppingCart.getCartItems()) {
-                cartItem.setProductItem(productService.getProductItem(cartItem.getItemId()));
+                cartItem.setGoodsItem(goodsService.getGoodsItem(cartItem.getItemId()));
             }
         }
         return add;
@@ -59,7 +57,7 @@ public class CompositeService {
         ShoppingCart shoppingCart = new ShoppingCart();
         List<CartItem> cartItems = shoppingCartService.getUserCartItems(userId);
         for (CartItem cartItem : cartItems) {
-            cartItem.setProductItem(productService.getProductItem(cartItem.getItemId()));
+            cartItem.setGoodsItem(goodsService.getGoodsItem(cartItem.getItemId()));
         }
         shoppingCart.setCartItems(cartItems);
         return shoppingCart;

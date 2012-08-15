@@ -20,7 +20,7 @@ public class CartItem implements Serializable {
     private int quantity;
     private Date createdDate;
 
-    private ProductItem productItem;
+    private GoodsItem goodsItem;
     /*
     1：正常。暂无其他状态
      */
@@ -70,11 +70,11 @@ public class CartItem implements Serializable {
         this.state = state;
     }
 
-    public ProductItem getProductItem() {
-        return productItem;
+    public GoodsItem getGoodsItem() {
+        return goodsItem;
     }
 
-    public void setProductItem(ProductItem productItem) {
-        this.productItem = productItem;
+    public void setGoodsItem(GoodsItem goodsInfo) {
+        this.goodsItem = goodsInfo;
     }
 }

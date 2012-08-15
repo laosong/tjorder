@@ -41,7 +41,7 @@ public class AddressService {
     public CityInfo getCity(int cityId) throws CityInfoNotFoundException {
         CityInfo cityInfo = addressMapper.getCityInfoById(cityId);
         if (cityInfo == null) {
-            throw new CityInfoNotFoundException();
+            throw new CityInfoNotFoundException(cityId);
         }
         return cityInfo;
     }
@@ -50,7 +50,7 @@ public class AddressService {
     public CityInfo getCity(String province, String city, String country) throws CityInfoNotFoundException {
         CityInfo cityInfo = addressMapper.getCityInfoByName(province, city, country);
         if (cityInfo == null) {
-            throw new CityInfoNotFoundException();
+            throw new CityInfoNotFoundException(province, city, country);
         }
         return cityInfo;
     }
@@ -83,10 +83,10 @@ public class AddressService {
     }
 
     @Transactional(readOnly = true)
-    public UserAddress getAddressById(int id) throws UserAddressNotFoundException {
-        UserAddress userAddress = addressMapper.getAddressById(id);
+    public UserAddress getUserAddressById(int addressId) throws UserAddressNotFoundException {
+        UserAddress userAddress = addressMapper.getAddressById(addressId);
         if (userAddress == null) {
-            throw new UserAddressNotFoundException();
+            throw new UserAddressNotFoundException(addressId);
         }
         return userAddress;
     }

@@ -3,7 +3,7 @@
 <head>
     <title>登录成功</title>
     <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
-    <meta http-equiv="refresh" content="0;url=/orderAction/showItemList">
+    <meta http-equiv="refresh" content="0;url=/">
 </head>
 <body>
 </body>

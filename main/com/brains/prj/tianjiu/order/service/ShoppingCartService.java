@@ -30,7 +30,7 @@ public class ShoppingCartService {
 
     CartMapper cartMapper;
 
-    ProductService productService;
+    GoodsService goodsService;
 
     @Autowired
     public void setCartMapper(CartMapper cartMapper) {
@@ -38,13 +38,13 @@ public class ShoppingCartService {
     }
 
     @Autowired
-    public void setProductService(ProductService productService) {
-        this.productService = productService;
+    public void setGoodsService(GoodsService goodsService) {
+        this.goodsService = goodsService;
     }
 
     @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
     @Transactional(rollbackFor = RuntimeException.class)
-    public int addItem(int userId, ProductItem productItem, int itemCount, ShoppingCart shoppingCart)
+    public int addItem(int userId, GoodsItem goodsItem, int itemCount, ShoppingCart shoppingCart)
             throws CartFullException {
 
         int userCartItemCount = cartMapper.getItemCountByUser(userId);
@@ -53,11 +53,11 @@ public class ShoppingCartService {
         }
         if (itemCount <= 0)
             itemCount = 1;
-        int affectRows = cartMapper.incItemCountIfExist(userId, productItem.getId(), itemCount);
+        int affectRows = cartMapper.incItemCountIfExist(userId, goodsItem.getId(), itemCount);
         if (affectRows <= 0) {
             CartItem cartItem = new CartItem();
             cartItem.setUserId(userId);
-            cartItem.setItemId(productItem.getId());
+            cartItem.setItemId(goodsItem.getId());
             cartItem.setQuantity(itemCount);
             cartItem.setCreatedDate(new Date());
             affectRows = cartMapper.addItem(cartItem);

@@ -27,11 +27,11 @@ public class ShoppingCart implements Serializable {
         this.cartItems = cartItems;
         if (cartItems != null) {
             for (CartItem cartItem : cartItems) {
-                ProductItem productItem = cartItem.getProductItem();
-                if (productItem != null) {
+                GoodsItem goodsItem = cartItem.getGoodsItem();
+                if (goodsItem != null) {
                     itemCount++;
                     itemSum += cartItem.getQuantity();
-                    totalPrice += cartItem.getQuantity() * productItem.getPrice();
+                    totalPrice += cartItem.getQuantity() * goodsItem.getPrice();
                 }
             }
         }

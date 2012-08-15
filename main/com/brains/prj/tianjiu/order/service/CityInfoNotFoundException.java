@@ -7,6 +7,32 @@ package com.brains.prj.tianjiu.order.service;
  * Time: 下午4:07
  * To change this template use File | Settings | File Templates.
  */
-public class CityInfoNotFoundException extends Exception {
 
+import com.brains.prj.tianjiu.order.common.MessageUtils;
+
+public class CityInfoNotFoundException extends Exception {
+    private int cityId;
+
+    private String province;
+    private String city;
+    private String country;
+
+    public CityInfoNotFoundException(int cityId) {
+        this.cityId = cityId;
+    }
+
+    public CityInfoNotFoundException(String province, String city, String country) {
+        this.province = province;
+        this.city = city;
+        this.country = country;
+    }
+
+    @Override
+    public String getMessage() {
+        if (province != null) {
+            return MessageUtils.format(MessageUtils.CityInfoNotFoundExceptionById_Message, cityId);
+        } else {
+            return MessageUtils.format(MessageUtils.CityInfoNotFoundExceptionByName_Message, province, city, country);
+        }
+    }
 }

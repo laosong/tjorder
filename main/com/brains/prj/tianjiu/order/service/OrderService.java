@@ -17,7 +17,6 @@ import java.util.HashMap;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brains.prj.tianjiu.order.common.OrderEventManager;
@@ -40,7 +39,7 @@ public class OrderService {
 
     PaymentMapper paymentMapper;
 
-    ProductService productService;
+    GoodsService goodsService;
 
     OrderEventManager orderEventManager;
 
@@ -70,8 +69,8 @@ public class OrderService {
     }
 
     @Autowired
-    public void setProductService(ProductService productService) {
-        this.productService = productService;
+    public void setGoodsService(GoodsService goodsService) {
+        this.goodsService = goodsService;
     }
 
     @Autowired
@@ -90,28 +89,28 @@ public class OrderService {
         return paymentMapper.getPaymentsByState((short) 1);
     }
 
-    @Cacheable(value = CACHE_NAME, key = "'PaymentInfo' + #id")
+    @Cacheable(value = CACHE_NAME, key = "'PaymentInfo' + #paymentId")
     @Transactional(readOnly = true)
-    public PaymentInfo getPaymentInfo(int id) throws PaymentNotFoundException {
-        PaymentInfo paymentInfo = paymentMapper.getPaymentById(id);
+    public PaymentInfo getPaymentInfo(int paymentId) throws PaymentNotFoundException {
+        PaymentInfo paymentInfo = paymentMapper.getPaymentById(paymentId);
         if (paymentInfo == null) {
-            throw new PaymentNotFoundException();
+            throw new PaymentNotFoundException(paymentId);
         }
         return paymentInfo;
     }
 
-    @Cacheable(value = CACHE_NAME, key = "'DeliveryInfo' + #id")
+    @Cacheable(value = CACHE_NAME, key = "'DeliveryInfo' + #deliveryId")
     @Transactional(readOnly = true)
-    public DeliveryInfo getDeliveryInfo(int id) throws DeliveryNotFoundException {
-        DeliveryInfo deliveryInfo = deliveryMapper.getDeliveryById(id);
+    public DeliveryInfo getDeliveryInfo(int deliveryId) throws DeliveryNotFoundException {
+        DeliveryInfo deliveryInfo = deliveryMapper.getDeliveryById(deliveryId);
         if (deliveryInfo == null) {
-            throw new DeliveryNotFoundException();
+            throw new DeliveryNotFoundException(deliveryId);
         }
         return deliveryInfo;
     }
 
     @Transactional
-    public int submitOrder(Order order, ShoppingCart shoppingCart) throws CartEmptyException, ProductStateException {
+    public int submitOrder(Order order, ShoppingCart shoppingCart) throws CartEmptyException, GoodsStateException {
         ShippingInfo shippingInfo = order.getShippingInfo();
         if (shippingInfo == null) {
             return 0;
@@ -125,9 +124,9 @@ public class OrderService {
         }
         List<CartItem> cartItems = shoppingCart.getCartItems();
         for (CartItem cartItem : cartItems) {
-            ProductItem productItem = cartItem.getProductItem();
-            if (productItem.okForSale() == false) {
-                throw new ProductStateException(productItem.getId());
+            GoodsItem goodsItem = cartItem.getGoodsItem();
+            if (goodsItem.okForSale() == false) {
+                throw new GoodsStateException(goodsItem);
             }
         }
 
@@ -143,14 +142,14 @@ public class OrderService {
         int createResult = orderMapper.createOrder(order);
 
         for (CartItem cartItem : cartItems) {
-            ProductItem productItem = cartItem.getProductItem();
+            GoodsItem goodsItem = cartItem.getGoodsItem();
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(order.getId());
             orderItem.setItemId(cartItem.getItemId());
             orderItem.setItemType((short) 1);
             orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setBasePrice(productItem.getPrice());
-            orderItem.setPrice(productItem.getPrice());
+            orderItem.setBasePrice(goodsItem.getPrice());
+            orderItem.setPrice(goodsItem.getPrice());
 
             orderMapper.createOrderItem(orderItem);
         }
@@ -166,7 +165,7 @@ public class OrderService {
     public Order getUserOrder(int userId, int orderId) throws OrderNotFoundException {
         Order order = orderMapper.getUserOrderInfo(userId, orderId);
         if (order == null) {
-            throw new OrderNotFoundException();
+            throw new OrderNotFoundException(orderId);
         }
         List<OrderItem> orderItems = orderMapper.getOrderItems(orderId);
         order.setOrderItems(orderItems);
@@ -221,7 +220,7 @@ public class OrderService {
     public ShippingInfo getOrderShippingInfo(int shippingId) throws ShippingNotFoundException {
         ShippingInfo shippingInfo = orderMapper.getShippingInfoById(shippingId);
         if (shippingInfo == null) {
-            throw new ShippingNotFoundException();
+            throw new ShippingNotFoundException(shippingId);
         }
         return shippingInfo;
     }

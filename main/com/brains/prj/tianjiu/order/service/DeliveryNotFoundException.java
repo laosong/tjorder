@@ -7,5 +7,18 @@ package com.brains.prj.tianjiu.order.service;
  * Time: 下午4:45
  * To change this template use File | Settings | File Templates.
  */
+
+import com.brains.prj.tianjiu.order.common.MessageUtils;
+
 public class DeliveryNotFoundException extends Exception {
+    private int deliveryId;
+
+    public DeliveryNotFoundException(int deliveryId) {
+        this.deliveryId = deliveryId;
+    }
+
+    @Override
+    public String getMessage() {
+        return MessageUtils.format(MessageUtils.DeliveryNotFoundException_Message, deliveryId);
+    }
 }

@@ -23,7 +23,6 @@
                             </div>
                             <div id="checkCode" class="info_input clearfix">
                                 <label for="checkcode">验证码</label>
-
                                 <div class="easyformfield codeInput">
                                     <input type="text" size="4" class="left" name="vc" id="valid_code" maxlength="4" tabindex="3"/>
                                     <img class="left" <img src="/verify_code.jpg" alt="验证码" id="valid_code_img"/>
@@ -37,7 +36,7 @@
                                     <label for="rememberCheck">记住登录状态</label>
                                 </div>
                                 <p class="left">
-                                    <a href="{- $web_grade_base_url -}/user/getpwd/" target="_blank">忘记密码？</a>
+                                    <a href="#" target="_blank">忘记密码？</a>
                                 </p>
                             </div>
                             <div class="login_submit mart20">
@@ -49,12 +48,11 @@
                 <div class="ebReg right">
                     <h2 class="f14px fb">还不是天酒商城用户？</h2>
                     <p class="mart10">现在免费注册成为天酒商城用户，便能立刻享受便宜又放心的购物乐趣。</p>
-                    <div class="payOrderBtn"><a href="注册.html" class="ebregbtn btn">新用户注册</a></div>
+                    <div class="payOrderBtn"><a href="#" class="ebregbtn btn">新用户注册</a></div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 </@override>
 <@override name="body_footerjs">

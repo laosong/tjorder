@@ -24,7 +24,7 @@ import com.brains.prj.tianjiu.order.service.*;
 public class OrderController {
 
     @Autowired
-    ProductService productService;
+    GoodsService goodsService;
 
     @Autowired
     ShoppingCartService shoppingCartService;
@@ -42,10 +42,6 @@ public class OrderController {
         try {
             String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
             String img = "test.jpg";
-
-            int itemId = productService.addProductItem(name, img);
-            result.putResult("itemId", itemId);
-            result.setViewName("showOrder");
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }
@@ -53,9 +49,6 @@ public class OrderController {
 
     public void getItemList(RequestContext rc, ResultContext result) {
         try {
-            List<ProductItem> productItems = productService.getItemList();
-            result.putResult("productItems", productItems);
-            result.setViewName("showItemList");
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }
@@ -71,7 +64,7 @@ public class OrderController {
 
             result.putResult("provinces", provinces);
             result.putResult("cart", cart);
-            result.setViewName("checkOrder");
+            result.setViewName("buy/checkOrder");
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }
@@ -95,7 +88,7 @@ public class OrderController {
             int payment = rc.getParameterInt("payment");
             int delivery = rc.getParameterInt("delivery");
 
-            UserAddress userAddress = addressService.getAddressById(orderPost);
+            UserAddress userAddress = addressService.getUserAddressById(orderPost);
 
             ShippingInfo shippingInfo = new ShippingInfo();
             shippingInfo.setCitiesId(userAddress.getCitiesId());
@@ -119,7 +112,7 @@ public class OrderController {
 
             result.putResult("orderId", order.getId());
             result.putResult("order", order);
-            result.setViewName("createOrderOk");
+            result.setViewName("buy/createOrderOk");
         } catch (BadParameterException e) {
             result.setError(e);
         } catch (UserAddressNotFoundException e) {
@@ -128,7 +121,7 @@ public class OrderController {
             result.setError(e);
         } catch (CartEmptyException e) {
             result.setError(e);
-        } catch (ProductStateException e) {
+        } catch (GoodsStateException e) {
             result.setError(e);
         }
     }
@@ -141,9 +134,9 @@ public class OrderController {
             Order order = orderService.getUserOrder(user.getUserId(), orderId);
 
             if (order.getPaymentId() == 1) {
-                result.setViewName("orderDone");
+                result.setViewName("buy/orderDone");
             } else if (order.getPaymentId() == 2) {
-                result.setViewName("payOrder");
+                result.setViewName("buy/payOrder");
             }
         } catch (BadParameterException e) {
             result.setError(e);
@@ -154,7 +147,7 @@ public class OrderController {
 
     protected void fillOrderDetail(Order order) {
         for (OrderItem orderItem : order.getOrderItems()) {
-            orderItem.setProductItem(productService.getProductItem(orderItem.getItemId()));
+            orderItem.setGoodsItem(goodsService.getGoodsItem(orderItem.getItemId()));
         }
     }
 
@@ -162,7 +155,7 @@ public class OrderController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            result.setViewName("showMyHome");
+            result.setViewName("home/showMyHome");
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }
@@ -176,9 +169,8 @@ public class OrderController {
             for (Order order : orders) {
                 fillOrderDetail(order);
             }
-
             result.putResult("orders", orders);
-            result.setViewName("showMyOrders");
+            result.setViewName("home/showMyOrders");
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }
@@ -192,9 +184,8 @@ public class OrderController {
             for (Order order : orders) {
                 fillOrderDetail(order);
             }
-
             result.putResult("orders", orders);
-            result.setViewName("showMyUnCompleteOrders");
+            result.setViewName("home/showMyUnCompleteOrders");
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }
@@ -208,9 +199,8 @@ public class OrderController {
             for (Order order : orders) {
                 fillOrderDetail(order);
             }
-
             result.putResult("orders", orders);
-            result.setViewName("showMyCompleteOrders");
+            result.setViewName("home/showMyCompleteOrders");
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }
@@ -232,7 +222,7 @@ public class OrderController {
             order.setShippingInfo(shippingInfo);
 
             result.putResult("order", order);
-            result.setViewName("showMyOrderData");
+            result.setViewName("home/showMyOrderData");
         } catch (BadParameterException e) {
             result.setError(e);
         } catch (OrderNotFoundException e) {

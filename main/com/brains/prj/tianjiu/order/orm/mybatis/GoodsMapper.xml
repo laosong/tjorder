@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.brains.prj.tianjiu.order.orm.GoodsMapper">
+
+    <resultMap id="goodsResultMap" type="com.brains.prj.tianjiu.order.domain.GoodsItem">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="price" column="price"/>
+        <result property="types" column="types"/>
+        <result property="state" column="state"/>
+        <result property="degree" column="degree"/>
+        <result property="volume" column="volume"/>
+        <result property="img" column="img"/>
+    </resultMap>
+
+    <select id="getGoodsItemById" resultMap="goodsResultMap">
+        SELECT A.id AS id, A.title AS title, A.price AS price, A.types AS types, A.state AS state,
+          A.degree AS degree, A.volume AS volume, CONCAT(B.file_location, '/', file_name) AS img
+          FROM goods A, upload_file B where A.id=#{id} A.id=B.owner_id AND B.owner_type=1 AND B.mark='s'
+    </select>
+
+</mapper>

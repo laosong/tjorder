@@ -17,8 +17,6 @@ import com.brains.prj.tianjiu.order.common.*;
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.service.*;
 
-import java.util.List;
-
 @Controller
 public class ShoppingCartController {
 
@@ -46,13 +44,12 @@ public class ShoppingCartController {
 
             result.putResult("itemSum", briefShoppingCart.getItemSum());
             result.putResult("totalPrice", briefShoppingCart.getTotalPrice());
-            result.setViewName("addCartItemOk");
-
+            result.setViewName("buy/addCartItemOk");
         } catch (BadParameterException e) {
             result.setError(e);
-        } catch (ProductNotFoundException e) {
+        } catch (GoodsNotFoundException e) {
             result.setError(e);
-        } catch (ProductStateException e) {
+        } catch (GoodsStateException e) {
             result.setError(e);
         } catch (CartFullException e) {
             result.setError(e);
@@ -81,8 +78,7 @@ public class ShoppingCartController {
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
-            result.setViewName("showCartData");
-
+            result.setViewName("buy/showCartData");
         } catch (CartItemNotFoundException e) {
             result.setError(e);
         }
@@ -110,8 +106,7 @@ public class ShoppingCartController {
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
-            result.setViewName("showCartData");
-
+            result.setViewName("buy/showCartData");
         } catch (CartItemNotFoundException e) {
             result.setError(e);
         }
@@ -139,8 +134,7 @@ public class ShoppingCartController {
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
-            result.setViewName("showCartData");
-
+            result.setViewName("buy/showCartData");
         } catch (CartItemNotFoundException e) {
             result.setError(e);
         }
@@ -169,8 +163,7 @@ public class ShoppingCartController {
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
-            result.setViewName("showCartData");
-
+            result.setViewName("buy/showCartData");
         } catch (BadParameterException e) {
             result.setError(e);
         } catch (CartItemNotFoundException e) {
@@ -179,7 +172,13 @@ public class ShoppingCartController {
     }
 
     public void getCartPage(RequestContext rc, ResultContext result) {
-        result.setViewName("showCart");
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            result.setViewName("buy/showCart");
+        } catch (IllegalArgumentException e) {
+            result.setError(e);
+        }
     }
 
     public void getCart(RequestContext rc, ResultContext result) {
@@ -190,8 +189,7 @@ public class ShoppingCartController {
             detailShoppingCart = compositeService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
-            result.setViewName("showCartData");
-
+            result.setViewName("buy/showCartData");
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }

@@ -11,6 +11,7 @@ package com.brains.prj.tianjiu.order.mvc;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
+import java.net.URL;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -19,13 +20,20 @@ import org.apache.commons.lang.StringUtils;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.util.WebUtils;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
+import org.springframework.util.SystemPropertyUtils;
 
 import com.easyvalidation.Validator;
 
 import com.brains.prj.tianjiu.order.common.*;
 
 public class OrderControlServlet extends HttpServlet {
+
+    public static final String MAPPING_CONFIG_LOCATION_PARAM = "mappingConfigLocation";
+    public static final String VALIDATOR_CONFIG_LOCATION_PARAM = "validatorConfigLocation";
+    public static final String TEMPLATE_LOCATION_PARAM = "templateLocation";
 
     public static final String UTF_8 = "utf-8";
 
@@ -36,20 +44,41 @@ public class OrderControlServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        String webRootPath = config.getServletContext().getRealPath("/");
         try {
             applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
 
-            mappingConfig.initConfig(webRootPath + "/WEB-INF/mapping.xml");
+            String location = config.getInitParameter(MAPPING_CONFIG_LOCATION_PARAM);
+            if (location != null) {
+                if (!ResourceUtils.isUrl(location)) {
+                    location = SystemPropertyUtils.resolvePlaceholders(location);
+                    location = WebUtils.getRealPath(config.getServletContext(), location);
+                } else {
+                    URL url = ResourceUtils.getURL(location);
+                    location = url.toString();
+                }
+                mappingConfig.initConfig(location);
+            }
+            location = config.getInitParameter(VALIDATOR_CONFIG_LOCATION_PARAM);
+            if (location != null) {
+                if (!ResourceUtils.isUrl(location)) {
+                    location = SystemPropertyUtils.resolvePlaceholders(location);
+                    location = WebUtils.getRealPath(config.getServletContext(), location);
+                } else {
+                    URL url = ResourceUtils.getURL(location);
+                    location = url.toString();
+                }
+                Validator.initialize(location);
+            }
+            location = config.getInitParameter(TEMPLATE_LOCATION_PARAM);
+            if (location != null) {
+                location = WebUtils.getRealPath(config.getServletContext(), location);
+                TemplateRender.initConfig(location, UTF_8);
 
-            Validator.initialize(webRootPath + "/WEB-INF/validator.xml");
-
+                OrderControlDirective orderControlDirective = new OrderControlDirective();
+                orderControlDirective.init(mappingConfig, applicationContext);
+                TemplateRender.addSharedVariable("OrderControl", orderControlDirective);
+            }
             JsonObjectMapper.initConfig(null, UTF_8);
-
-            TemplateRender.initConfig(webRootPath + "/WEB-INF/tpl", UTF_8);
-            OrderControlDirective orderControlDirective = new OrderControlDirective();
-            orderControlDirective.init(mappingConfig, applicationContext);
-            TemplateRender.addSharedVariable("OrderControl", orderControlDirective);
         } catch (Exception e) {
             throw new ServletException(e);
         }
