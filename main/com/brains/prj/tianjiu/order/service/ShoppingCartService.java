@@ -11,10 +11,7 @@ package com.brains.prj.tianjiu.order.service;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.brains.prj.tianjiu.order.domain.*;
@@ -23,94 +20,109 @@ import com.brains.prj.tianjiu.order.orm.*;
 @Service
 public class ShoppingCartService {
 
-    public static final String CACHE_NAME = "orderCache";
-    public static final String USER_CART_CACHE_KEY_PREFIX = "UserCartItems";
-
     public static final int MAX_ITEM_COUNT = 10;
 
-    CartMapper cartMapper;
+    public static final int MAX_EVA_GOODS_BUY = 1;
 
-    GoodsService goodsService;
+    public static final int CHECK_ORDER_CONTAIN_EVA_HOURS = 30 * 24;
+
+    ShoppingCartAOP shoppingCartAOP;
+
+    GoodsAOP goodsAOP;
+
+    OrderAOP orderAOP;
 
     @Autowired
-    public void setCartMapper(CartMapper cartMapper) {
-        this.cartMapper = cartMapper;
+    public void setShoppingCartAOP(ShoppingCartAOP shoppingCartAOP) {
+        this.shoppingCartAOP = shoppingCartAOP;
     }
 
     @Autowired
-    public void setGoodsService(GoodsService goodsService) {
-        this.goodsService = goodsService;
+    public void setGoodsAOP(GoodsAOP goodsAOP) {
+        this.goodsAOP = goodsAOP;
     }
 
-    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
-    @Transactional(rollbackFor = RuntimeException.class)
-    public int addItem(int userId, GoodsItem goodsItem, int itemCount, ShoppingCart shoppingCart)
-            throws CartFullException {
+    @Autowired
+    public void setOrderAOP(OrderAOP orderAOP) {
+        this.orderAOP = orderAOP;
+    }
 
-        int userCartItemCount = cartMapper.getItemCountByUser(userId);
-        if (userCartItemCount > MAX_ITEM_COUNT) {
+    public ShoppingCart getUserCart(int userId) {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        List<CartItem> cartItems = shoppingCartAOP.getUserCartItems(userId);
+        for (CartItem cartItem : cartItems) {
+            GoodsItem goodsItem = goodsAOP.getGoodsItem(cartItem.getItemId());
+            if (goodsItem == null)
+                goodsItem = GoodsService.nobodyItem;
+            cartItem.setGoodsItem(goodsItem);
+        }
+        shoppingCart.setCartItems(cartItems);
+        return shoppingCart;
+    }
+
+    public void addItem(int userId, int itemId, int itemCount) throws GoodsNotFoundException,
+            GoodsStateException, CartFullException, EvaGoodsBuyCountException, EvaGoodsAlreadyBuyException {
+        GoodsItem goodsItem = goodsAOP.getGoodsItem(itemId);
+        if (goodsItem == null) {
+            throw new GoodsNotFoundException(itemId);
+        }
+        if (goodsItem.okForSale() == false) {
+            throw new GoodsStateException(goodsItem);
+        }
+        ShoppingCart shoppingCart = getUserCart(userId);
+        if (shoppingCart.getItemCount() > MAX_ITEM_COUNT) {
             throw new CartFullException(MAX_ITEM_COUNT);
+        }
+        if (goodsItem.beEva() == true) {
+            if (itemCount > MAX_EVA_GOODS_BUY) {
+                throw new EvaGoodsBuyCountException(itemCount, MAX_EVA_GOODS_BUY);
+            }
+            int evaItemCountInCart = 0;
+            for (CartItem cartItem : shoppingCart.getCartItems()) {
+                if (cartItem.getGoodsItem().beEva() == true) {
+                    evaItemCountInCart += cartItem.getQuantity();
+                }
+            }
+            int evaItemCount = itemCount + evaItemCountInCart;
+            if (evaItemCount > MAX_EVA_GOODS_BUY) {
+                throw new EvaGoodsBuyCountException(evaItemCount, MAX_EVA_GOODS_BUY);
+            }
+            List<Order> ordersContainEvaItem = orderAOP.getUserOrderContainEvaItem(userId, CHECK_ORDER_CONTAIN_EVA_HOURS);
+            if (ordersContainEvaItem.size() > 0) {
+                throw new EvaGoodsAlreadyBuyException(goodsItem, ordersContainEvaItem.get(0));
+            }
         }
         if (itemCount <= 0)
             itemCount = 1;
-        int affectRows = cartMapper.incItemCountIfExist(userId, goodsItem.getId(), itemCount);
-        if (affectRows <= 0) {
-            CartItem cartItem = new CartItem();
-            cartItem.setUserId(userId);
-            cartItem.setItemId(goodsItem.getId());
-            cartItem.setQuantity(itemCount);
-            cartItem.setCreatedDate(new Date());
-            affectRows = cartMapper.addItem(cartItem);
-        }
-        if (shoppingCart != null) {
-            shoppingCart.setCartItems(cartMapper.getItemsByUser(userId));
-        }
-        return affectRows;
+
+        shoppingCartAOP.addItem(userId, goodsItem, itemCount);
     }
 
-    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
-    @Transactional
-    public int delItem(int userId, int id, int itemId) throws CartItemNotFoundException {
-        int affectRows = cartMapper.delItemByTestId(userId, id, itemId);
+    public void delItem(int userId, int id, int itemId) throws CartItemNotFoundException {
+        int affectRows = shoppingCartAOP.delItem(userId, id, itemId);
         if (affectRows <= 0) {
             throw new CartItemNotFoundException(id, itemId);
         }
-        return affectRows;
     }
 
-    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
-    @Transactional
-    public int incItem(int userId, int id, int itemId) throws CartItemNotFoundException {
-        int affectRows = cartMapper.incItemCountByTestId(userId, id, itemId, 1);
+    public void incItem(int userId, int id, int itemId) throws CartItemNotFoundException {
+        int affectRows = shoppingCartAOP.incItem(userId, id, itemId);
         if (affectRows <= 0) {
             throw new CartItemNotFoundException(id, itemId);
         }
-        return affectRows;
     }
 
-    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
-    @Transactional
-    public int decItem(int userId, int id, int itemId) throws CartItemNotFoundException {
-        int affectRows = cartMapper.decItemCountByTestId(userId, id, itemId, 1);
+    public void decItem(int userId, int id, int itemId) throws CartItemNotFoundException {
+        int affectRows = shoppingCartAOP.decItem(userId, id, itemId);
         if (affectRows <= 0) {
             throw new CartItemNotFoundException(id, itemId);
         }
-        return affectRows;
     }
 
-    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
-    @Transactional
-    public int setItemCount(int userId, int id, int itemId, int itemCount) throws CartItemNotFoundException {
-        int affectRows = cartMapper.setItemCountByTestId(userId, id, itemId, itemCount);
+    public void setItemCount(int userId, int id, int itemId, int itemCount) throws CartItemNotFoundException {
+        int affectRows = shoppingCartAOP.setItemCount(userId, id, itemId, itemCount);
         if (affectRows <= 0) {
             throw new CartItemNotFoundException(id, itemId);
         }
-        return affectRows;
-    }
-
-    @Cacheable(value = CACHE_NAME, key = "'UserCartItems' + #userId")
-    @Transactional(readOnly = true)
-    public List<CartItem> getUserCartItems(int userId) {
-        return cartMapper.getItemsByUser(userId);
     }
 }

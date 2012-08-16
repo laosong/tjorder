@@ -8,6 +8,7 @@
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="price" column="price"/>
+        <result property="marketPrice" column="market_price"/>
         <result property="types" column="types"/>
         <result property="state" column="state"/>
         <result property="degree" column="degree"/>
@@ -15,10 +16,16 @@
         <result property="img" column="img"/>
     </resultMap>
 
-    <select id="getGoodsItemById" resultMap="goodsResultMap">
-        SELECT A.id AS id, A.title AS title, A.price AS price, A.types AS types, A.state AS state,
-          A.degree AS degree, A.volume AS volume, CONCAT(B.file_location, '/', file_name) AS img
-          FROM goods A, upload_file B where A.id=#{id} A.id=B.owner_id AND B.owner_type=1 AND B.mark='s'
+    <select id="getGoodsListByState" parameterType="int" resultMap="goodsResultMap">
+      SELECT A.id, A.title, A.price, A.market_price, A.types, A.state, A.degree, A.volume,
+          concat(B.file_location, '/', file_name) AS img
+          FROM goods A LEFT JOIN upload_file B on A.id=B.owner_id WHERE A.state=#{state} AND B.owner_type=1 AND B.mark='s'
+    </select>
+
+    <select id="getGoodsItemById" parameterType="int" resultMap="goodsResultMap">
+        SELECT A.id, A.title, A.price, A.market_price, A.types, A.state, A.degree, A.volume,
+          concat(B.file_location, '/', file_name) AS img
+          FROM goods A LEFT JOIN upload_file B on A.id=B.owner_id WHERE A.id=#{id} AND B.owner_type=1 AND B.mark='s'
     </select>
 
 </mapper>

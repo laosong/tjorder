@@ -17,6 +17,7 @@ public class GoodsItem implements Serializable {
     private int id;
     private String title;
     private float price;
+    private float marketPrice;
     private short types;
     private short state;
 
@@ -46,6 +47,14 @@ public class GoodsItem implements Serializable {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public float getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(float marketPrice) {
+        this.marketPrice = marketPrice;
     }
 
     public short getTypes() {
@@ -93,7 +102,7 @@ public class GoodsItem implements Serializable {
         return state == 2;
     }
 
-    public boolean beSpecial() {
+    public boolean beEva() {
         return types == 0;
     }
 

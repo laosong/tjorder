@@ -8,6 +8,8 @@ package com.brains.prj.tianjiu.order.web;
  * To change this template use File | Settings | File Templates.
  */
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,10 +26,9 @@ public class ShoppingCartController {
     ShoppingCartService shoppingCartService;
 
     @Autowired
-    CompositeService compositeService;
+    GoodsService goodsService;
 
     public void addItem(RequestContext rc, ResultContext result) {
-        int addResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -38,13 +39,7 @@ public class ShoppingCartController {
             } catch (Exception e) {
                 itemCount = 1;
             }
-
-            ShoppingCart briefShoppingCart = new ShoppingCart();
-            addResult = compositeService.addCartItem(user.getUserId(), itemId, itemCount, briefShoppingCart);
-
-            result.putResult("itemSum", briefShoppingCart.getItemSum());
-            result.putResult("totalPrice", briefShoppingCart.getTotalPrice());
-            result.setViewName("buy/addCartItemOk");
+            shoppingCartService.addItem(user.getUserId(), itemId, itemCount);
         } catch (BadParameterException e) {
             result.setError(e);
         } catch (GoodsNotFoundException e) {
@@ -53,11 +48,14 @@ public class ShoppingCartController {
             result.setError(e);
         } catch (CartFullException e) {
             result.setError(e);
+        } catch (EvaGoodsBuyCountException e) {
+            result.setError(e);
+        } catch (EvaGoodsAlreadyBuyException e) {
+            result.setError(e);
         }
     }
 
     public void delItem(RequestContext rc, ResultContext result) {
-        int delResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -72,10 +70,10 @@ public class ShoppingCartController {
             } catch (Exception e) {
             }
 
-            delResult = shoppingCartService.delItem(user.getUserId(), id, itemId);
+            shoppingCartService.delItem(user.getUserId(), id, itemId);
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = compositeService.getUserCart(user.getUserId());
+            detailShoppingCart = shoppingCartService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
             result.setViewName("buy/showCartData");
@@ -85,7 +83,6 @@ public class ShoppingCartController {
     }
 
     public void incItem(RequestContext rc, ResultContext result) {
-        int incResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -100,10 +97,10 @@ public class ShoppingCartController {
             } catch (Exception e) {
             }
 
-            incResult = shoppingCartService.incItem(user.getUserId(), id, itemId);
+            shoppingCartService.incItem(user.getUserId(), id, itemId);
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = compositeService.getUserCart(user.getUserId());
+            detailShoppingCart = shoppingCartService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
             result.setViewName("buy/showCartData");
@@ -113,7 +110,6 @@ public class ShoppingCartController {
     }
 
     public void decItem(RequestContext rc, ResultContext result) {
-        int decResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -128,10 +124,10 @@ public class ShoppingCartController {
             } catch (Exception e) {
             }
 
-            decResult = shoppingCartService.decItem(user.getUserId(), id, itemId);
+            shoppingCartService.decItem(user.getUserId(), id, itemId);
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = compositeService.getUserCart(user.getUserId());
+            detailShoppingCart = shoppingCartService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
             result.setViewName("buy/showCartData");
@@ -141,7 +137,6 @@ public class ShoppingCartController {
     }
 
     public void setItemCount(RequestContext rc, ResultContext result) {
-        int decResult = 0;
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
@@ -157,10 +152,10 @@ public class ShoppingCartController {
             }
             int itemCount = rc.getParameterInt("itemCount");
 
-            decResult = shoppingCartService.setItemCount(user.getUserId(), id, itemId, itemCount);
+            shoppingCartService.setItemCount(user.getUserId(), id, itemId, itemCount);
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = compositeService.getUserCart(user.getUserId());
+            detailShoppingCart = shoppingCartService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
             result.setViewName("buy/showCartData");
@@ -186,7 +181,7 @@ public class ShoppingCartController {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
             ShoppingCart detailShoppingCart = null;
-            detailShoppingCart = compositeService.getUserCart(user.getUserId());
+            detailShoppingCart = shoppingCartService.getUserCart(user.getUserId());
 
             result.putResult("cart", detailShoppingCart);
             result.setViewName("buy/showCartData");

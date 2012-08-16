@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="product_img_root" type="java.lang.String" -->
-<#-- @ftlvariable name="productItems" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.ProductItem>" -->
-<@override name="title"><@super/>产品列表</@override>
+<#-- @ftlvariable name="goodsItems" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.GoodsItem>" -->
+<@override name="title">产品列表_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
     #cartWrapper {
@@ -50,15 +50,15 @@
                 <td width="20%" align="center"> 商品数量</td>
                 <td width="10%" align="center">操作</td>
             </tr>
-            <#list productItems as productItem>
-                <tr <#if productItem_index%2==0> class="row_odd"</#if>>
-                    <td align="center">${productItem_index+1} - ${productItem.getId()}</td>
+            <#list goodsItems as goodsItem>
+                <tr <#if goodsItem_index%2==0> class="row_odd"</#if>>
+                    <td align="center">${goodsItem_index+1} - ${goodsItem.getId()}</td>
                     <td>
                         <a href="#">
-                            <img src="${product_img_root}${productItem.getImg()}" border="0" width="100" height="100" align="middle"/>
-                        </a> &nbsp;&nbsp;<a href="#">${productItem.getName()?html}</a>
+                            <img src="${product_img_root}${goodsItem.getImg()}" border="0" width="100" height="100" align="middle"/>
+                        </a> &nbsp;&nbsp;<a href="#">${goodsItem.getName()?html}</a>
                     </td>
-                    <td align="right"><span><STRONG>${productItem.getPrice()}</STRONG></span></td>
+                    <td align="right"><span><STRONG>${goodsItem.getPrice()}</STRONG></span></td>
                     <td align="center">
                         <button id="minus-3" class="ui-button ui-widget ui-state-default">
                             <span class="ui-icon ui-icon-minus"></span></button>
@@ -67,7 +67,7 @@
                             <span class="ui-icon ui-icon-plus"></span></button>
                     </td>
                     <td align="center">
-                        <a href="/orderAction/addCartItem?itemId=${productItem.getId()}&itemCount=1">加入购物车</a>
+                        <a href="/orderAction/addCartItem?itemId=${goodsItem.getId()}&itemCount=1">加入购物车</a>
                     </td>
                 </tr>
             </#list>

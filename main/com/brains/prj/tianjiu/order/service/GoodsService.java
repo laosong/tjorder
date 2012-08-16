@@ -8,37 +8,45 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.brains.prj.tianjiu.order.domain.*;
-import com.brains.prj.tianjiu.order.orm.*;
 
 @Service
 public class GoodsService {
-    public static final String CACHE_NAME = "goodsCache";
 
     final static GoodsItem nobodyItem;
 
     static {
         nobodyItem = new GoodsItem();
-        nobodyItem.setState((short) -1);
+        nobodyItem.setId(-1);
         nobodyItem.setTitle("nobody");
     }
 
-    GoodsMapper goodsMapper;
+    GoodsAOP goodsAOP;
 
     @Autowired
-    public void setGoodsMapper(GoodsMapper goodsMapper) {
-        this.goodsMapper = goodsMapper;
+    public void setGoodsAOP(GoodsAOP goodsAOP) {
+        this.goodsAOP = goodsAOP;
     }
 
-    @Cacheable(value = CACHE_NAME, key = "'GoodsItem' + #id")
-    @Transactional(readOnly = true)
-    public GoodsItem getGoodsItem(int id) {
-        GoodsItem goodsItem = goodsMapper.getGoodsItemById(id);
+    public List<GoodsItem> getGoodsForSale() {
+        return goodsAOP.getGoodsForSale();
+    }
+
+    public GoodsItem getGoodsItem(int goodsId) throws GoodsNotFoundException {
+        GoodsItem goodsItem = goodsAOP.getGoodsItem(goodsId);
+        if (goodsItem == null) {
+            throw new GoodsNotFoundException(goodsId);
+        }
+        return goodsItem;
+    }
+
+    public GoodsItem getGoodsItemNoThrow(int goodsId) {
+        GoodsItem goodsItem = goodsAOP.getGoodsItem(goodsId);
         if (goodsItem == null) {
             goodsItem = nobodyItem;
         }

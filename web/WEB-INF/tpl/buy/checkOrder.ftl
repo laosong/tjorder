@@ -98,12 +98,12 @@
                             <tbody>
                                 <#assign cartItems = cart.getCartItems()>
                                 <#list cartItems as cartItem>
-                                    <#assign productItem = cartItem.getProductItem()>
+                                    <#assign goodsItem = cartItem.getGoodsItem()>
                                 <tr>
                                     <td>${cartItem.getItemId()}</td>
-                                    <td><a class="list02" href="#">${productItem.getName()?html}</a></td>
+                                    <td><a class="list02" href="#">${goodsItem.getName()?html}</a></td>
                                     <td align="right">${cartItem.getQuantity()?c}</td>
-                                    <td align="right">${productItem.getPrice()}</td>
+                                    <td align="right">${goodsItem.getPrice()}</td>
                                 </tr>
                                 </#list>
                             </tbody>

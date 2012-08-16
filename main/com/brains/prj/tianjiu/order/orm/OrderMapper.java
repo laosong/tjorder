@@ -18,6 +18,9 @@ public interface OrderMapper {
 
     public int createOrder(Order order);
 
+    public int setOrderCd(@Param("orderId") int orderId,
+                          @Param("orderCd") String orderCd);
+
     public int createOrderItem(OrderItem orderItem);
 
     public int updateOrderPriceById(@Param("id") int id,
@@ -25,6 +28,9 @@ public interface OrderMapper {
 
     public Order getUserOrderInfo(@Param("userId") int userId,
                                   @Param("orderId") int orderId);
+
+    public List<Order> getUserOrderContainEvaItem(@Param("userId") int userId,
+                                                  @Param("checkHours") int checkHours);
 
     public List<OrderItem> getOrderItems(@Param("orderId") int orderId);
 

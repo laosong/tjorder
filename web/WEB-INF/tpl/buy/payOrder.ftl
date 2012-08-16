@@ -14,7 +14,9 @@
             <div class="payOrder_succeed">
                 <dl class="ebBg">
                     <dt>订单提交成功，请您尽快付款！</dt>
-                    <dd>订单号：277221801<span>|</span>应付金额：<em class="succeed_price f14px fb fred">￥1599.00</em></dd>
+                    <dd>订单号：${order.getOrderCd()}
+                        <span>|</span>应付金额：<em class="succeed_price f14px fb fred">${order.getSumPrice()}</em>
+                    </dd>
                 </dl>
             </div>
             <p class="mart20">
@@ -120,7 +122,8 @@
                     </tr>
                 </table>
                 <div class="payOrderBtn f14px fb mart20 txtright">
-                    <a href="#" class="btnCom btnCom_reb"><span>确定支付方式</span></a></div>
+                    <a href="#" class="btnCom btnCom_reb"><span>确定支付方式</span></a>
+                </div>
             </div>
         </div>
         <span class="sFillet ht5 ebBg ebFillet990_b"></span>

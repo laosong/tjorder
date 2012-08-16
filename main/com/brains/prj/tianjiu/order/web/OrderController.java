@@ -35,9 +35,6 @@ public class OrderController {
     @Autowired
     AddressService addressService;
 
-    @Autowired
-    CompositeService compositeService;
-
     public void addProductItem(RequestContext rc, ResultContext result) {
         try {
             String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
@@ -49,6 +46,9 @@ public class OrderController {
 
     public void getItemList(RequestContext rc, ResultContext result) {
         try {
+            List<GoodsItem> goodsItems = goodsService.getGoodsForSale();
+            result.putResult("goodsItems", goodsItems);
+            result.setViewName("showItemList");
         } catch (IllegalArgumentException e) {
             result.setError(e);
         }
@@ -60,12 +60,20 @@ public class OrderController {
 
             List<String> provinces = addressService.getProvinces();
 
-            ShoppingCart cart = compositeService.getUserCart(user.getUserId());
+            ShoppingCart cart = shoppingCartService.getUserCart(user.getUserId());
+
+            orderService.submitCart(user.getUserId(), cart);
 
             result.putResult("provinces", provinces);
             result.putResult("cart", cart);
             result.setViewName("buy/checkOrder");
-        } catch (IllegalArgumentException e) {
+        } catch (CartEmptyException e) {
+            result.setError(e);
+        } catch (GoodsStateException e) {
+            result.setError(e);
+        } catch (EvaGoodsBuyCountException e) {
+            result.setError(e);
+        } catch (EvaGoodsAlreadyBuyException e) {
             result.setError(e);
         }
     }
@@ -106,9 +114,9 @@ public class OrderController {
 
             order.setDeliveryInfo(orderService.getDeliveryInfo(delivery));
 
-            ShoppingCart shoppingCart = compositeService.getUserCart(user.getUserId());
+            ShoppingCart cart = shoppingCartService.getUserCart(user.getUserId());
 
-            int submitResult = orderService.submitOrder(order, shoppingCart);
+            orderService.submitOrder(order, cart);
 
             result.putResult("orderId", order.getId());
             result.putResult("order", order);
@@ -122,6 +130,10 @@ public class OrderController {
         } catch (CartEmptyException e) {
             result.setError(e);
         } catch (GoodsStateException e) {
+            result.setError(e);
+        } catch (EvaGoodsBuyCountException e) {
+            result.setError(e);
+        } catch (EvaGoodsAlreadyBuyException e) {
             result.setError(e);
         }
     }
@@ -147,7 +159,7 @@ public class OrderController {
 
     protected void fillOrderDetail(Order order) {
         for (OrderItem orderItem : order.getOrderItems()) {
-            orderItem.setGoodsItem(goodsService.getGoodsItem(orderItem.getItemId()));
+            orderItem.setGoodsItem(goodsService.getGoodsItemNoThrow(orderItem.getItemId()));
         }
     }
 

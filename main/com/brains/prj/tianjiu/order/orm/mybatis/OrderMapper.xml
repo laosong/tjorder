@@ -29,6 +29,9 @@
         INSERT INTO orders(user_id, order_cd, payment_id, delivery_id, shipping_id, types, sum_price, created_date, state)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     </insert>
+    <update id="setOrderCd">
+        UPDATE orders SET order_cd=#{orderCd} WHERE id=#{orderId}
+    </update>
     <insert id="createOrderItem" parameterMap="orderItemParameterMap">
         INSERT INTO order_item(order_id, item_id, item_type, promotion_id, quantity, base_price, price)
           VALUES(?, ?, ?, ?, ?, ?, ?)
@@ -54,6 +57,12 @@
 
     <select id="getUserOrderInfo" resultMap="orderInfoResultMap">
         SELECT * FROM orders WHERE id=#{orderId} AND user_id=#{userId}
+    </select>
+
+    <select id="getUserOrderContainEvaItem" resultMap="orderInfoResultMap">
+        SELECT * FROM orders WHERE id in
+          (SELECT A.id FROM orders A, order_item B
+          WHERE A.id=B.order_id AND A.user_id=#{userId} AND TIMESTAMPDIFF(HOUR, A.created_date, NOW()) &lt; #{checkHours})
     </select>
 
     <resultMap id="orderItemResultMap" type="com.brains.prj.tianjiu.order.domain.OrderItem">

@@ -18,45 +18,51 @@ public class MessageUtils {
     }
 
     public static final String CartFullException_Message
-            = "com.brains.prj.tianjiu.order.service.CartFullException, maxItemCount={0}";
+            = "order.service.CartFullException, maxItemCount={0}";
 
     public static final String CartItemNotFoundException_Message
-            = "com.brains.prj.tianjiu.order.service.CartItemNotFoundException, id={0}##itemId={1}";
+            = "order.service.CartItemNotFoundException, id={0}##itemId={1}";
 
     public static final String CartEmptyException_Message
-            = "com.brains.prj.tianjiu.order.service.CartEmptyException";
+            = "order.service.CartEmptyException";
 
 
     public static final String GoodsNotFoundException_Message
-            = "com.brains.prj.tianjiu.order.service.GoodsNotFoundException, goodsId={0}";
+            = "order.service.GoodsNotFoundException, goodsId={0}";
 
     public static final String GoodsStateException_Message
-            = "com.brains.prj.tianjiu.order.service.GoodsStateException, goodsId={0}##goodsShowName={1}##goodsState={2}";
+            = "order.service.GoodsStateException, goodsId={0}##goodsName={1}##goodsState={2}";
 
     public static final String CityInfoNotFoundExceptionById_Message
-            = "com.brains.prj.tianjiu.order.service.CityInfoNotFoundExceptionById, cityId={0}";
+            = "order.service.CityInfoNotFoundExceptionById, cityId={0}";
 
     public static final String CityInfoNotFoundExceptionByName_Message
-            = "com.brains.prj.tianjiu.order.service.CityInfoNotFoundExceptionByName, province={0}##city={1}##country={2}";
+            = "order.service.CityInfoNotFoundExceptionByName, province={0}##city={1}##country={2}";
 
     public static final String OrderNotFoundException_Message
-            = "com.brains.prj.tianjiu.order.service.OrderNotFoundException, orderId={0}";
+            = "order.service.OrderNotFoundException, orderId={0}";
 
     public static final String UserAddressNotFoundException_Message
-            = "com.brains.prj.tianjiu.order.service.UserAddressNotFoundException, addressId={0}";
+            = "order.service.UserAddressNotFoundException, addressId={0}";
 
     public static final String ShippingNotFoundException_Message
-            = "com.brains.prj.tianjiu.order.service.ShippingNotFoundException, shippingId={0}";
+            = "order.service.ShippingNotFoundException, shippingId={0}";
 
     public static final String PaymentNotFoundException_Message
-            = "com.brains.prj.tianjiu.order.service.PaymentNotFoundException, paymentId={0}";
+            = "order.service.PaymentNotFoundException, paymentId={0}";
 
     public static final String DeliveryNotFoundException_Message
-            = "com.brains.prj.tianjiu.order.service.DeliveryNotFoundException, deliveryId={0}";
+            = "order.service.DeliveryNotFoundException, deliveryId={0}";
+
+    public static final String EvaGoodsBuyCountException_Message
+            = "order.service.EvaGoodsBuyCountException, buyCount={0}##maxCount={1}";
+
+    public static final String EvaGoodsExistInCartException_Message
+            = "order.service.EvaGoodsExistInCartException, goodsId={0}##goodsName={1}##cartGoodsId={2}##cartGoodsName={3}";
+
+    public static final String EvaGoodsAlreadyBuyException_Message
+            = "order.service.EvaGoodsAlreadyBuyException, goodsId={0}##goodsName={1}##orderId={2}##orderDate={3}";
 
     public static void main(String[] args) {
-        com.brains.prj.tianjiu.order.service.GoodsNotFoundException exception
-                = new com.brains.prj.tianjiu.order.service.GoodsNotFoundException(10);
-        System.out.println(exception.getMessage());
     }
 }

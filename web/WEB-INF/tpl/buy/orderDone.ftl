@@ -11,10 +11,9 @@
     </div>
     <div class="ebCon_wrap mart10">
         <span class="sFillet ht5 ebBg ebFillet990_t"></span>
-
         <div class="ebCon">
             <div class="orderFinish_wrap">
-                <div class="orderFinish f14px">订单&nbsp;<span class="fred fb">184945906</span>&nbsp;已支付完成，您可以。
+                <div class="orderFinish f14px">订单&nbsp;<span class="fred fb">${order.getOrderCd()}</span>&nbsp;已支付完成，您可以。
                 </div>
                 <p class="orderFinish_skip">
                     <a href="/orderAction/showMyOrders">去我的订单</a><span style="width: 50px"></span><a href="/main.html">去商城首页</a>

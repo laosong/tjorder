@@ -26,8 +26,8 @@
                 <td class="f999">${order.getCreatedDate()?datetime}</td>
                 <td class="t_l">
                     <#list order.getOrderItems() as order_item>
-                        <a href="#" target="_blank" title="${order_item.getProductItem().getName()}">
-                            <img src="${product_img_root}${order_item.getProductItem().getImg()!("")}" width="42" height="42" border="0" align="middle">
+                        <a href="#" target="_blank" title="${order_item.getGoodsItem().getName()}">
+                            <img src="${product_img_root}${order_item.getGoodsItem().getImg()!("")}" width="42" height="42" border="0" align="middle">
                         </a>
                     </#list>
                 </td>

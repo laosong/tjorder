@@ -80,4 +80,4 @@
     });
 </script>
 </@override>
-<@extends name="buybase.ftl"/>
+<@extends name="base.ftl"/>
