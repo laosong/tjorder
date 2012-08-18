@@ -3,20 +3,28 @@
 <div class="per_nav">
     <dl>
         <dt>订单中心</dt>
-        <dd <#if nav_name=="allorders">class="curNav"</#if>><a href="/orderAction/showMyOrders">所有订单</a></dd>
-        <dd <#if nav_name=="uncomporders">class="curNav"</#if>><a href="/orderAction/showMyUnCompleteOrders">未完成订单</a>
-        </dd>
-        <dd <#if nav_name=="comporders">class="curNav"</#if>><a href="/orderAction/showMyCompleteOrders">已结束订单</a></dd>
-        <dd><a href="/orderAction/showMyOrders">我的评论</a></dd>
-        <dd><a href="/orderAction/showMyOrders">我的藏酒阁</a></dd>
+        <dd <#if nav_name=="allorders">class="curNav"</#if>><a href="/orderAction/myOrders">所有订单</a></dd>
+        <dd <#if nav_name=="uncomporders">class="curNav"</#if>><a href="/orderAction/myUnCompleteOrders">未完成订单</a></dd>
+        <dd <#if nav_name=="comporders">class="curNav"</#if>><a href="/orderAction/myCompleteOrders">已结束订单</a></dd>
+        <dd><a href="/home/user/comments.htm">我的评论</a></dd>
+        <dd><a href="/home/user/favor.htm">我的藏酒阁</a></dd>
     </dl>
     <dl>
         <dt>账户中心</dt>
-        <dd><a href="/orderAction/showMyOrders">个人资料</a></dd>
-        <dd><a href="/orderAction/showMyOrders">密码修改</a></dd>
-        <dd><a href="/orderAction/showMyOrders">地址管理</a></dd>
+        <dd><a href="/home/user/info.htm">个人资料</a></dd>
+        <dd><a href="/home/user/ch-pwd.htm">密码修改</a></dd>
+        <dd><a href="/orderAction/myAddress">地址管理</a></dd>
     </dl>
 </div>
+</#macro>
+<#macro order_status os=0>
+    <#if os==0>刚创建
+    <#elseif os==1>已提交
+    <#elseif os==2>已付款
+    <#elseif os==3>已发货
+    <#elseif os==4>已完成
+    <#elseif os==5>已取消
+    </#if>
 </#macro>
 <@override name="include_css">
     <@super/>

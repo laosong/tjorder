@@ -36,6 +36,9 @@ public class Order implements Serializable {
     /*
     1：一般订单
      */
+
+    public static final short TYPES_NORMAL = 1;
+
     private short types;
     private float sumPrice;
     private Date createdDate;
@@ -51,6 +54,14 @@ public class Order implements Serializable {
         货到付款：1->3->4
         在线支付：1->2->3->4
      */
+
+    public static final short STATE_CREATED = 0;
+    public static final short STATE_SUBMIT = 1;
+    public static final short STATE_PAYED = 2;
+    public static final short STATE_SHIPPED = 3;
+    public static final short STATE_COMPLETE = 4;
+    public static final short STATE_CANCELED = 5;
+
     private short state;
 
     private PaymentInfo paymentInfo;
@@ -179,11 +190,13 @@ public class Order implements Serializable {
         this.orderItems = orderItems;
     }
 
+    public static final float FREE_DELIVERY_ORDER_FEE = 99;
+
     public OrderFee calcOrderFee(float itemFee) {
         OrderFee orderFee = new OrderFee();
         orderFee.setItemFee(itemFee);
         if (deliveryInfo != null) {
-            if (itemFee < 99) {
+            if (itemFee < FREE_DELIVERY_ORDER_FEE) {
                 orderFee.setDeliveryFee(deliveryInfo.getFee());
             }
         }

@@ -17,6 +17,7 @@
 <@block name="include_js">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/popwindow.js"></script>
+    <script type="text/javascript" src="/js/laosong_zhCn.js"></script>
     <script type="text/javascript" src="/js/laosong.js"></script>
 </@block>
 </head>
@@ -27,15 +28,15 @@
         <div class="toptip_logon left">
             <ul class="clearfix">
                 <#if (systemUser.getUserId()<0)>
-                    <li>您好，欢迎来到天酒商城！<a href="/orderAction/showLoginPage">请登录</a>
-                        <a href="javascript:void(0);">免费注册</a><span>|
+                    <li>您好，欢迎来到天酒商城！<a href="/home/user/login.htm">请登录</a>
+                        <a href="/home/user/reg.htm">免费注册</a><span>|
                     </li>
                 <#else>
-                    <li>您好，<span><a href="/orderAction/showCart">${systemUser.getUserName()!("nobody")}</a></span>！
-                        <a href="/orderAction/logout">退出</a><span>|</span>
+                    <li>您好，<span><a href="/home/user/center.htm">${systemUser.getUserName()!("nobody")}</a></span>！
+                        <a href="/home/user/logout.htm">退出</a><span>|</span>
                     </li>
                 </#if>
-                <li><a href="#">我的收藏夹</a></li>
+                <li><a href="/home/user/favor.htm">我的收藏夹</a></li>
             </ul>
         </div>
         <div class="toptip_tool right">
@@ -76,7 +77,8 @@
                 <div class="t_cart btn right">
                     <ul class="clearfix">
                         <li class="t_cart_num"><a href="#">购物车<span>10</span>件</a></li>
-                        <li class="t_cart_pay link_white fb"><a href="#">去结算</a></li>
+                        <li class="t_cart_pay link_white fb"><a href="/orderAction/showCart" target="_blank">去结算</a>
+                        </li>
                     </ul>
                 </div>
             </div>

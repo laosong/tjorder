@@ -10,17 +10,11 @@ package com.brains.prj.tianjiu.order.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.brains.prj.tianjiu.order.common.OrderEventManager;
 import com.brains.prj.tianjiu.order.domain.*;
-import com.brains.prj.tianjiu.order.orm.*;
-import com.brains.prj.tianjiu.order.edm.*;
 
 @Service
 public class OrderService {
@@ -56,8 +50,8 @@ public class OrderService {
         return deliveryInfo;
     }
 
-    public void checkCartForSubmit(int userId, ShoppingCart shoppingCart)
-            throws CartEmptyException, GoodsStateException, EvaGoodsBuyCountException, EvaGoodsAlreadyBuyException {
+    public void submitCart(int userId, ShoppingCart shoppingCart, ShoppingCartService shoppingCartService)
+            throws CartEmptyException, GoodsStateException, BuyEvaGoodsException {
         if (shoppingCart == null || shoppingCart.getCartItems().size() <= 0) {
             throw new CartEmptyException();
         }
@@ -68,42 +62,31 @@ public class OrderService {
                 throw new GoodsStateException(goodsItem);
             }
         }
-        int evaItemCountInCart = 0;
-        GoodsItem evaItemInCart = null;
-        for (CartItem cartItem : shoppingCart.getCartItems()) {
-            if (cartItem.getGoodsItem().beEva() == true) {
-                evaItemCountInCart += cartItem.getQuantity();
-                evaItemInCart = cartItem.getGoodsItem();
-            }
-        }
-        if (evaItemCountInCart > ShoppingCartService.MAX_EVA_GOODS_BUY) {
-            throw new EvaGoodsBuyCountException(evaItemCountInCart, ShoppingCartService.MAX_EVA_GOODS_BUY);
-        }
-        if (evaItemInCart != null) {
-            List<Order> ordersContainEvaItem = orderAOP.getUserOrderContainEvaItem(userId, ShoppingCartService.CHECK_ORDER_CONTAIN_EVA_HOURS);
-            if (ordersContainEvaItem.size() > 0) {
-                throw new EvaGoodsAlreadyBuyException(evaItemInCart, ordersContainEvaItem.get(0));
-            }
-        }
+        shoppingCartService.checkCartForEvaGoods(userId, shoppingCart, 0, 0);
     }
 
-    public void submitCart(int userId, ShoppingCart shoppingCart)
-            throws CartEmptyException, GoodsStateException, EvaGoodsBuyCountException, EvaGoodsAlreadyBuyException {
-        checkCartForSubmit(userId, shoppingCart);
-    }
-
-    public void submitOrder(Order order, ShoppingCart shoppingCart)
-            throws CartEmptyException, GoodsStateException, EvaGoodsBuyCountException, EvaGoodsAlreadyBuyException {
-        checkCartForSubmit(order.getUserId(), shoppingCart);
+    public void submitOrder(Order order, ShoppingCart shoppingCart, ShoppingCartService shoppingCartService)
+            throws CartEmptyException, GoodsStateException, BuyEvaGoodsException {
+        if (shoppingCart == null || shoppingCart.getCartItems().size() <= 0) {
+            throw new CartEmptyException();
+        }
+        List<CartItem> cartItems = shoppingCart.getCartItems();
+        for (CartItem cartItem : cartItems) {
+            GoodsItem goodsItem = cartItem.getGoodsItem();
+            if (goodsItem.okForSale() == false) {
+                throw new GoodsStateException(goodsItem);
+            }
+        }
+        shoppingCartService.checkCartForEvaGoods(order.getUserId(), shoppingCart, 0, 0);
 
         float itemFee = shoppingCart.getTotalPrice();
         OrderFee orderFee = order.calcOrderFee(itemFee);
 
         order.setOrderCd("");
-        order.setTypes((short) 1);
+        order.setTypes(Order.TYPES_NORMAL);
         order.setSumPrice(orderFee.getTotalFee());
         order.setCreatedDate(new Date());
-        order.setState((short) 1);
+        order.setState(Order.STATE_SUBMIT);
 
         orderAOP.submitOrder(order, shoppingCart);
     }

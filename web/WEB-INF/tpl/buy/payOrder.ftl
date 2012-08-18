@@ -15,12 +15,12 @@
                 <dl class="ebBg">
                     <dt>订单提交成功，请您尽快付款！</dt>
                     <dd>订单号：${order.getOrderCd()}
-                        <span>|</span>应付金额：<em class="succeed_price f14px fb fred">${order.getSumPrice()}</em>
+                        <span>|</span>应付金额：<em class="succeed_price f14px fb fred">${order.getSumPrice()?string.currency}</em>
                     </dd>
                 </dl>
             </div>
             <p class="mart20">
-                <span class="f16px fb">立即支付<em class="succeed_price fred">￥1599.00</em>，即可完成订单。</span>请您在<span class="fred fb">24小时</span>内完成支付，否则订单会被自动取消。
+                <span class="f16px fb">立即支付<em class="succeed_price fred">${order.getSumPrice()?string.currency}</em>，即可完成订单。</span>请您在<span class="fred fb">24小时</span>内完成支付，否则订单会被自动取消。
             </p>
 
             <h2 class="f14px fb mart20">请选择以下网银支付：</h2>

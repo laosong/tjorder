@@ -17,7 +17,7 @@ public class ResultContext {
 
     Map<String, Object> resultMap = new HashMap<String, Object>();
 
-    String viewName;
+    String templateView;
     Exception actionError;
 
     public ResultContext() {
@@ -31,21 +31,22 @@ public class ResultContext {
         return resultMap;
     }
 
-    public void setViewName(String viewName) {
-        this.viewName = viewName;
+    public void setTemplateView(String templateView) {
+        this.templateView = templateView;
     }
 
-    public String getViewTemplateFile() {
+    public String getTemplateView() {
         if (actionError != null) {
-            return "actionError.ftl";
+            return templateView == null ? "actionError" : templateView;
         } else {
-            return viewName + ".ftl";
+            return templateView == null ? "actionError" : templateView;
         }
     }
 
-    public void setError(Exception e) {
-        if (e != null) {
-            actionError = e;
+    public void setError(Exception exception, String errorView) {
+        if (exception != null) {
+            actionError = exception;
+            templateView = errorView;
 
             putResult("success", false);
             String message = actionError.getMessage();

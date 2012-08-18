@@ -22,15 +22,19 @@ import com.brains.prj.tianjiu.order.mvc.ResultContext;
 @Controller
 public class LoginController {
 
-    public static final String DEFAULT_REDIRECT = "/main.html";
+    public static final String DEFAULT_REDIRECT = "/";
 
     public void getSystemUser(RequestContext rc, ResultContext result) {
         result.putResult("systemUser", rc.getSystemUser());
     }
 
     public void showLoginPage(RequestContext rc, ResultContext result) {
-        result.putResult("redirect", DEFAULT_REDIRECT);
-        result.setViewName("loginPage");
+        try {
+            result.putResult("redirect", DEFAULT_REDIRECT);
+            result.setTemplateView("loginPage");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null);
+        }
     }
 
     public void login(RequestContext rc, ResultContext result) {
@@ -52,18 +56,22 @@ public class LoginController {
                 redirect = DEFAULT_REDIRECT;
             result.putResult("redirect", redirect);
 
-            result.setViewName("loginOk");
+            result.setTemplateView("loginOk");
         } catch (BadParameterException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
     public void logout(RequestContext rc, ResultContext result) {
-        SystemUser user = new SystemUser();
-        user.setUserId(-1);
-        user.setUserRole(SystemUser.UserRole.Anonymous);
-        rc.setSystemUser(user);
+        try {
+            SystemUser user = new SystemUser();
+            user.setUserId(-1);
+            user.setUserRole(SystemUser.UserRole.Anonymous);
+            rc.setSystemUser(user);
 
-        result.setViewName("loginOk");
+            result.setTemplateView("loginOk");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null);
+        }
     }
 }

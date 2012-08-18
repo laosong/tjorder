@@ -18,6 +18,7 @@
 <@block name="include_js">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/popwindow.js"></script>
+    <script type="text/javascript" src="/js/laosong_zhCn.js"></script>
     <script type="text/javascript" src="/js/laosong.js"></script>
 </@block>
 </head>
@@ -27,17 +28,17 @@
     <@block name="body_head">
         <div id="header" class="ebHeader clearfix">
             <div class="mainlogo left">
-                <a href="/main.html"><img src="/images/logo.png" alt="天酒商城"/></a>
+                <a href="/"><img src="/images/logo.png" alt="天酒商城"/></a>
             </div>
             <div class="header_tool right">
                 <div class="header_help right"><a href="#" target="_blank">帮助中心</a></div>
                 <div class="header_login right">
                     <#if (systemUser.getUserId()<0)>
-                        <a href="/orderAction/showLoginPage">登录</a><span>|</span><a href="javascript:void(0);">注册</a>
+                        <a href="/home/user/login.htm">登录</a><span>|</span><a href="/home/user/reg.htm">注册</a>
                     <#else>
                         <a href="/orderAction/showCart">${systemUser.getUserName()!("nobody")}</a><span>|</span>
-                        <a href="/orderAction/showMyOrders">我的订单</a><span>|</span>
-                        <a href="/orderAction/logout">[退出]</a>
+                        <a href="/orderAction/myOrders">我的订单</a><span>|</span>
+                        <a href="/home/user/logout.htm">[退出]</a>
                     </#if>
                 </div>
             </div>

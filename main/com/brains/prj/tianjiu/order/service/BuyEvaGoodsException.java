@@ -11,17 +11,15 @@ package com.brains.prj.tianjiu.order.service;
 import com.brains.prj.tianjiu.order.common.MessageUtils;
 import com.brains.prj.tianjiu.order.domain.GoodsItem;
 
-public class EvaGoodsBuyCountException extends Exception {
-    private int buyCount;
+public class BuyEvaGoodsException extends Exception {
     private int maxCount;
 
-    public EvaGoodsBuyCountException(int buyCount, int maxCount) {
-        this.buyCount = buyCount;
+    public BuyEvaGoodsException(int maxCount) {
         this.maxCount = maxCount;
     }
 
     @Override
     public String getMessage() {
-        return MessageUtils.format(MessageUtils.EvaGoodsBuyCountException_Message, buyCount, maxCount);
+        return MessageUtils.format(MessageUtils.BuyEvaGoodsException_Message, maxCount);
     }
 }

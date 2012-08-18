@@ -184,7 +184,8 @@
                     }
             ).always(function () {
                         closeLoadingDialog();
-                    });
+                    }
+            );
         }
 
         function editNumChanged(itemRowObj) {
@@ -192,27 +193,12 @@
             var itemId = itemRowObj.find("input[name=itemId]").val();
             var itemCount = itemRowObj.find("input[name=edit_num]").val();
             if (itemCount <= 0) {
-                noty({text:"itemCount invalid.",
-                            layout:"center",
-                            type:"error",
-                            animateOpen:{"height":"toggle"},
-                            animateClose:{"height":"toggle"},
-                            speed:500,
-                            timeout:5000,
-                            closeButton:true,
-                            closeOnSelfClick:true,
-                            closeOnSelfOver:false,
-                            modal:false,
-                            onClose:function () {
-                                $.callOrderAction("POST", "/orderAction/showCartData", null,
-                                        function (data) {
-                                            updateCartData(data);
-                                        });
-                            }
+                alert(getLocaleMessage("client.cart.InputGoodNum"));
+                $.callOrderAction("POST", "/orderAction/showCartData", null,
+                        function (data) {
+                            updateCartData(data);
                         }
-
-                )
-                ;
+                );
                 return;
             }
             popupLoadingDialog(itemRowObj);
@@ -224,7 +210,8 @@
                     }
             ).always(function () {
                         closeLoadingDialog();
-                    });
+                    }
+            );
         }
 
         $.callOrderAction("POST", "/orderAction/showCartData", null,

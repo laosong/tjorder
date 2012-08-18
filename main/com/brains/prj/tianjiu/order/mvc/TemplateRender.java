@@ -35,16 +35,16 @@ public class TemplateRender {
         ftConfig.setSharedVariable(name, templateDirectiveModel);
     }
 
-    public static void process(String templateFile, Object rootMap, Writer writer)
+    public static void process(String templateView, Object rootMap, Writer writer)
             throws freemarker.template.TemplateException, java.io.IOException {
-        String result = process(templateFile, rootMap);
+        String result = process(templateView, rootMap);
         writer.write(result);
     }
 
-    public static String process(String templateFile, Object rootMap)
+    public static String process(String templateView, Object rootMap)
             throws freemarker.template.TemplateException, java.io.IOException {
         StringWriter stringWriter = new StringWriter();
-        freemarker.template.Template template = ftConfig.getTemplate(templateFile);
+        freemarker.template.Template template = ftConfig.getTemplate(templateView + ".ftl");
         template.process(rootMap, stringWriter);
         String result = stringWriter.toString();
         stringWriter.close();

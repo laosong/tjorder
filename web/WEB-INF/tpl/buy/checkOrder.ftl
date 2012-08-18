@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="provinces" type="java.util.Collection<java.lang.String>" -->
-<#-- @ftlvariable name="userAddresses" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.UserAddress>" -->
 <#-- @ftlvariable name="cart" type="com.brains.prj.tianjiu.order.domain.ShoppingCart" -->
+<#-- @ftlvariable name="orderFee" type="com.brains.prj.tianjiu.order.domain.OrderFee" -->
 <@override name="title">填写订单细节_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
@@ -18,8 +18,8 @@
             <form name="prepareOrderForm" id="prepareOrderForm">
                 <div class="eb_checkOrder">
                     <div class="eb_checkOrder_cul">
-                        <h3 class="f14px fb">收货人信息</h3>
-
+                        <h3 class="f14px fb" id="addressH3">收货人信息<span class="yellow_block_tip" style="display: none;">请填写收货人信息</span>
+                        </h3>
                         <div id="userAddress" class="usedAddress">
                         </div>
                         <div class="newAddress">
@@ -67,7 +67,8 @@
                         </div>
                     </div>
                     <div class="eb_checkOrder_cul mart20">
-                        <h3 class="f14px fb">支付及配送方式</h3>
+                        <h3 class="f14px fb" id="payDeliveryH3">支付及配送方式<span class="yellow_block_tip" style="display: none;">请选择支付及配送方式</span>
+                        </h3>
                         <dl>
                             <dt>支付方式</dt>
                             <dd><input type="radio" name="payment" value="1"/>货到付款</dd>
@@ -80,8 +81,7 @@
                         </dl>
                         <dl class="mart10">
                             <dt>配送方式</dt>
-                            <dd><input type="radio" name="delivery" value="1"/>满99元免运费</dd>
-                            <dd><input type="radio" name="delivery" value="2"/>运费15元</dd>
+                            <dd><input type="radio" name="delivery" value="1" checked="checked"/>EMS</dd>
                         </dl>
                     </div>
                     <div class="eb_checkOrder_cul mart20">
@@ -110,7 +110,10 @@
                         </table>
                     </div>
                     <div class="payOrderTotal txtright f14px fb mart20">
-                        <span class="payOrderTotal_num">共<em>${cart.getItemSum()?c}</em>件商品</span>应付总额：<span class="f16px fred">${cart.getTotalPrice()}</span>
+                        <span class="payOrderTotal_num">共<em>${cart.getItemSum()?c}</em>件商品</span>应付总额：
+                        <span class="f16px fred">
+                        ${orderFee.getTotalFee()?string.currency}(<#if (orderFee.getDeliveryFee() > 0)>含${orderFee.getDeliveryFee()}元<#else>免</#if>运费)
+                        </span>
                     </div>
                     <div class="payOrderBtn mart20 f14px fb txtright">
                         <a href="javascript:void(0);" id="submitOrder" class="btnCom btnCom_reb"><span>确认无误，提交订单</span></a>
@@ -263,14 +266,20 @@
         $("#submitOrder").click(function (event) {
             var orderPostRadioVal = $("#prepareOrderForm input[name=orderPost]:checked").val();
             if (orderPostRadioVal == null) {
+                $("#addressH3 .yellow_block_tip").show();
+                $("#addressH3").ScrollTo();
                 return;
             }
             var paymentRadioVal = $("#prepareOrderForm input[name=payment]:checked").val();
             if (paymentRadioVal == null) {
+                $("#payDeliveryH3 .yellow_block_tip").show();
+                $("#payDeliveryH3").ScrollTo();
                 return;
             }
             var deliveryRadioVal = $("#prepareOrderForm input[name=delivery]:checked").val();
             if (deliveryRadioVal == null) {
+                $("#payDeliveryH3 .yellow_block_tip").show();
+                $("#payDeliveryH3").ScrollTo();
                 return;
             }
             var params = {respDataType:"json", orderPost:orderPostRadioVal, payment:paymentRadioVal, delivery:deliveryRadioVal};

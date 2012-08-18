@@ -1,14 +1,13 @@
-<#-- @ftlvariable name="product_img_root" type="java.lang.String" -->
 <#-- @ftlvariable name="orders" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.Order>" -->
-<#assign page_name = "allorders">
+<#assign page_name = "uncomporders">
 
-<@override name="title">所有订单_<@super/></@override>
+<@override name="title">未结束订单_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
 </style>
 </@override>
 <@override name="my_body_content">
-<h3 class="con_til">所有订单</h3>
+<h3 class="con_til">未结束订单</h3>
 <div class="personal_del tablestyle mart10">
     <table summary="所有订单" class="personal_order">
         <tbody>
@@ -22,7 +21,7 @@
         </tr>
             <#list orders as order>
             <tr>
-                <td>${order.getId()}</td>
+                <td>${order.getOrderCd()}</td>
                 <td class="f999">${order.getCreatedDate()?datetime}</td>
                 <td class="t_l">
                     <#list order.getOrderItems() as order_item>
@@ -31,8 +30,8 @@
                         </a>
                     </#list>
                 </td>
-                <td>${order.getSumPrice()}</td>
-                <td class="f999">${order.getState()}</td>
+                <td>${order.getSumPrice()?string.currency}</td>
+                <td class="f999"><@order_status order.getState()/></td>
                 <td class="o_l"><a href="#">继续订单</a><a href="#">删除</a></td>
             </tr>
             </#list>

@@ -54,14 +54,8 @@ public class MessageUtils {
     public static final String DeliveryNotFoundException_Message
             = "order.service.DeliveryNotFoundException, deliveryId={0}";
 
-    public static final String EvaGoodsBuyCountException_Message
-            = "order.service.EvaGoodsBuyCountException, buyCount={0}##maxCount={1}";
-
-    public static final String EvaGoodsExistInCartException_Message
-            = "order.service.EvaGoodsExistInCartException, goodsId={0}##goodsName={1}##cartGoodsId={2}##cartGoodsName={3}";
-
-    public static final String EvaGoodsAlreadyBuyException_Message
-            = "order.service.EvaGoodsAlreadyBuyException, goodsId={0}##goodsName={1}##orderId={2}##orderDate={3}";
+    public static final String BuyEvaGoodsException_Message
+            = "order.service.BuyEvaGoodsException, maxCount={0}";
 
     public static void main(String[] args) {
     }

@@ -40,7 +40,7 @@ public class OrderController {
             String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
             String img = "test.jpg";
         } catch (IllegalArgumentException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
@@ -48,9 +48,9 @@ public class OrderController {
         try {
             List<GoodsItem> goodsItems = goodsService.getGoodsForSale();
             result.putResult("goodsItems", goodsItems);
-            result.setViewName("showItemList");
+            result.setTemplateView("showItemList");
         } catch (IllegalArgumentException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
@@ -61,20 +61,24 @@ public class OrderController {
             List<String> provinces = addressService.getProvinces();
 
             ShoppingCart cart = shoppingCartService.getUserCart(user.getUserId());
+            orderService.submitCart(user.getUserId(), cart, shoppingCartService);
 
-            orderService.submitCart(user.getUserId(), cart);
+            Order order = new Order();
+            order.setDeliveryInfo(orderService.getDeliveryInfo(1));
+            OrderFee orderFee = order.calcOrderFee(cart.getTotalPrice());
 
             result.putResult("provinces", provinces);
             result.putResult("cart", cart);
-            result.setViewName("buy/checkOrder");
+            result.putResult("orderFee", orderFee);
+            result.setTemplateView("buy/checkOrder");
         } catch (CartEmptyException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (GoodsStateException e) {
-            result.setError(e);
-        } catch (EvaGoodsBuyCountException e) {
-            result.setError(e);
-        } catch (EvaGoodsAlreadyBuyException e) {
-            result.setError(e);
+            result.setError(e, null);
+        } catch (BuyEvaGoodsException e) {
+            result.setError(e, null);
+        } catch (DeliveryNotFoundException e) {
+            result.setError(e, null);
         }
     }
 
@@ -108,33 +112,30 @@ public class OrderController {
             order.setUserId(user.getUserId());
             order.setPaymentId(payment);
             order.setDeliveryId(delivery);
-            order.setTypes((short) 1);
+            order.setTypes(Order.TYPES_NORMAL);
 
             order.setShippingInfo(shippingInfo);
 
             order.setDeliveryInfo(orderService.getDeliveryInfo(delivery));
 
             ShoppingCart cart = shoppingCartService.getUserCart(user.getUserId());
-
-            orderService.submitOrder(order, cart);
+            orderService.submitOrder(order, cart, shoppingCartService);
 
             result.putResult("orderId", order.getId());
             result.putResult("order", order);
-            result.setViewName("buy/createOrderOk");
+            result.setTemplateView("buy/createOrderOk");
         } catch (BadParameterException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (UserAddressNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (DeliveryNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (CartEmptyException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (GoodsStateException e) {
-            result.setError(e);
-        } catch (EvaGoodsBuyCountException e) {
-            result.setError(e);
-        } catch (EvaGoodsAlreadyBuyException e) {
-            result.setError(e);
+            result.setError(e, null);
+        } catch (BuyEvaGoodsException e) {
+            result.setError(e, null);
         }
     }
 
@@ -145,15 +146,17 @@ public class OrderController {
             int orderId = rc.getParameterInt("orderId");
             Order order = orderService.getUserOrder(user.getUserId(), orderId);
 
+            result.putResult("order", order);
+
             if (order.getPaymentId() == 1) {
-                result.setViewName("buy/orderDone");
+                result.setTemplateView("buy/orderDone");
             } else if (order.getPaymentId() == 2) {
-                result.setViewName("buy/payOrder");
+                result.setTemplateView("buy/payOrder");
             }
         } catch (BadParameterException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (OrderNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
@@ -167,9 +170,9 @@ public class OrderController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            result.setViewName("home/showMyHome");
+            result.setTemplateView("home/myHome");
         } catch (IllegalArgumentException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
@@ -182,9 +185,9 @@ public class OrderController {
                 fillOrderDetail(order);
             }
             result.putResult("orders", orders);
-            result.setViewName("home/showMyOrders");
+            result.setTemplateView("home/myOrders");
         } catch (IllegalArgumentException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
@@ -197,9 +200,9 @@ public class OrderController {
                 fillOrderDetail(order);
             }
             result.putResult("orders", orders);
-            result.setViewName("home/showMyUnCompleteOrders");
+            result.setTemplateView("home/myUnCompleteOrders");
         } catch (IllegalArgumentException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
@@ -212,9 +215,9 @@ public class OrderController {
                 fillOrderDetail(order);
             }
             result.putResult("orders", orders);
-            result.setViewName("home/showMyCompleteOrders");
+            result.setTemplateView("home/myCompleteOrders");
         } catch (IllegalArgumentException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
@@ -234,19 +237,19 @@ public class OrderController {
             order.setShippingInfo(shippingInfo);
 
             result.putResult("order", order);
-            result.setViewName("home/showMyOrderData");
+            result.setTemplateView("home/myOrderData");
         } catch (BadParameterException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (OrderNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (PaymentNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (DeliveryNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (ShippingNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (CityInfoNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 }

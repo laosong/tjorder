@@ -309,3 +309,13 @@ h1, h2, h3, h4, h5, h6 {
     padding: 4px 10px 4px 10px;
     overflow: hidden;
 }
+
+.yellow_block_tip {
+    margin: 2px 10px 0 0;
+    height: 22px;
+    line-height: 22px;
+    padding: 0 7px;
+    color: #F60;
+    background: #FFFDEE;
+    border: 1px solid #EDD28B;
+}

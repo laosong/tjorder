@@ -30,16 +30,23 @@ public interface OrderMapper {
                                   @Param("orderId") int orderId);
 
     public List<Order> getUserOrderContainEvaItem(@Param("userId") int userId,
+                                                  @Param("evaItemType") short evaItemType,
+                                                  @Param("states") short[] orderStates,
                                                   @Param("checkHours") int checkHours);
+
+    public int getUserOrderBuyEvaItemSum(@Param("userId") int userId,
+                                         @Param("evaItemType") short evaItemType,
+                                         @Param("states") short[] orderStates,
+                                         @Param("checkHours") int checkHours);
 
     public List<OrderItem> getOrderItems(@Param("orderId") int orderId);
 
     public List<Order> getUserOrders(@Param("userId") int userId);
 
-    public List<OrderItem> getOrdersItems(List<Integer> ids);
+    public List<OrderItem> getOrdersItems(@Param("ids") List<Integer> ids);
 
     public List<Order> getUserOrdersByState(@Param("userId") int userId,
-                                            @Param("states") Integer[] states);
+                                            @Param("states") short[] states);
 
 
     public int createShippingInfo(ShippingInfo shippingInfo);

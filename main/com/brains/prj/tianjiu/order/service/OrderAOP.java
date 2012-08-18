@@ -138,8 +138,20 @@ class OrderAOP {
 
     @Transactional(readOnly = true)
     public List<Order> getUserOrderContainEvaItem(int userId, int checkHours) {
-        List<Order> orders = orderMapper.getUserOrderContainEvaItem(userId, checkHours);
+        short[] orderStates =
+                {Order.STATE_SUBMIT, Order.STATE_PAYED, Order.STATE_SHIPPED, Order.STATE_COMPLETE};
+        List<Order> orders =
+                orderMapper.getUserOrderContainEvaItem(userId, GoodsItem.TYPES_EVA, orderStates, checkHours);
         return orders;
+    }
+
+    @Transactional(readOnly = true)
+    public int getUserOrderBuyEvaItemSum(int userId, int checkHours) {
+        short[] orderStates =
+                {Order.STATE_SUBMIT, Order.STATE_PAYED, Order.STATE_SHIPPED, Order.STATE_COMPLETE};
+        int sum =
+                orderMapper.getUserOrderBuyEvaItemSum(userId, GoodsItem.TYPES_EVA, orderStates, checkHours);
+        return sum;
     }
 
     @Transactional(readOnly = true)
@@ -171,7 +183,8 @@ class OrderAOP {
 
     @Transactional(readOnly = true)
     public List<Order> getUserUnCompleteOrders(int userId) {
-        Integer[] complete_state = {0, 1, 2, 3, 5};
+        short[] complete_state =
+                {Order.STATE_CREATED, Order.STATE_SUBMIT, Order.STATE_PAYED, Order.STATE_SHIPPED};
         List<Order> orders = orderMapper.getUserOrdersByState(userId, complete_state);
         fillOrdersItems(orders);
         return orders;
@@ -179,7 +192,7 @@ class OrderAOP {
 
     @Transactional(readOnly = true)
     public List<Order> getUserCompleteOrders(int userId) {
-        Integer[] complete_state = {4};
+        short[] complete_state = {Order.STATE_COMPLETE};
         List<Order> orders = orderMapper.getUserOrdersByState(userId, complete_state);
         fillOrdersItems(orders);
         return orders;

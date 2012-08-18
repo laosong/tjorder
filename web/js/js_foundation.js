@@ -75,16 +75,19 @@ function util_replaceQString2(param, value)
 function util_replaceQString3(url, param, value)
 {
     var preURL = ""; var postURL = ""; var newURL = "";
+    var start = url.indexOf("&"+param+"=");
 
-    var start = url.indexOf(param+"=");
+    if(start<0)  start = url.indexOf("?"+param+"=");
     if(start > -1)
     {
         var end = url.indexOf("=", start);
         if(value != null) preURL=url.substring(0,end) +"="+value;
-        else preURL = url.substring(0,start-1);
-
-        var startRest = url.indexOf("&",start);
-        postURL="";
+        else
+        {
+            if(url[start]=='?') preURL = url.substring(0,start+1);
+            else preURL = url.substring(0,start);
+        }
+        var startRest = url.indexOf("&",start+1);
         if(startRest > -1) postURL=url.substring(startRest);
     }
     else

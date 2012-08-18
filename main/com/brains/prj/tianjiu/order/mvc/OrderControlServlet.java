@@ -121,12 +121,12 @@ public class OrderControlServlet extends HttpServlet {
 
             try {
                 if (role.compareTo(user.getUserRole()) > 0) {
-                    if (requestContext.isJsonReq()) {
+                    if (requestContext.isAjaxReq()) {
                         resp.setContentType("text/json;charset=utf-8");
                         resultContext.putResult("success", false);
                         resultContext.putResult("loginFrame", requestURI);
-                        resultContext.setViewName("loginFrame");
-                        JsonObjectMapper.process(resultContext.getViewTemplateFile(), resultContext.getResult(), resp.getWriter());
+                        resultContext.setTemplateView("loginFrame");
+                        JsonObjectMapper.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
                     } else {
                         String redirect = requestURI;
                         if (req.getQueryString() != null) {
@@ -136,8 +136,8 @@ public class OrderControlServlet extends HttpServlet {
                         resp.setContentType("text/html;charset=utf-8");
                         resultContext.putResult("success", false);
                         resultContext.putResult("redirect", redirect);
-                        resultContext.setViewName("loginPage");
-                        TemplateRender.process(resultContext.getViewTemplateFile(), resultContext.getResult(), resp.getWriter());
+                        resultContext.setTemplateView("loginPage");
+                        TemplateRender.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
                     }
                 } else {
                     List<com.easyvalidation.dto.Error> validateErrors = null;
@@ -152,7 +152,7 @@ public class OrderControlServlet extends HttpServlet {
                         validateErrors = Validator.checkValidations(handlerMapping.getValidator(), reqParametersMap);
                     }
                     if (validateErrors != null && validateErrors.size() > 0) {
-                        resultContext.setError(new ValidateException(validateErrors));
+                        resultContext.setError(new ValidateException(validateErrors), null);
                     } else {
                         Object controller = applicationContext.getBean(handlerMapping.getBean());
                         if (controller == null) {
@@ -164,12 +164,12 @@ public class OrderControlServlet extends HttpServlet {
                         handler.invoke(controller, requestContext, resultContext);
                     }
 
-                    if (requestContext.needJsonResp() || (requestContext.isJsonReq() && resultContext.hasError())) {
+                    if (requestContext.needJsonResp() || (requestContext.isAjaxReq() && resultContext.hasError())) {
                         resp.setContentType("text/json;charset=utf-8");
-                        JsonObjectMapper.process(resultContext.getViewTemplateFile(), resultContext.getResult(), resp.getWriter());
+                        JsonObjectMapper.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
                     } else {
                         resp.setContentType("text/html;charset=utf-8");
-                        TemplateRender.process(resultContext.getViewTemplateFile(), resultContext.getResult(), resp.getWriter());
+                        TemplateRender.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
                     }
                 }
 

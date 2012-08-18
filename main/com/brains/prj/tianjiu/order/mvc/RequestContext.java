@@ -100,8 +100,8 @@ public class RequestContext {
         return systemUser;
     }
 
-    public boolean isJsonReq() {
-        return "json".equals(getParameter("reqDataType"));
+    public boolean isAjaxReq() {
+        return "ajax".equals(getParameter("requestType"));
     }
 
     public boolean needJsonResp() {

@@ -31,7 +31,7 @@ public class AddressController {
 
     public void getAllCityInfo(RequestContext rc, ResultContext result) {
         List<CityInfo> allCityInfo = addressService.getAllCityInfo();
-        result.setViewName("showCity");
+        result.setTemplateView("showCity");
     }
 
     public void getCityInfo(RequestContext rc, ResultContext result) {
@@ -40,18 +40,18 @@ public class AddressController {
             CityInfo cityInfo = addressService.getCity(id);
 
             result.putResult("city", cityInfo);
-            result.setViewName("showCity");
+            result.setTemplateView("showCity");
         } catch (BadParameterException e) {
-            result.setError(e);
+            result.setError(e, null);
         } catch (CityInfoNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
     public void getProvinces(RequestContext rc, ResultContext result) {
         List<String> provinces = addressService.getProvinces();
         result.putResult("provinces", provinces);
-        result.setViewName("showCity");
+        result.setTemplateView("showCity");
     }
 
     public void getProvinceCities(RequestContext rc, ResultContext result) {
@@ -78,7 +78,7 @@ public class AddressController {
         }
         result.putResult("checkAddress", checkAddress);
         result.putResult("userAddresses", userAddresses);
-        result.setViewName("userAddress");
+        result.setTemplateView("buy/userAddress");
     }
 
     public void addUserAddress(RequestContext rc, ResultContext result) {
@@ -110,10 +110,9 @@ public class AddressController {
             checkAddress = userAddress.getId();
             result.putResult("checkAddress", checkAddress);
             result.putResult("userAddresses", userAddresses);
-            result.setViewName("userAddress");
-
+            result.setTemplateView("buy/userAddress");
         } catch (CityInfoNotFoundException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 
@@ -133,10 +132,9 @@ public class AddressController {
             }
             result.putResult("checkAddress", checkAddress);
             result.putResult("userAddresses", userAddresses);
-            result.setViewName("userAddress");
-
+            result.setTemplateView("buy/userAddress");
         } catch (BadParameterException e) {
-            result.setError(e);
+            result.setError(e, null);
         }
     }
 }

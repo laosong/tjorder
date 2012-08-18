@@ -18,7 +18,15 @@ public class GoodsItem implements Serializable {
     private String title;
     private float price;
     private float marketPrice;
+
+    public static final short STATE_OFF_SALE = 1;
+    public static final short STATE_ON_SALE = 2;
+
     private short types;
+
+    public static final short TYPES_NORMAL = 1;
+    public static final short TYPES_EVA = 2;
+
     private short state;
 
     private String degree;
@@ -97,13 +105,12 @@ public class GoodsItem implements Serializable {
         this.img = img;
     }
 
-
     public boolean okForSale() {
-        return state == 2;
+        return state == STATE_ON_SALE;
     }
 
     public boolean beEva() {
-        return types == 0;
+        return types == TYPES_EVA;
     }
 
     public String getName() {

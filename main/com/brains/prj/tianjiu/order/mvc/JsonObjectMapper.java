@@ -15,7 +15,7 @@ public class JsonObjectMapper {
     public static void initConfig(String templateDir, String encoding) throws java.io.IOException {
     }
 
-    public static void process(String templateFile, Object rootMap, Writer writer)
+    public static void process(String templateView, Object rootMap, Writer writer)
             throws java.io.IOException {
         org.codehaus.jackson.map.ObjectMapper objectMapper = new org.codehaus.jackson.map.ObjectMapper();
         objectMapper.writeValue(writer, rootMap);
