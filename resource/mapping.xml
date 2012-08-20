@@ -56,6 +56,10 @@
              role="Normal" validator="showOrderValidator">
     </mapping>
 
+    <mapping path="adminOrders" bean="orderController" function="adminGetOrders"
+             role="Admin">
+    </mapping>
+
     <mapping path="showAllCity" bean="addressController" function="getAllCityInfo"></mapping>
     <mapping path="showCity" bean="addressController" function="getCityInfo"></mapping>
     <mapping path="getProvinces" bean="addressController" function="getProvinces"></mapping>

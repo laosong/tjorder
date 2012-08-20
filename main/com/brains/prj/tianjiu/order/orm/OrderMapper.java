@@ -54,6 +54,9 @@ public interface OrderMapper {
     public ShippingInfo getShippingInfoById(@Param("id") int id);
 
 
+    public List<Order> getOrders(@Param("offset") int offset,
+                                 @Param("limit") int limit);
+
     public int createOrderStatus(OrderStatus orderStatus);
 
     public List<OrderStatus> getOrderStatus(@Param("orderId") int orderId);

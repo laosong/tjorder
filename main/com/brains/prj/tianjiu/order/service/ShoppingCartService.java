@@ -70,8 +70,6 @@ public class ShoppingCartService {
                     evaItemSumInCart += cartItem.getQuantity();
                 }
             }
-            if (evaItemSumInCart <= 0)
-                return;
             if (maxBefore < evaItemSumInCart) {
                 throw new BuyEvaGoodsException(MAX_EVA_GOODS_BUY);
             } else {

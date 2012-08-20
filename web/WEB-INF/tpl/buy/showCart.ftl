@@ -43,7 +43,6 @@
         <span class="dialog-bg dialog-bg-sw"></span>
         <span class="dialog-bg dialog-bg-w"></span>
         <span class="dialog-bg dialog-bg-nw"></span>
-
         <div class="dialog-inner">
             <div class="loading-style1"><b></b>加载中,请稍候...</div>
         </div>
@@ -55,7 +54,6 @@
         <input type="hidden" name="id"/>
         <input type="hidden" name="itemId"/>
     </form>
-
     <div class="dialog-outer">
         <span class="dialog-bg dialog-bg-n"></span>
         <span class="dialog-bg dialog-bg-ne"></span>
@@ -65,7 +63,6 @@
         <span class="dialog-bg dialog-bg-sw"></span>
         <span class="dialog-bg dialog-bg-w"></span>
         <span class="dialog-bg dialog-bg-nw"></span>
-
         <div class="dialog-inner">
             <div class="dialog-toolbar clearfix">
                 <a title="关闭" href="javascript:void(0);" class="dialog-close">关闭</a>
@@ -77,7 +74,6 @@
                 <div class="btns clearfix">
                     <a class="btn btn-ok" href="javascript:void(0);"><span class="btn-text">确定</span></a>
                     <a class="btn btn-cancel" href="javascript:void(0);"><span class="btn-text">取消</span></a>
-
                 </div>
             </div>
         </div>

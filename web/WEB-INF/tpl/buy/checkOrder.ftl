@@ -101,7 +101,9 @@
                                     <#assign goodsItem = cartItem.getGoodsItem()>
                                 <tr>
                                     <td>${cartItem.getItemId()}</td>
-                                    <td><a class="list02" href="#">${goodsItem.getName()?html}</a></td>
+                                    <td>
+                                        <a class="list02" href="javascript:void(0);" target="_blank">${goodsItem.getName()?html}</a>
+                                    </td>
                                     <td align="right">${cartItem.getQuantity()?c}</td>
                                     <td align="right">${goodsItem.getPrice()}</td>
                                 </tr>

@@ -3,44 +3,15 @@
 <@override name="title">产品列表_<@super/></@override>
 <@override name="head_css">
 <style type="text/css">
-    #cartWrapper {
-        position: absolute;
-        right: 10px;
-        width: 205px;
-    }
-
-    #scrollCart {
-        top: 0;
-        width: 205px;
-        height: 29px;
-        background: url("/images/laosong/bg_spirit.png") no-repeat scroll -774px -56px transparent;
-    }
-
     #scrollCart.fixed {
         position: fixed;
         top: 0;
-    }
-
-    #scrollCart #miniCart {
-        cursor: pointer;
-        height: 21px;
-        padding: 7px 0 0 30px;
-        width: 112px;
-        float: left;
+        right: 10px;
     }
 </style>
 </@override>
 <@override name="body_content">
 <div class="home_body">
-    <div class="space clear"></div>
-    <div id="cartWrapper">
-        <div id="scrollCart">
-            <div id="miniCart"><span>购物车：<strong class="cartItemSum">0</strong>件</span></div>
-            <a href="/orderAction/showCart"><span>去结算</span></a>
-        </div>
-    </div>
-    <div class="space clear"></div>
-
     <div class="cart_list_block centered" align="center">
         <table width="100%" border="0" cellspacing="2" cellpadding="4" bgcolor="#fefefe">
             <tr class="cart_list_header">
@@ -58,13 +29,9 @@
                             <img src="${product_img_root}${goodsItem.getImg()}" border="0" width="100" height="100" align="middle"/>
                         </a> &nbsp;&nbsp;<a href="#">${goodsItem.getName()?html}</a>
                     </td>
-                    <td align="right"><span><STRONG>${goodsItem.getPrice()}</STRONG></span></td>
+                    <td align="right"><span><STRONG>${goodsItem.getPrice()?string.currency}</STRONG></span></td>
                     <td align="center">
-                        <button id="minus-3" class="ui-button ui-widget ui-state-default">
-                            <span class="ui-icon ui-icon-minus"></span></button>
-                        <input name="num" type="text" id="num3" value="1" class="ui-widget"/>
-                        <button id="plus-3" class="ui-button ui-widget ui-state-default">
-                            <span class="ui-icon ui-icon-plus"></span></button>
+                        <input type="text" name="quantityInput" size="5" value="1">
                     </td>
                     <td align="center">
                         <a href="/orderAction/addCartItem?itemId=${goodsItem.getId()}&itemCount=1">加入购物车</a>
@@ -80,7 +47,8 @@
 <@override name="body_footerjs">
 <script type="text/javascript">
     $(function () {
-        var top = $('#scrollCart').offset().top - parseFloat($('#scrollCart').css('marginTop').replace(/auto/, 0));
+        //var top = $('#scrollCart').offset().top - parseFloat($('#scrollCart').css('marginTop').replace(/auto/, 0));
+        var top = 150;
         $(window).scroll(function (event) {
             // what the y position of the scroll is
             var y = $(this).scrollTop();

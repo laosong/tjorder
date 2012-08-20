@@ -18,7 +18,7 @@
         <#assign goodsItem = cartItem.getGoodsItem()>
     <tr class="cart_row">
         <td>${cartItem_index+1} - ${goodsItem.getId()}</td>
-        <td class="t_left"><a href="#" target="_blank">${goodsItem.getName()?html}</a></td>
+        <td class="t_left"><a href="javascript:void(0);" target="_blank">${goodsItem.getName()?html}</a></td>
         <td>${goodsItem.getPrice()}</td>
         <td>${goodsItem.getMarketPrice()}</td>
         <td>现货</td>

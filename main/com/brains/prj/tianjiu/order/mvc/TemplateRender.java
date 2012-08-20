@@ -22,7 +22,8 @@ public class TemplateRender {
     public static void initConfig(String templateDir, String encoding) throws java.io.IOException {
         ftConfig = new freemarker.template.Configuration();
         ftConfig.setTemplateExceptionHandler(freemarker.template.TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-        ftConfig.setEncoding(Locale.getDefault(), encoding);
+        ftConfig.setLocale(Locale.SIMPLIFIED_CHINESE);
+        ftConfig.setDefaultEncoding(encoding);
         ftConfig.setDirectoryForTemplateLoading(new java.io.File(templateDir));
 
         ftConfig.setSharedVariable("block", new BlockDirective());

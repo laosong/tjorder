@@ -125,6 +125,11 @@ public class OrderService {
         return shippingInfo;
     }
 
+    public List<Order> adminGetOrders(int offset, int limit) {
+        List<Order> orders = orderAOP.adminGetOrders(offset, limit);
+        return orders;
+    }
+
     public void addOrderStatus(OrderStatus orderStatus) {
         orderAOP.addOrderStatus(orderStatus);
     }

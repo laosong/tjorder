@@ -74,9 +74,9 @@
                         <input type="button" tabindex="2" value="搜索" class="s_submit btn">
                     </form>
                 </div>
-                <div class="t_cart btn right">
+                <div class="t_cart btn right" id="scrollCart">
                     <ul class="clearfix">
-                        <li class="t_cart_num"><a href="#">购物车<span>10</span>件</a></li>
+                        <li class="t_cart_num"><a href="#">购物车<span class="cartCount">0</span>件</a></li>
                         <li class="t_cart_pay link_white fb"><a href="/orderAction/showCart" target="_blank">去结算</a>
                         </li>
                     </ul>

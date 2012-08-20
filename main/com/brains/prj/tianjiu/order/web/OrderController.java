@@ -252,4 +252,17 @@ public class OrderController {
             result.setError(e, null);
         }
     }
+
+    public void adminGetOrders(RequestContext rc, ResultContext result) {
+        try {
+            List<Order> orders = orderService.adminGetOrders(0, 0);
+            for (Order order : orders) {
+                fillOrderDetail(order);
+            }
+            result.putResult("orders", orders);
+            result.setTemplateView("admin/orders");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null);
+        }
+    }
 }

@@ -90,11 +90,12 @@ public class RequestContext {
                 systemUser.setUserId(user.getId().intValue());
                 systemUser.setUserName(user.getLogin_name());
                 systemUser.setUserRole(SystemUser.UserRole.Normal);
+                if ("admin".equals(user.getGroup_cd()) || "super".equals(user.getGroup_cd())) {
+                    systemUser.setUserRole(SystemUser.UserRole.Admin);
+                }
             }
             if (systemUser.getUserId() < 0) {
                 systemUser.setUserRole(SystemUser.UserRole.Anonymous);
-            } else if (systemUser.getUserId() > 1000) {
-                systemUser.setUserRole(SystemUser.UserRole.Admin);
             }
         }
         return systemUser;

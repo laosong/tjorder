@@ -131,6 +131,10 @@
         SELECT * FROM shipping_info WHERE id=#{id}
     </select>
 
+    <select id="getOrders" resultMap="orderInfoResultMap">
+        SELECT * FROM orders order by created_date desc
+    </select>
+
 
     <parameterMap id="orderStatusParameterMap" type="com.brains.prj.tianjiu.order.domain.OrderStatus">
         <parameter property="orderId"/>

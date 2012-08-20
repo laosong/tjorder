@@ -205,6 +205,13 @@ class OrderAOP {
         return shippingInfo;
     }
 
+    @Transactional(readOnly = true)
+    public List<Order> adminGetOrders(int offset, int limit) {
+        List<Order> orders = orderMapper.getOrders(offset, limit);
+        fillOrdersItems(orders);
+        return orders;
+    }
+
     @Transactional
     public int addOrderStatus(OrderStatus orderStatus) {
         int add = orderMapper.createOrderStatus(orderStatus);
