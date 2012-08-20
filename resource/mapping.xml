@@ -6,7 +6,7 @@
                 path CDATA #REQUIRED
                 bean CDATA #REQUIRED
                 function CDATA #REQUIRED
-                role (Anonymous|Normal|Admin) #IMPLIED
+                role (Anonymous|Normal|Administrator) #IMPLIED
                 validator CDATA #IMPLIED>
         ]>
 <mappings>
@@ -15,6 +15,7 @@
     <mapping path="login" bean="loginController" function="login"></mapping>
     <mapping path="logout" bean="loginController" function="logout"></mapping>
 
+    <mapping path="miniCart" bean="shoppingCartController" function="getMiniCart"></mapping>
 
     <mapping path="showCart" bean="shoppingCartController" function="getCartPage"
              role="Normal"></mapping>
@@ -57,7 +58,10 @@
     </mapping>
 
     <mapping path="adminOrders" bean="orderController" function="adminGetOrders"
-             role="Admin">
+             role="Administrator">
+    </mapping>
+    <mapping path="adminOrder" bean="orderController" function="adminGetOrder"
+             role="Administrator">
     </mapping>
 
     <mapping path="showAllCity" bean="addressController" function="getAllCityInfo"></mapping>

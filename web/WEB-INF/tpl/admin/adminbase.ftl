@@ -10,6 +10,7 @@
         @import "/css/jquery/blitzer/jquery-ui-1.8.16.custom.css";
         @import "/css/admin/admin.css";
         @import "/css/admin/data_table.css";
+        @import "/plugin/buk/buk.css";
     </style>
 </@block>
 <@block name="head_css">
@@ -18,6 +19,7 @@
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/plugin/buk/pager.js"></script>
 </@block>
 </head>
 <body>

@@ -3,10 +3,12 @@
 <div id="side">
     <ul id="menu">
         <li><a href="/orderAction/adminOrders"<#if nav_name=="allorders">class="highlight"</#if>>所有订单</a></li>
+        <li><a href="javascript:void(0);">支付方式</a></li>
+        <li><a href="javascript:void(0);">快递方式</a></li>
     </ul>
 </div>
 </#macro>
-<#macro order_status os=0>
+<#macro OrderStatusString os=0>
     <#if os==0>刚创建
     <#elseif os==1>已提交
     <#elseif os==2>已付款

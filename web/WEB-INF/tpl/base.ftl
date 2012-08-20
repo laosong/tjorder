@@ -74,12 +74,7 @@
                         <input type="button" tabindex="2" value="搜索" class="s_submit btn">
                     </form>
                 </div>
-                <div class="t_cart btn right" id="scrollCart">
-                    <ul class="clearfix">
-                        <li class="t_cart_num"><a href="#">购物车<span class="cartCount">0</span>件</a></li>
-                        <li class="t_cart_pay link_white fb"><a href="/orderAction/showCart" target="_blank">去结算</a>
-                        </li>
-                    </ul>
+                <div class="t_cart btn right" id="miniCartContainer">
                 </div>
             </div>
         </div>
@@ -160,5 +155,14 @@
 </@block>
 <@block name="body_footerjs">
 </@block>
+<script type="text/javascript">
+    $(function () {
+        $.callOrderAction("POST", "/orderAction/miniCart", null,
+                function (data) {
+                    $("#miniCartContainer").html(data);
+                }
+        )
+    });
+</script>
 </body>
 </html>

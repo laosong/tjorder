@@ -20,10 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.brains.prj.tianjiu.order.common.OrderEventManager;
+import com.brains.prj.tianjiu.order.common.TotalList;
 import com.brains.prj.tianjiu.order.domain.*;
 import com.brains.prj.tianjiu.order.orm.*;
-import com.brains.prj.tianjiu.order.edm.*;
 
 @Service
 class OrderAOP {
@@ -205,13 +204,6 @@ class OrderAOP {
         return shippingInfo;
     }
 
-    @Transactional(readOnly = true)
-    public List<Order> adminGetOrders(int offset, int limit) {
-        List<Order> orders = orderMapper.getOrders(offset, limit);
-        fillOrdersItems(orders);
-        return orders;
-    }
-
     @Transactional
     public int addOrderStatus(OrderStatus orderStatus) {
         int add = orderMapper.createOrderStatus(orderStatus);
@@ -222,5 +214,21 @@ class OrderAOP {
     public List<OrderStatus> getOrderStatus(int orderId) {
         List<OrderStatus> orderStatuses = orderMapper.getOrderStatus(orderId);
         return orderStatuses;
+    }
+
+    @Transactional(readOnly = true)
+    public TotalList<Order> getOrdersInfo(int offset, int limit) {
+        List<Order> orders = orderMapper.getOrdersByPage(offset, limit);
+        int total = orderMapper.getFoundRows();
+        return new TotalList<Order>(total, orders);
+    }
+
+    public Order getOrder(int orderId) {
+        Order order = orderMapper.getOrderInfo(orderId);
+        if (order != null) {
+            List<OrderItem> orderItems = orderMapper.getOrderItems(orderId);
+            order.setOrderItems(orderItems);
+        }
+        return order;
     }
 }

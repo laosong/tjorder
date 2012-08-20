@@ -207,4 +207,17 @@ public class ShoppingCartController {
             result.setError(e, null);
         }
     }
+
+    public void getMiniCart(RequestContext rc, ResultContext result) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+            if (user.getUserId() > 0) {
+                ShoppingCart cart = shoppingCartService.getUserCart(user.getUserId());
+                result.putResult("cart", cart);
+            }
+            result.setTemplateView("buy/miniCart");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null);
+        }
+    }
 }

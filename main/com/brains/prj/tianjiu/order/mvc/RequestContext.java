@@ -91,7 +91,7 @@ public class RequestContext {
                 systemUser.setUserName(user.getLogin_name());
                 systemUser.setUserRole(SystemUser.UserRole.Normal);
                 if ("admin".equals(user.getGroup_cd()) || "super".equals(user.getGroup_cd())) {
-                    systemUser.setUserRole(SystemUser.UserRole.Admin);
+                    systemUser.setUserRole(SystemUser.UserRole.Administrator);
                 }
             }
             if (systemUser.getUserId() < 0) {

@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.brains.prj.tianjiu.order.common.TotalList;
 import com.brains.prj.tianjiu.order.domain.*;
 
 @Service
@@ -21,9 +22,16 @@ public class OrderService {
 
     OrderAOP orderAOP;
 
+    GoodsAOP goodsAOP;
+
     @Autowired
     public void setOrderAOP(OrderAOP orderAOP) {
         this.orderAOP = orderAOP;
+    }
+
+    @Autowired
+    public void setGoodsAOP(GoodsAOP goodsAOP) {
+        this.goodsAOP = goodsAOP;
     }
 
     public List<DeliveryInfo> getAvailableDelivery() {
@@ -125,11 +133,6 @@ public class OrderService {
         return shippingInfo;
     }
 
-    public List<Order> adminGetOrders(int offset, int limit) {
-        List<Order> orders = orderAOP.adminGetOrders(offset, limit);
-        return orders;
-    }
-
     public void addOrderStatus(OrderStatus orderStatus) {
         orderAOP.addOrderStatus(orderStatus);
     }
@@ -137,6 +140,22 @@ public class OrderService {
     public List<OrderStatus> getOrderStatus(int orderId) {
         List<OrderStatus> orderStatuses = orderAOP.getOrderStatus(orderId);
         return orderStatuses;
+    }
+
+    public TotalList<Order> getOrdersInfo(int offset, int limit) {
+        TotalList<Order> ordersInfo = orderAOP.getOrdersInfo(offset, limit);
+        return ordersInfo;
+    }
+
+    public Order getOrder(int orderId) throws OrderNotFoundException {
+        Order order = orderAOP.getOrder(orderId);
+        if (order == null) {
+            throw new OrderNotFoundException(orderId);
+        }
+        for (OrderItem orderItem : order.getOrderItems()) {
+            orderItem.setGoodsItem(goodsAOP.getGoodsItem(orderItem.getItemId()));
+        }
+        return order;
     }
 }
 

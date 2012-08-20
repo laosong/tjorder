@@ -89,6 +89,10 @@
         SELECT *, id AS oid FROM order_item WHERE order_id=#{orderId}
     </select>
 
+    <select id="getFoundRows" resultType="int">
+        SELECT FOUND_ROWS() as foundRows;
+    </select>
+
     <select id="getUserOrders" parameterType="int" resultMap="orderInfoResultMap">
         SELECT * FROM orders WHERE user_id=#{userId} limit 20
     </select>
@@ -131,8 +135,12 @@
         SELECT * FROM shipping_info WHERE id=#{id}
     </select>
 
-    <select id="getOrders" resultMap="orderInfoResultMap">
-        SELECT * FROM orders order by created_date desc
+    <select id="getOrdersByPage" resultMap="orderInfoResultMap">
+        SELECT SQL_CALC_FOUND_ROWS * FROM orders ORDER BY created_date DESC limit #{limit} offset #{offset}
+    </select>
+
+    <select id="getOrderInfo" resultMap="orderInfoResultMap">
+        SELECT * FROM orders WHERE id=#{orderId}
     </select>
 
 

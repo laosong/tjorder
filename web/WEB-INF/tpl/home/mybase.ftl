@@ -17,7 +17,7 @@
     </dl>
 </div>
 </#macro>
-<#macro order_status os=0>
+<#macro OrderStatusString os=0>
     <#if os==0>刚创建
     <#elseif os==1>已提交
     <#elseif os==2>已付款

@@ -31,7 +31,7 @@
                     </#list>
                 </td>
                 <td>${order.getSumPrice()?string.currency}</td>
-                <td class="f999"><@order_status order.getState()/></td>
+                <td class="f999"><@OrderStatusString order.getState()/></td>
                 <td class="o_l"><a href="#">继续订单</a><a href="#">删除</a></td>
             </tr>
             </#list>

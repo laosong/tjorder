@@ -10,6 +10,7 @@ package com.brains.prj.tianjiu.order.web;
 
 import java.util.List;
 
+import com.brains.prj.tianjiu.order.common.TotalList;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -255,13 +256,33 @@ public class OrderController {
 
     public void adminGetOrders(RequestContext rc, ResultContext result) {
         try {
-            List<Order> orders = orderService.adminGetOrders(0, 0);
-            for (Order order : orders) {
-                fillOrderDetail(order);
-            }
-            result.putResult("orders", orders);
+            int num_per_page = 10;
+
+            TotalList<Order> totalList = orderService.getOrdersInfo(0, num_per_page);
+
+            result.putResult("orders", totalList.getList());
             result.setTemplateView("admin/orders");
         } catch (IllegalArgumentException e) {
+            result.setError(e, null);
+        }
+    }
+
+    public void adminGetOrder(RequestContext rc, ResultContext result) {
+        try {
+            int orderId = rc.getParameterInt("orderId");
+
+            Order order = orderService.getOrder(orderId);
+
+            List<OrderStatus> orderStatuses = orderService.getOrderStatus(orderId);
+
+            result.putResult("order", order);
+            result.putResult("orderStatuses", orderStatuses);
+            result.setTemplateView("admin/order");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null);
+        } catch (BadParameterException e) {
+            result.setError(e, null);
+        } catch (OrderNotFoundException e) {
             result.setError(e, null);
         }
     }

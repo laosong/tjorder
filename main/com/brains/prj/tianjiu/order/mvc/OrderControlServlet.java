@@ -124,7 +124,8 @@ public class OrderControlServlet extends HttpServlet {
                     if (requestContext.isAjaxReq()) {
                         resp.setContentType("text/json;charset=utf-8");
                         resultContext.putResult("success", false);
-                        resultContext.putResult("loginFrame", requestURI);
+                        resultContext.putResult("needRole", role.ordinal());
+                        resultContext.putResult("redirect", requestURI);
                         resultContext.setTemplateView("loginFrame");
                         JsonObjectMapper.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
                     } else {
@@ -135,6 +136,7 @@ public class OrderControlServlet extends HttpServlet {
                         }
                         resp.setContentType("text/html;charset=utf-8");
                         resultContext.putResult("success", false);
+                        resultContext.putResult("needRole", role.ordinal());
                         resultContext.putResult("redirect", redirect);
                         resultContext.setTemplateView("loginPage");
                         TemplateRender.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
@@ -172,7 +174,6 @@ public class OrderControlServlet extends HttpServlet {
                         TemplateRender.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
                     }
                 }
-
             } catch (NoSuchMethodException e) {
                 throw new ServletException("NoSuchMethodException", e);
             } catch (IllegalAccessException e) {

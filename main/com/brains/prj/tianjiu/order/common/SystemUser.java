@@ -13,7 +13,7 @@ public class SystemUser {
     public enum UserRole {
         Anonymous,
         Normal,
-        Admin;
+        Administrator;
     }
 
     public static String toString(UserRole enumRole) {
