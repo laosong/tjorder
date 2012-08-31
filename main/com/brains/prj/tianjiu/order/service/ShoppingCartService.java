@@ -9,6 +9,7 @@ package com.brains.prj.tianjiu.order.service;
  */
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,10 @@ import com.brains.prj.tianjiu.order.domain.*;
 @Service
 public class ShoppingCartService {
 
-    public static final int MAX_ITEM_COUNT = 10;
+    public static final int BUY_COUNT_MIN = 1;
+    public static final int BUY_COUNT_MAX = 100;
+
+    public static final int MAX_CART_ITEM_COUNT = 10;
 
     public static final int MAX_EVA_GOODS_BUY = 1;
 
@@ -58,31 +62,11 @@ public class ShoppingCartService {
         return shoppingCart;
     }
 
-    public void checkCartForEvaGoods(int userId, ShoppingCart cart, int itemCountOld, int itemCountNew)
-            throws BuyEvaGoodsException {
-        int maxBefore = MAX_EVA_GOODS_BUY - (itemCountNew - itemCountOld);
-        if (maxBefore < 0) {
-            throw new BuyEvaGoodsException(MAX_EVA_GOODS_BUY);
-        } else {
-            int evaItemSumInCart = 0;
-            for (CartItem cartItem : cart.getCartItems()) {
-                if (cartItem.getGoodsItem().beEva() == true) {
-                    evaItemSumInCart += cartItem.getQuantity();
-                }
-            }
-            if (maxBefore < evaItemSumInCart) {
-                throw new BuyEvaGoodsException(MAX_EVA_GOODS_BUY);
-            } else {
-                int evaItemAlreadyBuy = orderAOP.getUserOrderBuyEvaItemSum(userId, CHECK_ORDER_CONTAIN_EVA_HOURS);
-                if (maxBefore < evaItemSumInCart + evaItemAlreadyBuy) {
-                    throw new BuyEvaGoodsException(MAX_EVA_GOODS_BUY);
-                }
-            }
+    public void addItem(int userId, int itemId, int itemCount) throws BadBuyCountException,
+            GoodsNotFoundException, GoodsStateException, CartFullException, EvaGoodsBuyException, EvaGoodBuyCountException {
+        if (itemCount < BUY_COUNT_MIN || itemCount > BUY_COUNT_MAX) {
+            throw new BadBuyCountException(BUY_COUNT_MIN, BUY_COUNT_MAX);
         }
-    }
-
-    public void addItem(int userId, int itemId, int itemCount) throws GoodsNotFoundException,
-            GoodsStateException, CartFullException, BuyEvaGoodsException {
         GoodsItem goodsItem = goodsAOP.getGoodsItem(itemId);
         if (goodsItem == null) {
             throw new GoodsNotFoundException(itemId);
@@ -91,11 +75,24 @@ public class ShoppingCartService {
             throw new GoodsStateException(goodsItem);
         }
         ShoppingCart shoppingCart = getUserCart(userId);
-        if (shoppingCart.getItemCount() > MAX_ITEM_COUNT) {
-            throw new CartFullException(MAX_ITEM_COUNT);
+        if (shoppingCart.getItemCount() > MAX_CART_ITEM_COUNT) {
+            throw new CartFullException(MAX_CART_ITEM_COUNT);
         }
         if (goodsItem.beEva() == true) {
-            checkCartForEvaGoods(userId, shoppingCart, 0, itemCount);
+            List<Order> evaOrders = orderAOP.getUserOrderContainEvaItem(userId, CHECK_ORDER_CONTAIN_EVA_HOURS);
+            List<GoodsItem> evaGoods = new ArrayList<GoodsItem>();
+            for (CartItem cartItem : shoppingCart.getCartItems()) {
+                if (cartItem.getGoodsItem().beEva() == true) {
+                    evaGoods.add(cartItem.getGoodsItem());
+                }
+            }
+            if (evaOrders.size() + evaGoods.size() > 0) {
+                throw new EvaGoodsBuyException(evaGoods, evaOrders);
+            }
+
+            if (itemCount > MAX_EVA_GOODS_BUY) {
+                throw new EvaGoodBuyCountException(goodsItem, MAX_EVA_GOODS_BUY);
+            }
         }
         if (itemCount <= 0)
             itemCount = 1;
@@ -112,7 +109,7 @@ public class ShoppingCartService {
     }
 
     public void incItem(int userId, int id, int itemId) throws GoodsNotFoundException,
-            GoodsStateException, BuyEvaGoodsException, CartItemNotFoundException {
+            GoodsStateException, EvaGoodBuyCountException, CartItemNotFoundException {
         GoodsItem goodsItem = goodsAOP.getGoodsItem(itemId);
         if (goodsItem == null) {
             throw new GoodsNotFoundException(itemId);
@@ -121,8 +118,7 @@ public class ShoppingCartService {
             throw new GoodsStateException(goodsItem);
         }
         if (goodsItem.beEva() == true) {
-            ShoppingCart shoppingCart = getUserCart(userId);
-            checkCartForEvaGoods(userId, shoppingCart, 0, 1);
+            throw new EvaGoodBuyCountException(goodsItem, MAX_EVA_GOODS_BUY);
         }
         int affectRows = shoppingCartAOP.incItem(userId, id, itemId);
         if (affectRows <= 0) {
@@ -131,7 +127,7 @@ public class ShoppingCartService {
     }
 
     public void decItem(int userId, int id, int itemId) throws GoodsNotFoundException,
-            GoodsStateException, BuyEvaGoodsException, CartItemNotFoundException {
+            GoodsStateException, CartItemNotFoundException {
         GoodsItem goodsItem = goodsAOP.getGoodsItem(itemId);
         if (goodsItem == null) {
             throw new GoodsNotFoundException(itemId);
@@ -140,8 +136,6 @@ public class ShoppingCartService {
             throw new GoodsStateException(goodsItem);
         }
         if (goodsItem.beEva() == true) {
-            ShoppingCart shoppingCart = getUserCart(userId);
-            checkCartForEvaGoods(userId, shoppingCart, 0, 0);
         }
         int affectRows = shoppingCartAOP.decItem(userId, id, itemId);
         if (affectRows <= 0) {
@@ -149,8 +143,11 @@ public class ShoppingCartService {
         }
     }
 
-    public void setItemCount(int userId, int id, int itemId, int itemCount) throws GoodsNotFoundException,
-            GoodsStateException, BuyEvaGoodsException, CartItemNotFoundException {
+    public void setItemCount(int userId, int id, int itemId, int itemCount) throws BadBuyCountException,
+            GoodsNotFoundException, GoodsStateException, EvaGoodBuyCountException, CartItemNotFoundException {
+        if (itemCount < BUY_COUNT_MIN || itemCount > BUY_COUNT_MAX) {
+            throw new BadBuyCountException(BUY_COUNT_MIN, BUY_COUNT_MAX);
+        }
         GoodsItem goodsItem = goodsAOP.getGoodsItem(itemId);
         if (goodsItem == null) {
             throw new GoodsNotFoundException(itemId);
@@ -159,14 +156,9 @@ public class ShoppingCartService {
             throw new GoodsStateException(goodsItem);
         }
         if (goodsItem.beEva() == true) {
-            ShoppingCart shoppingCart = getUserCart(userId);
-            int itemCountOld = 0;
-            for (CartItem cartItem : shoppingCart.getCartItems()) {
-                if (cartItem.getId() == id) {
-                    itemCountOld = cartItem.getQuantity();
-                }
+            if (itemCount > MAX_EVA_GOODS_BUY) {
+                throw new EvaGoodBuyCountException(goodsItem, MAX_EVA_GOODS_BUY);
             }
-            checkCartForEvaGoods(userId, shoppingCart, itemCountOld, itemCount);
         }
         int affectRows = shoppingCartAOP.setItemCount(userId, id, itemId, itemCount);
         if (affectRows <= 0) {

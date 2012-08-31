@@ -8,19 +8,20 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import com.brains.prj.tianjiu.order.common.MessageUtils;
+import com.brains.prj.tianjiu.order.common.LogicException;
 import com.brains.prj.tianjiu.order.domain.GoodsItem;
 
-public class GoodsStateException extends Exception {
+public class GoodsStateException extends LogicException {
+
+    private static final long serialVersionUID = 5707215839924780180L;
+
     private GoodsItem goodsItem;
 
     public GoodsStateException(GoodsItem goodsItem) {
         this.goodsItem = goodsItem;
     }
 
-    @Override
-    public String getMessage() {
-        return java.text.MessageFormat.format(MessageUtils.GoodsStateException_Message,
-                goodsItem.getId(), goodsItem.getName(), goodsItem.getState());
+    public GoodsItem getGoodsItem() {
+        return goodsItem;
     }
 }

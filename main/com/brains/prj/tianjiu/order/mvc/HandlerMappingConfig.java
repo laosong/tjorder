@@ -34,12 +34,12 @@ public class HandlerMappingConfig {
 
             String path = namedNodeMap.getNamedItem("path").getNodeValue();
             String bean = namedNodeMap.getNamedItem("bean").getNodeValue();
-            String function = namedNodeMap.getNamedItem("function").getNodeValue();
+            String method = namedNodeMap.getNamedItem("method").getNodeValue();
 
             HandlerMapping mapping = new HandlerMapping();
             mapping.setPath(path);
             mapping.setBean(bean);
-            mapping.setFunction(function);
+            mapping.setMethod(method);
 
             String role = null;
             Node node = namedNodeMap.getNamedItem("role");

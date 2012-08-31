@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>提交订单成功</title>
-    <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 </head>
 <body>
 </body>

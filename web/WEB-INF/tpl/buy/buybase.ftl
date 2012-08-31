@@ -1,5 +1,4 @@
-<#-- @ftlvariable name="systemUser" type="com.brains.prj.tianjiu.order.common.SystemUser" -->
-<@OrderControl path="getSystemUser" para="" />
+<#global systemUser = __RequestContext.getSystemUser()>
 <#assign product_img_root = "">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

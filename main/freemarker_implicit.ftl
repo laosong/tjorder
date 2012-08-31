@@ -1,5 +1,6 @@
 [#ftl]
 [#-- @implicitly included --]
+[#-- @ftlvariable name="__RequestContext" type="com.brains.prj.tianjiu.order.mvc.RequestContext" --]
 
 [#macro block name][/#macro]
 [#macro override name][/#macro]

@@ -13,10 +13,13 @@ import java.io.StringWriter;
 
 import java.util.Locale;
 
+import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveModel;
+import freemarker.ext.beans.BeansWrapper;
+
 import cn.org.rapid_framework.freemarker.directive.*;
 
-public class TemplateRender {
+public class FMTemplateRender {
     static freemarker.template.Configuration ftConfig;
 
     public static void initConfig(String templateDir, String encoding) throws java.io.IOException {
@@ -36,16 +39,25 @@ public class TemplateRender {
         ftConfig.setSharedVariable(name, templateDirectiveModel);
     }
 
-    public static void process(String templateView, Object rootMap, Writer writer)
+    public static final String KEY_REQUEST = "__RequestContext";
+
+    public static void process(RequestContext requestContext, ResultContext resultContext, Writer writer)
             throws freemarker.template.TemplateException, java.io.IOException {
-        String result = process(templateView, rootMap);
+        String templateView = resultContext.getTemplateView();
+        freemarker.template.Template template = ftConfig.getTemplate(templateView + ".ftl");
+        StringWriter stringWriter = new StringWriter();
+        Environment environment = template.createProcessingEnvironment(resultContext.getResult(), stringWriter);
+        environment.setGlobalVariable(KEY_REQUEST, BeansWrapper.getDefaultInstance().wrap(requestContext));
+        environment.process();
+        String result = stringWriter.toString();
+        stringWriter.close();
         writer.write(result);
     }
 
     public static String process(String templateView, Object rootMap)
             throws freemarker.template.TemplateException, java.io.IOException {
-        StringWriter stringWriter = new StringWriter();
         freemarker.template.Template template = ftConfig.getTemplate(templateView + ".ftl");
+        StringWriter stringWriter = new StringWriter();
         template.process(rootMap, stringWriter);
         String result = stringWriter.toString();
         stringWriter.close();

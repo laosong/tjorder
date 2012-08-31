@@ -72,11 +72,11 @@ public class OrderControlServlet extends HttpServlet {
             location = config.getInitParameter(TEMPLATE_LOCATION_PARAM);
             if (location != null) {
                 location = WebUtils.getRealPath(config.getServletContext(), location);
-                TemplateRender.initConfig(location, UTF_8);
+                FMTemplateRender.initConfig(location, UTF_8);
 
                 OrderControlDirective orderControlDirective = new OrderControlDirective();
                 orderControlDirective.init(mappingConfig, applicationContext);
-                TemplateRender.addSharedVariable("OrderControl", orderControlDirective);
+                FMTemplateRender.addSharedVariable(OrderControlDirective.DIRECTIVE_NAME, orderControlDirective);
             }
             JsonObjectMapper.initConfig(null, UTF_8);
         } catch (Exception e) {
@@ -111,8 +111,6 @@ public class OrderControlServlet extends HttpServlet {
         String path = parts[1];
         HandlerMapping handlerMapping = mappingConfig.getMapping(path);
         if (handlerMapping != null) {
-            ContextUtils.setContext(req, resp);
-
             RequestContext requestContext = new RequestContext(req, resp);
             ResultContext resultContext = new ResultContext();
 
@@ -127,7 +125,7 @@ public class OrderControlServlet extends HttpServlet {
                         resultContext.putResult("needRole", role.ordinal());
                         resultContext.putResult("redirect", requestURI);
                         resultContext.setTemplateView("loginFrame");
-                        JsonObjectMapper.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
+                        JsonObjectMapper.process(requestContext, resultContext, resp.getWriter());
                     } else {
                         String redirect = requestURI;
                         if (req.getQueryString() != null) {
@@ -139,40 +137,25 @@ public class OrderControlServlet extends HttpServlet {
                         resultContext.putResult("needRole", role.ordinal());
                         resultContext.putResult("redirect", redirect);
                         resultContext.setTemplateView("loginPage");
-                        TemplateRender.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
+                        FMTemplateRender.process(requestContext, resultContext, resp.getWriter());
                     }
                 } else {
-                    List<com.easyvalidation.dto.Error> validateErrors = null;
-                    if (handlerMapping.getValidator() != null) {
-                        Map<String, Object> reqParametersMap = new HashMap<String, Object>();
-
-                        Set<Map.Entry<String, String[]>> paraSet = req.getParameterMap().entrySet();
-                        for (Map.Entry<String, String[]> entry : paraSet) {
-                            reqParametersMap.put(entry.getKey(), entry.getValue()[0]);
-                        }
-
-                        validateErrors = Validator.checkValidations(handlerMapping.getValidator(), reqParametersMap);
-                    }
-                    if (validateErrors != null && validateErrors.size() > 0) {
-                        resultContext.setError(new ValidateException(validateErrors), null);
-                    } else {
-                        Object controller = applicationContext.getBean(handlerMapping.getBean());
-                        if (controller == null) {
-                            throw new NoSuchMethodException();
-                        }
-
-                        Class clazz = controller.getClass();
-                        Method handler = ClassUtils.getMethod(clazz, handlerMapping.getFunction(), RequestContext.class, ResultContext.class);
-                        handler.invoke(controller, requestContext, resultContext);
+                    Object controller = applicationContext.getBean(handlerMapping.getBean());
+                    if (controller == null) {
+                        throw new NoSuchMethodException();
                     }
 
-                    if (requestContext.needJsonResp() || (requestContext.isAjaxReq() && resultContext.hasError())) {
-                        resp.setContentType("text/json;charset=utf-8");
-                        JsonObjectMapper.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
-                    } else {
-                        resp.setContentType("text/html;charset=utf-8");
-                        TemplateRender.process(resultContext.getTemplateView(), resultContext.getResult(), resp.getWriter());
-                    }
+                    Class<?> clazz = controller.getClass();
+                    Method handler = clazz.getMethod(handlerMapping.getMethod(), RequestContext.class, ResultContext.class);
+                    handler.invoke(controller, requestContext, resultContext);
+                }
+
+                if (requestContext.needJsonResp() || (requestContext.isAjaxReq() && resultContext.hasError())) {
+                    resp.setContentType("text/json;charset=utf-8");
+                    JsonObjectMapper.process(requestContext, resultContext, resp.getWriter());
+                } else {
+                    resp.setContentType("text/html;charset=utf-8");
+                    FMTemplateRender.process(requestContext, resultContext, resp.getWriter());
                 }
             } catch (NoSuchMethodException e) {
                 throw new ServletException("NoSuchMethodException", e);
@@ -183,7 +166,6 @@ public class OrderControlServlet extends HttpServlet {
             } catch (freemarker.template.TemplateException e) {
                 throw new ServletException("TemplateException", e);
             } finally {
-                ContextUtils.resetContext();
             }
         } else {
             throw new ServletException("no handlerMapping");

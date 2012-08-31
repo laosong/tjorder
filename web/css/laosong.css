@@ -319,3 +319,15 @@ h1, h2, h3, h4, h5, h6 {
     background: #FFFDEE;
     border: 1px solid #EDD28B;
 }
+
+.infoTip {
+    margin: 50px 0 10px 0;
+    padding: 10px;
+    background: #FFFDEE;
+    border: 1px solid #EDD28B;
+    color: #F60;
+}
+
+.infoAct {
+    margin: 10px 0 50px 0;
+}

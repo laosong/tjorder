@@ -8,17 +8,19 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import com.brains.prj.tianjiu.order.common.MessageUtils;
+import com.brains.prj.tianjiu.order.common.LogicException;
 
-public class DeliveryNotFoundException extends Exception {
+public class DeliveryNotFoundException extends LogicException {
+
+    private static final long serialVersionUID = -2297771407971754625L;
+
     private int deliveryId;
 
     public DeliveryNotFoundException(int deliveryId) {
         this.deliveryId = deliveryId;
     }
 
-    @Override
-    public String getMessage() {
-        return MessageUtils.format(MessageUtils.DeliveryNotFoundException_Message, deliveryId);
+    public int getDeliveryId() {
+        return deliveryId;
     }
 }

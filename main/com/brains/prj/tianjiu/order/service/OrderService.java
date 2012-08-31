@@ -8,8 +8,9 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import com.brains.prj.tianjiu.order.domain.*;
 
 @Service
 public class OrderService {
+
+    public static final int DEFAULT_DELIVERY_ID = 1;
 
     OrderAOP orderAOP;
 
@@ -58,8 +61,8 @@ public class OrderService {
         return deliveryInfo;
     }
 
-    public void submitCart(int userId, ShoppingCart shoppingCart, ShoppingCartService shoppingCartService)
-            throws CartEmptyException, GoodsStateException, BuyEvaGoodsException {
+    public void checkCartForSubmit(int userId, ShoppingCart shoppingCart) throws CartEmptyException,
+            GoodsStateException, EvaGoodsBuyException {
         if (shoppingCart == null || shoppingCart.getCartItems().size() <= 0) {
             throw new CartEmptyException();
         }
@@ -70,22 +73,32 @@ public class OrderService {
                 throw new GoodsStateException(goodsItem);
             }
         }
-        shoppingCartService.checkCartForEvaGoods(userId, shoppingCart, 0, 0);
+        List<Order> evaOrders = orderAOP.getUserOrderContainEvaItem(userId, ShoppingCartService.CHECK_ORDER_CONTAIN_EVA_HOURS);
+        List<GoodsItem> evaGoods = new ArrayList<GoodsItem>();
+        for (CartItem cartItem : shoppingCart.getCartItems()) {
+            if (cartItem.getGoodsItem().beEva() == true) {
+                evaGoods.add(cartItem.getGoodsItem());
+            }
+        }
+        if (evaOrders.size() + evaGoods.size() > 0) {
+            throw new EvaGoodsBuyException(evaGoods, evaOrders);
+        }
     }
 
-    public void submitOrder(Order order, ShoppingCart shoppingCart, ShoppingCartService shoppingCartService)
-            throws CartEmptyException, GoodsStateException, BuyEvaGoodsException {
-        if (shoppingCart == null || shoppingCart.getCartItems().size() <= 0) {
-            throw new CartEmptyException();
-        }
-        List<CartItem> cartItems = shoppingCart.getCartItems();
-        for (CartItem cartItem : cartItems) {
-            GoodsItem goodsItem = cartItem.getGoodsItem();
-            if (goodsItem.okForSale() == false) {
-                throw new GoodsStateException(goodsItem);
-            }
-        }
-        shoppingCartService.checkCartForEvaGoods(order.getUserId(), shoppingCart, 0, 0);
+    public OrderFee submitCart(int userId, ShoppingCart shoppingCart) throws CartEmptyException,
+            GoodsStateException, EvaGoodsBuyException {
+        checkCartForSubmit(userId, shoppingCart);
+
+        Order order = new Order();
+        DeliveryInfo deliveryInfo = orderAOP.getDeliveryInfo(DEFAULT_DELIVERY_ID);
+        order.setDeliveryInfo(deliveryInfo);
+        OrderFee orderFee = order.calcOrderFee(shoppingCart.getTotalPrice());
+        return orderFee;
+    }
+
+    public void submitOrder(Order order, ShoppingCart shoppingCart) throws CartEmptyException,
+            GoodsStateException, EvaGoodsBuyException {
+        checkCartForSubmit(order.getUserId(), shoppingCart);
 
         float itemFee = shoppingCart.getTotalPrice();
         OrderFee orderFee = order.calcOrderFee(itemFee);
@@ -99,7 +112,16 @@ public class OrderService {
         orderAOP.submitOrder(order, shoppingCart);
     }
 
-    public void updateOrderFee(Order order, OrderFee orderFee) {
+    public Order preparePay(int userId, int orderId) throws OrderNotFoundException,
+            OrderPayNoNeedException, OrderStateException, OrderPayExpiredException {
+        Order order = orderAOP.getUserOrder(userId, orderId);
+        if (order == null) {
+            throw new OrderNotFoundException(orderId);
+        }
+        if (order.getPaymentId() == 1) {
+            throw new OrderPayNoNeedException(order);
+        }
+        return order;
     }
 
     public Order getUserOrder(int userId, int orderId) throws OrderNotFoundException {

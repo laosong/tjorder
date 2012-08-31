@@ -1,5 +1,4 @@
-<#-- @ftlvariable name="systemUser" type="com.brains.prj.tianjiu.order.common.SystemUser" -->
-<@OrderControl path="getSystemUser" para="" />
+<#global systemUser = __RequestContext.getSystemUser()>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -30,7 +29,7 @@
         <div id="header">
             <div style="float:left;margin: 5px;"><h1>管理后台</h1></div>
             <div style="float:right;margin: 5px;">您好，<span>${systemUser.getUserName()!("nobody")}</span>！
-                <a href="javascript:window.location.href='/home/user/logout.htm?toUrl=/admin/usr/login.htm';">退出</a>
+                <a href="/home/user/logout.htm?toUrl=/admin/usr/login.htm">退出</a>
             </div>
         </div>
         <div id="top-nav">

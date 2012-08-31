@@ -8,15 +8,12 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import com.brains.prj.tianjiu.order.common.MessageUtils;
+import com.brains.prj.tianjiu.order.common.LogicException;
 
-public class CartEmptyException extends Exception {
+public class CartEmptyException extends LogicException {
+
+    private static final long serialVersionUID = -5341167973893107718L;
 
     public CartEmptyException() {
-    }
-
-    @Override
-    public String getMessage() {
-        return MessageUtils.format(MessageUtils.CartEmptyException_Message);
     }
 }

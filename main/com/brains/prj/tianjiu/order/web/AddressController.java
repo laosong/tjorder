@@ -42,43 +42,59 @@ public class AddressController {
             result.putResult("city", cityInfo);
             result.setTemplateView("showCity");
         } catch (BadParameterException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         } catch (CityInfoNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
     public void getProvinces(RequestContext rc, ResultContext result) {
-        List<String> provinces = addressService.getProvinces();
-        result.putResult("provinces", provinces);
-        result.setTemplateView("showCity");
+        try {
+            List<String> provinces = addressService.getProvinces();
+            result.putResult("provinces", provinces);
+            result.setTemplateView("showCity");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        }
     }
 
     public void getProvinceCities(RequestContext rc, ResultContext result) {
-        String province = rc.getParameter("provinceName");
-        List<String> provinceCities = addressService.getProvinceCities(province);
-        result.putResult("provinceCities", provinceCities);
+        try {
+            String province = rc.getParameter("provinceName");
+            List<String> provinceCities = addressService.getProvinceCities(province);
+            result.putResult("provinceCities", provinceCities);
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        }
     }
 
     public void getCityCountries(RequestContext rc, ResultContext result) {
-        String province = rc.getParameter("provinceName");
-        String city = rc.getParameter("cityName");
-        List<String> cityCountries = addressService.getCityCountries(province, city);
-        result.putResult("cityCountries", cityCountries);
+        try {
+            String province = rc.getParameter("provinceName");
+            String city = rc.getParameter("cityName");
+            List<String> cityCountries = addressService.getCityCountries(province, city);
+            result.putResult("cityCountries", cityCountries);
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        }
     }
 
     public void getUserAddress(RequestContext rc, ResultContext result) {
-        com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
-        List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+            List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
 
-        int checkAddress = 0;
-        for (UserAddress userAddress : userAddresses) {
-            checkAddress = userAddress.getId();
-            break;
+            int checkAddress = 0;
+            for (UserAddress userAddress : userAddresses) {
+                checkAddress = userAddress.getId();
+                break;
+            }
+            result.putResult("checkAddress", checkAddress);
+            result.putResult("userAddresses", userAddresses);
+            result.setTemplateView("buy/userAddress");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
         }
-        result.putResult("checkAddress", checkAddress);
-        result.putResult("userAddresses", userAddresses);
-        result.setTemplateView("buy/userAddress");
     }
 
     public void addUserAddress(RequestContext rc, ResultContext result) {
@@ -112,7 +128,7 @@ public class AddressController {
             result.putResult("userAddresses", userAddresses);
             result.setTemplateView("buy/userAddress");
         } catch (CityInfoNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -134,7 +150,7 @@ public class AddressController {
             result.putResult("userAddresses", userAddresses);
             result.setTemplateView("buy/userAddress");
         } catch (BadParameterException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 }

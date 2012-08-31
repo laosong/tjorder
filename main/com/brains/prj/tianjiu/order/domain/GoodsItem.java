@@ -19,15 +19,15 @@ public class GoodsItem implements Serializable {
     private float price;
     private float marketPrice;
 
-    public static final short STATE_OFF_SALE = 1;
-    public static final short STATE_ON_SALE = 2;
-
     private short types;
 
     public static final short TYPES_NORMAL = 1;
     public static final short TYPES_EVA = 2;
 
     private short state;
+
+    public static final short STATE_OFF_SALE = 1;
+    public static final short STATE_ON_SALE = 2;
 
     private String degree;
     private String volume;

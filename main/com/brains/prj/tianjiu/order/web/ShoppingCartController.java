@@ -44,15 +44,19 @@ public class ShoppingCartController {
             result.putResult("free_delivery_order_fee", Order.FREE_DELIVERY_ORDER_FEE);
             result.setTemplateView("buy/addCartItemOk");
         } catch (BadParameterException e) {
-            result.setError(e, null);
+            result.setError(e, "badParameterException", "buy/addCartItemEr");
+        } catch (BadBuyCountException e) {
+            result.setError(e, "badBuyCountException", "buy/addCartItemEr");
         } catch (GoodsNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsNotFoundException", "buy/addCartItemEr");
         } catch (GoodsStateException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsStateException", "buy/addCartItemEr");
         } catch (CartFullException e) {
-            result.setError(e, null);
-        } catch (BuyEvaGoodsException e) {
-            result.setError(e, null);
+            result.setError(e, "cartFullException", "buy/addCartItemEr");
+        } catch (EvaGoodsBuyException e) {
+            result.setError(e, "evaGoodsBuyException", "buy/addCartItemEr");
+        } catch (EvaGoodBuyCountException e) {
+            result.setError(e, "evaGoodBuyCountException", "buy/addCartItemEr");
         }
     }
 
@@ -60,16 +64,8 @@ public class ShoppingCartController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            int id = 0;
-            int itemId = 0;
-            try {
-                id = rc.getParameterInt("id");
-            } catch (Exception e) {
-            }
-            try {
-                itemId = rc.getParameterInt("itemId");
-            } catch (Exception e) {
-            }
+            int id = rc.getParameterInt("id");
+            int itemId = rc.getParameterInt("itemId");
 
             shoppingCartService.delItem(user.getUserId(), id, itemId);
 
@@ -77,12 +73,14 @@ public class ShoppingCartController {
             result.putResult("cart", cart);
             result.putResult("free_delivery_order_fee", Order.FREE_DELIVERY_ORDER_FEE);
             result.setTemplateView("buy/showCartData");
-        } catch (CartItemNotFoundException e) {
-            result.setError(e, null);
+        } catch (BadParameterException e) {
+            result.setError(e, "badParameterException", "buy/delCartItemEr");
         } catch (GoodsNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsNotFoundException", "buy/delCartItemEr");
         } catch (GoodsStateException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsStateException", "buy/delCartItemEr");
+        } catch (CartItemNotFoundException e) {
+            result.setError(e, "cartItemNotFoundException", "buy/delCartItemEr");
         }
     }
 
@@ -90,16 +88,8 @@ public class ShoppingCartController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            int id = 0;
-            int itemId = 0;
-            try {
-                id = rc.getParameterInt("id");
-            } catch (Exception e) {
-            }
-            try {
-                itemId = rc.getParameterInt("itemId");
-            } catch (Exception e) {
-            }
+            int id = rc.getParameterInt("id");
+            int itemId = rc.getParameterInt("itemId");
 
             shoppingCartService.incItem(user.getUserId(), id, itemId);
 
@@ -107,14 +97,16 @@ public class ShoppingCartController {
             result.putResult("cart", cart);
             result.putResult("free_delivery_order_fee", Order.FREE_DELIVERY_ORDER_FEE);
             result.setTemplateView("buy/showCartData");
-        } catch (CartItemNotFoundException e) {
-            result.setError(e, null);
+        } catch (BadParameterException e) {
+            result.setError(e, "badParameterException", "buy/incCartItemEr");
         } catch (GoodsNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsNotFoundException", "buy/incCartItemEr");
         } catch (GoodsStateException e) {
-            result.setError(e, null);
-        } catch (BuyEvaGoodsException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsStateException", "buy/incCartItemEr");
+        } catch (EvaGoodBuyCountException e) {
+            result.setError(e, "evaGoodBuyCountException", "buy/incCartItemEr");
+        } catch (CartItemNotFoundException e) {
+            result.setError(e, "cartItemNotFoundException", "buy/incCartItemEr");
         }
     }
 
@@ -122,16 +114,8 @@ public class ShoppingCartController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            int id = 0;
-            int itemId = 0;
-            try {
-                id = rc.getParameterInt("id");
-            } catch (Exception e) {
-            }
-            try {
-                itemId = rc.getParameterInt("itemId");
-            } catch (Exception e) {
-            }
+            int id = rc.getParameterInt("id");
+            int itemId = rc.getParameterInt("itemId");
 
             shoppingCartService.decItem(user.getUserId(), id, itemId);
 
@@ -139,14 +123,14 @@ public class ShoppingCartController {
             result.putResult("cart", cart);
             result.putResult("free_delivery_order_fee", Order.FREE_DELIVERY_ORDER_FEE);
             result.setTemplateView("buy/showCartData");
-        } catch (CartItemNotFoundException e) {
-            result.setError(e, null);
+        } catch (BadParameterException e) {
+            result.setError(e, "badParameterException", "buy/decCartItemEr");
         } catch (GoodsNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsNotFoundException", "buy/decCartItemEr");
         } catch (GoodsStateException e) {
-            result.setError(e, null);
-        } catch (BuyEvaGoodsException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsStateException", "buy/decCartItemEr");
+        } catch (CartItemNotFoundException e) {
+            result.setError(e, "cartItemNotFoundException", "buy/decCartItemEr");
         }
     }
 
@@ -154,16 +138,8 @@ public class ShoppingCartController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            int id = 0;
-            int itemId = 0;
-            try {
-                id = rc.getParameterInt("id");
-            } catch (Exception e) {
-            }
-            try {
-                itemId = rc.getParameterInt("itemId");
-            } catch (Exception e) {
-            }
+            int id = rc.getParameterInt("id");
+            int itemId = rc.getParameterInt("itemId");
             int itemCount = rc.getParameterInt("itemCount");
 
             shoppingCartService.setItemCount(user.getUserId(), id, itemId, itemCount);
@@ -173,15 +149,17 @@ public class ShoppingCartController {
             result.putResult("free_delivery_order_fee", Order.FREE_DELIVERY_ORDER_FEE);
             result.setTemplateView("buy/showCartData");
         } catch (BadParameterException e) {
-            result.setError(e, null);
-        } catch (CartItemNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "badParameterException", "buy/setCartItemCountEr");
+        } catch (BadBuyCountException e) {
+            result.setError(e, "badBuyCountException", "buy/setCartItemCountEr");
         } catch (GoodsNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsNotFoundException", "buy/setCartItemCountEr");
         } catch (GoodsStateException e) {
-            result.setError(e, null);
-        } catch (BuyEvaGoodsException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsStateException", "buy/setCartItemCountEr");
+        } catch (EvaGoodBuyCountException e) {
+            result.setError(e, "evaGoodBuyCountException", "buy/setCartItemCountEr");
+        } catch (CartItemNotFoundException e) {
+            result.setError(e, "cartItemNotFoundException", "buy/setCartItemCountEr");
         }
     }
 
@@ -191,7 +169,7 @@ public class ShoppingCartController {
 
             result.setTemplateView("buy/showCart");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -204,7 +182,7 @@ public class ShoppingCartController {
             result.putResult("free_delivery_order_fee", Order.FREE_DELIVERY_ORDER_FEE);
             result.setTemplateView("buy/showCartData");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -217,7 +195,7 @@ public class ShoppingCartController {
             }
             result.setTemplateView("buy/miniCart");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 }

@@ -195,8 +195,8 @@ public class Order implements Serializable {
     public OrderFee calcOrderFee(float itemFee) {
         OrderFee orderFee = new OrderFee();
         orderFee.setItemFee(itemFee);
-        if (deliveryInfo != null) {
-            if (itemFee < FREE_DELIVERY_ORDER_FEE) {
+        if (itemFee < FREE_DELIVERY_ORDER_FEE) {
+            if (deliveryInfo != null) {
                 orderFee.setDeliveryFee(deliveryInfo.getFee());
             }
         }

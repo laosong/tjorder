@@ -8,9 +8,12 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import com.brains.prj.tianjiu.order.common.MessageUtils;
+import com.brains.prj.tianjiu.order.common.LogicException;
 
-public class CartItemNotFoundException extends Exception {
+public class CartItemNotFoundException extends LogicException {
+
+    private static final long serialVersionUID = -4371703414984843779L;
+
     private int id;
     private int itemId;
 
@@ -19,8 +22,4 @@ public class CartItemNotFoundException extends Exception {
         this.itemId = itemId;
     }
 
-    @Override
-    public String getMessage() {
-        return MessageUtils.format(MessageUtils.CartItemNotFoundException_Message, id, itemId);
-    }
 }

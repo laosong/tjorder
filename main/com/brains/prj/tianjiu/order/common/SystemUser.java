@@ -12,7 +12,7 @@ public class SystemUser {
 
     public enum UserRole {
         Anonymous,
-        Normal,
+        Register,
         Administrator;
     }
 

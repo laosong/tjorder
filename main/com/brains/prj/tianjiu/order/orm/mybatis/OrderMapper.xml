@@ -64,7 +64,7 @@
         (SELECT A.id FROM orders A, order_item B WHERE A.id=B.order_id AND
         A.user_id=#{userId} AND B.item_type=#{evaItemType} AND
         TIMESTAMPDIFF(HOUR, A.created_date, NOW()) &lt; #{checkHours} AND A.state IN
-        <foreach collection="states" open="(" separator="," close=")" item="s">#{s}</foreach>)
+        <foreach collection="states" open="(" separator="," close=")" item="s">#{s}</foreach>) limit 10
     </select>
 
     <select id="getUserOrderBuyEvaItemSum" resultType="int">

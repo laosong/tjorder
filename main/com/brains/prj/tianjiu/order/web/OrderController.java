@@ -41,7 +41,7 @@ public class OrderController {
             String name = org.apache.commons.lang.RandomStringUtils.randomAscii(200);
             String img = "test.jpg";
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -51,7 +51,7 @@ public class OrderController {
             result.putResult("goodsItems", goodsItems);
             result.setTemplateView("showItemList");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -62,24 +62,18 @@ public class OrderController {
             List<String> provinces = addressService.getProvinces();
 
             ShoppingCart cart = shoppingCartService.getUserCart(user.getUserId());
-            orderService.submitCart(user.getUserId(), cart, shoppingCartService);
-
-            Order order = new Order();
-            order.setDeliveryInfo(orderService.getDeliveryInfo(1));
-            OrderFee orderFee = order.calcOrderFee(cart.getTotalPrice());
+            OrderFee orderFee = orderService.submitCart(user.getUserId(), cart);
 
             result.putResult("provinces", provinces);
             result.putResult("cart", cart);
             result.putResult("orderFee", orderFee);
             result.setTemplateView("buy/checkOrder");
         } catch (CartEmptyException e) {
-            result.setError(e, null);
+            result.setError(e, "cartEmptyException", "buy/submitCartEr");
         } catch (GoodsStateException e) {
-            result.setError(e, null);
-        } catch (BuyEvaGoodsException e) {
-            result.setError(e, null);
-        } catch (DeliveryNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsStateException", "buy/submitCartEr");
+        } catch (EvaGoodsBuyException e) {
+            result.setError(e, "evaGoodsBuyException", "buy/submitCartEr");
         }
     }
 
@@ -120,44 +114,47 @@ public class OrderController {
             order.setDeliveryInfo(orderService.getDeliveryInfo(delivery));
 
             ShoppingCart cart = shoppingCartService.getUserCart(user.getUserId());
-            orderService.submitOrder(order, cart, shoppingCartService);
+            orderService.submitOrder(order, cart);
 
             result.putResult("orderId", order.getId());
             result.putResult("order", order);
             result.setTemplateView("buy/createOrderOk");
         } catch (BadParameterException e) {
-            result.setError(e, null);
+            result.setError(e, "badParameterException", "buy/submitOrderEr");
         } catch (UserAddressNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "userAddressNotFoundException", "buy/submitOrderEr");
         } catch (DeliveryNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "deliveryNotFoundException", "buy/submitOrderEr");
         } catch (CartEmptyException e) {
-            result.setError(e, null);
+            result.setError(e, "cartEmptyException", "buy/submitOrderEr");
         } catch (GoodsStateException e) {
-            result.setError(e, null);
-        } catch (BuyEvaGoodsException e) {
-            result.setError(e, null);
+            result.setError(e, "goodsStateException", "buy/submitOrderEr");
+        } catch (EvaGoodsBuyException e) {
+            result.setError(e, "evaGoodsBuyException", "buy/submitOrderEr");
         }
     }
 
-    public void payOrder(RequestContext rc, ResultContext result) {
+    public void payAfterSubmit(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
             int orderId = rc.getParameterInt("orderId");
-            Order order = orderService.getUserOrder(user.getUserId(), orderId);
-
-            result.putResult("order", order);
-
-            if (order.getPaymentId() == 1) {
+            try {
+                Order order = orderService.preparePay(user.getUserId(), orderId);
+                result.putResult("order", order);
+                result.setTemplateView("buy/preparePay");
+            } catch (OrderPayNoNeedException e) {
+                result.putResult("order", e.getOrder());
                 result.setTemplateView("buy/orderDone");
-            } else if (order.getPaymentId() == 2) {
-                result.setTemplateView("buy/payOrder");
             }
         } catch (BadParameterException e) {
-            result.setError(e, null);
+            result.setError(e, "badParameterException", "buy/preparePayEx");
         } catch (OrderNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, "orderNotFoundException", "buy/preparePayEx");
+        } catch (OrderStateException e) {
+            result.setError(e, "orderStateException", "buy/preparePayEx");
+        } catch (OrderPayExpiredException e) {
+            result.setError(e, "orderNotFoundException", "buy/preparePayEx");
         }
     }
 
@@ -173,7 +170,7 @@ public class OrderController {
 
             result.setTemplateView("home/myHome");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -188,7 +185,7 @@ public class OrderController {
             result.putResult("orders", orders);
             result.setTemplateView("home/myOrders");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -203,7 +200,7 @@ public class OrderController {
             result.putResult("orders", orders);
             result.setTemplateView("home/myUnCompleteOrders");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -218,7 +215,7 @@ public class OrderController {
             result.putResult("orders", orders);
             result.setTemplateView("home/myCompleteOrders");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -227,30 +224,8 @@ public class OrderController {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
             int orderId = rc.getParameterInt("orderId");
-            Order order = orderService.getUserOrder(user.getUserId(), orderId);
-            fillOrderDetail(order);
-
-            order.setPaymentInfo(orderService.getPaymentInfo(order.getPaymentId()));
-            order.setDeliveryInfo(orderService.getDeliveryInfo(order.getDeliveryId()));
-
-            ShippingInfo shippingInfo = orderService.getOrderShippingInfo(order.getShippingId());
-            shippingInfo.setCityInfo(addressService.getCity(shippingInfo.getCitiesId()));
-            order.setShippingInfo(shippingInfo);
-
-            result.putResult("order", order);
-            result.setTemplateView("home/myOrderData");
         } catch (BadParameterException e) {
-            result.setError(e, null);
-        } catch (OrderNotFoundException e) {
-            result.setError(e, null);
-        } catch (PaymentNotFoundException e) {
-            result.setError(e, null);
-        } catch (DeliveryNotFoundException e) {
-            result.setError(e, null);
-        } catch (ShippingNotFoundException e) {
-            result.setError(e, null);
-        } catch (CityInfoNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -263,7 +238,7 @@ public class OrderController {
             result.putResult("orders", totalList.getList());
             result.setTemplateView("admin/orders");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 
@@ -279,11 +254,11 @@ public class OrderController {
             result.putResult("orderStatuses", orderStatuses);
             result.setTemplateView("admin/order");
         } catch (IllegalArgumentException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         } catch (BadParameterException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         } catch (OrderNotFoundException e) {
-            result.setError(e, null);
+            result.setError(e, null, null);
         }
     }
 }

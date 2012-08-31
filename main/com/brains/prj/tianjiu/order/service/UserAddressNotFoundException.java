@@ -8,17 +8,19 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import com.brains.prj.tianjiu.order.common.MessageUtils;
+import com.brains.prj.tianjiu.order.common.LogicException;
 
-public class UserAddressNotFoundException extends Exception {
+public class UserAddressNotFoundException extends LogicException {
+
+    private static final long serialVersionUID = 3444077840039989080L;
+
     private int addressId;
 
     public UserAddressNotFoundException(int addressId) {
         this.addressId = addressId;
     }
 
-    @Override
-    public String getMessage() {
-        return MessageUtils.format(MessageUtils.UserAddressNotFoundException_Message, addressId);
+    public int getAddressId() {
+        return addressId;
     }
 }

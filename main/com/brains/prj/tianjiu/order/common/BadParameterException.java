@@ -7,6 +7,7 @@ package com.brains.prj.tianjiu.order.common;
  * Time: 下午9:44
  * To change this template use File | Settings | File Templates.
  */
+
 public class BadParameterException extends Exception {
     private String parameterName;
     private String parameterValue;

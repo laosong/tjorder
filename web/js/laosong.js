@@ -218,7 +218,7 @@
 
 })(window);
 
-var laosong_login =
+var laosong_login_dialog =
     '<!-- 弹出登录层 -->' +
         '<!--end弹出登录层-- >';
 
@@ -261,7 +261,7 @@ function submitAfterLogin() {
                         if (pending_failCallback) {
                             pending_failCallback(data);
                         } else {
-                            alert(data.message);
+                            alert(getLocaleMessage(data.message));
                         }
                     } else {
                         pending_successCallback(data);

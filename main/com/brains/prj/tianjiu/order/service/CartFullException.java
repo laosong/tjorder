@@ -8,17 +8,19 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import com.brains.prj.tianjiu.order.common.MessageUtils;
+import com.brains.prj.tianjiu.order.common.LogicException;
 
-public class CartFullException extends Exception {
+public class CartFullException extends LogicException {
+
+    private static final long serialVersionUID = -22015882707605703L;
+
     private int maxItemCount;
 
     public CartFullException(int maxItemCount) {
         this.maxItemCount = maxItemCount;
     }
 
-    @Override
-    public String getMessage() {
-        return MessageUtils.format(MessageUtils.CartFullException_Message, maxItemCount);
+    public int getMaxItemCount() {
+        return maxItemCount;
     }
 }

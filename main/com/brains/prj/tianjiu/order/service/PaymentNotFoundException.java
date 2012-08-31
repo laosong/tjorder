@@ -8,17 +8,15 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import com.brains.prj.tianjiu.order.common.MessageUtils;
+import com.brains.prj.tianjiu.order.common.LogicException;
 
-public class PaymentNotFoundException extends Exception {
+public class PaymentNotFoundException extends LogicException {
+
+    private static final long serialVersionUID = -2133952046731424619L;
+
     private int paymentId;
 
     public PaymentNotFoundException(int paymentId) {
         this.paymentId = paymentId;
-    }
-
-    @Override
-    public String getMessage() {
-        return MessageUtils.format(MessageUtils.PaymentNotFoundException_Message, paymentId);
     }
 }

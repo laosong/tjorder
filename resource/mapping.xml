@@ -4,76 +4,50 @@
         <!ELEMENT mapping (#PCDATA)>
         <!ATTLIST mapping
                 path CDATA #REQUIRED
-                bean CDATA #REQUIRED
-                function CDATA #REQUIRED
-                role (Anonymous|Normal|Administrator) #IMPLIED
-                validator CDATA #IMPLIED>
+                bean (loginController|shoppingCartController|orderController|addressController) #REQUIRED
+                method CDATA #REQUIRED
+                role  (Anonymous|Register|Administrator) #IMPLIED>
         ]>
 <mappings>
-    <mapping path="getSystemUser" bean="loginController" function="getSystemUser"></mapping>
-    <mapping path="showLoginPage" bean="loginController" function="showLoginPage"></mapping>
-    <mapping path="login" bean="loginController" function="login"></mapping>
-    <mapping path="logout" bean="loginController" function="logout"></mapping>
+    <mapping path="getSystemUser" bean="loginController" method="getSystemUser"/>
+    <mapping path="showLoginPage" bean="loginController" method="showLoginPage"/>
+    <mapping path="login" bean="loginController" method="login"/>
+    <mapping path="logout" bean="loginController" method="logout"/>
 
-    <mapping path="miniCart" bean="shoppingCartController" function="getMiniCart"></mapping>
+    <mapping path="miniCart" bean="shoppingCartController" method="getMiniCart"/>
+    <mapping path="showCart" bean="shoppingCartController" method="getCartPage" role="Register"/>
+    <mapping path="showCartData" bean="shoppingCartController" method="getCart" role="Register"/>
 
-    <mapping path="showCart" bean="shoppingCartController" function="getCartPage"
-             role="Normal"></mapping>
-    <mapping path="showCartData" bean="shoppingCartController" function="getCart"
-             role="Normal"></mapping>
+    <mapping path="addCartItem" bean="shoppingCartController" method="addItem" role="Register"/>
+    <mapping path="delCartItem" bean="shoppingCartController" method="delItem" role="Register"/>
+    <mapping path="incCartItem" bean="shoppingCartController" method="incItem" role="Register"/>
+    <mapping path="decCartItem" bean="shoppingCartController" method="decItem" role="Register"/>
+    <mapping path="setCartItemCount" bean="shoppingCartController" method="setItemCount" role="Register"/>
 
-    <mapping path="addCartItem" bean="shoppingCartController" function="addItem"
-             role="Normal" validator="addCartItemValidator"></mapping>
-    <mapping path="delCartItem" bean="shoppingCartController" function="delItem"
-             role="Normal" validator="comCartItemValidator"></mapping>
-    <mapping path="incCartItem" bean="shoppingCartController" function="incItem"
-             role="Normal" validator="comCartItemValidator"></mapping>
-    <mapping path="decCartItem" bean="shoppingCartController" function="decItem"
-             role="Normal" validator="comCartItemValidator"></mapping>
-    <mapping path="setCartItemCount" bean="shoppingCartController" function="setItemCount"
-             role="Normal" validator="setCartItemValidator"></mapping>
+    <mapping path="addProductItem" bean="orderController" method="addProductItem" role="Anonymous"/>
+    <mapping path="showItemList" bean="orderController" method="getItemList" role="Anonymous"/>
 
-    <mapping path="addProductItem" bean="orderController" function="addProductItem"
-             role="Anonymous"></mapping>
-    <mapping path="showItemList" bean="orderController" function="getItemList"
-             role="Anonymous"></mapping>
+    <mapping path="submitCart" bean="orderController" method="submitCart" role="Register"/>
+    <mapping path="submitOrder" bean="orderController" method="submitOrder" role="Register"/>
+    <mapping path="payAfterSubmit" bean="orderController" method="payAfterSubmit" role="Register"/>
 
-    <mapping path="submitCart" bean="orderController" function="submitCart"
-             role="Normal"></mapping>
-    <mapping path="submitOrder" bean="orderController" function="submitOrder"
-             role="Normal" validator="submitOrderValidator"></mapping>
-    <mapping path="payOrder" bean="orderController" function="payOrder"
-             role="Normal"></mapping>
+    <mapping path="myHome" bean="orderController" method="getMyHomeInfo" role="Register"/>
+    <mapping path="myOrders" bean="orderController" method="getMyOrders" role="Register"/>
+    <mapping path="myUnCompleteOrders" bean="orderController" method="getMyUnCompleteOrders" role="Register"/>
+    <mapping path="myCompleteOrders" bean="orderController" method="getMyCompleteOrders" role="Register"/>
+    <mapping path="myOrderDetail" bean="orderController" method="getMyOrderDetail" role="Register"/>
 
-    <mapping path="myHome" bean="orderController" function="getMyHomeInfo"
-             role="Normal"></mapping>
-    <mapping path="myOrders" bean="orderController" function="getMyOrders"
-             role="Normal"></mapping>
-    <mapping path="myUnCompleteOrders" bean="orderController" function="getMyUnCompleteOrders"
-             role="Normal"></mapping>
-    <mapping path="myCompleteOrders" bean="orderController" function="getMyCompleteOrders"
-             role="Normal"></mapping>
-    <mapping path="myOrderDetail" bean="orderController" function="getMyOrderDetail"
-             role="Normal" validator="showOrderValidator">
-    </mapping>
+    <mapping path="adminOrders" bean="orderController" method="adminGetOrders" role="Administrator"/>
+    <mapping path="adminOrder" bean="orderController" method="adminGetOrder" role="Administrator"/>
 
-    <mapping path="adminOrders" bean="orderController" function="adminGetOrders"
-             role="Administrator">
-    </mapping>
-    <mapping path="adminOrder" bean="orderController" function="adminGetOrder"
-             role="Administrator">
-    </mapping>
+    <mapping path="showAllCity" bean="addressController" method="getAllCityInfo"/>
 
-    <mapping path="showAllCity" bean="addressController" function="getAllCityInfo"></mapping>
-    <mapping path="showCity" bean="addressController" function="getCityInfo"></mapping>
-    <mapping path="getProvinces" bean="addressController" function="getProvinces"></mapping>
-    <mapping path="getProvinceCities" bean="addressController" function="getProvinceCities"></mapping>
-    <mapping path="getCityCountries" bean="addressController" function="getCityCountries"></mapping>
+    <mapping path="showCity" bean="addressController" method="getCityInfo"/>
+    <mapping path="getProvinces" bean="addressController" method="getProvinces"/>
+    <mapping path="getProvinceCities" bean="addressController" method="getProvinceCities"/>
+    <mapping path="getCityCountries" bean="addressController" method="getCityCountries"/>
 
-    <mapping path="getUserAddress" bean="addressController" function="getUserAddress"
-             role="Normal"></mapping>
-    <mapping path="addUserAddress" bean="addressController" function="addUserAddress"
-             role="Normal"></mapping>
-    <mapping path="delUserAddress" bean="addressController" function="delUserAddress"
-             role="Normal"></mapping>
+    <mapping path="getUserAddress" bean="addressController" method="getUserAddress" role="Register"/>
+    <mapping path="addUserAddress" bean="addressController" method="addUserAddress" role="Register"/>
+    <mapping path="delUserAddress" bean="addressController" method="delUserAddress" role="Register"/>
 </mappings>

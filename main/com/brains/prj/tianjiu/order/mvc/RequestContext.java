@@ -32,7 +32,9 @@ public class RequestContext {
         requestParametersMap = request.getParameterMap();
     }
 
-    public RequestContext(String queryString) {
+    public RequestContext(HttpServletRequest request, HttpServletResponse response, String queryString) {
+        this.httpServletRequest = request;
+        this.httpServletResponse = response;
         this.requestParametersMap = parseQueryString(queryString);
     }
 
@@ -41,33 +43,23 @@ public class RequestContext {
     }
 
     public String getParameter(String paraName) {
-        String[] pValues = requestParametersMap.get(paraName);
+        String[] pValues = getParameters(paraName);
+        String value = null;
         if (pValues != null && pValues.length > 0) {
-            return pValues[0];
-        } else return null;
+            value = pValues[0];
+        }
+        return value;
     }
 
     public int getParameterInt(String paraName) throws BadParameterException {
-        String[] pValues = requestParametersMap.get(paraName);
-        String pValue = null;
-        if (pValues != null && pValues.length > 0) {
-            pValue = pValues[0];
-        }
-
-        int result = 0;
+        String pValue = getParameter(paraName);
+        int value = 0;
         try {
-            result = StringConvert.toInt(pValue);
-        } catch (StringConvert.ConvertException e) {
-            throw new BadParameterException("getParameterInt failed", paraName, pValue);
+            value = Integer.parseInt(pValue);
+        } catch (Exception ex) {
+            throw new BadParameterException("getParameterInt fail", paraName, pValue);
         }
-        return result;
-    }
-
-    private HttpServletRequest getRequest() {
-        if (this.httpServletRequest == null) {
-            this.httpServletRequest = ContextUtils.getThreadHttpServletRequest();
-        }
-        return this.httpServletRequest;
+        return value;
     }
 
     private SystemUser systemUser;
@@ -78,18 +70,18 @@ public class RequestContext {
         User user = new User();
         user.setId((long) systemUser.getUserId());
         user.setLogin_name(systemUser.getUserName());
-        UserSupport.saveCurrentUser(getRequest(), user);
+        UserSupport.saveCurrentUser(this.httpServletRequest, user);
     }
 
     public SystemUser getSystemUser() {
         if (systemUser == null) {
             systemUser = new SystemUser();
             systemUser.setUserId(-1);
-            User user = UserSupport.getCurrentUser(getRequest());
+            User user = UserSupport.getCurrentUser(this.httpServletRequest);
             if (user != null) {
                 systemUser.setUserId(user.getId().intValue());
                 systemUser.setUserName(user.getLogin_name());
-                systemUser.setUserRole(SystemUser.UserRole.Normal);
+                systemUser.setUserRole(SystemUser.UserRole.Register);
                 if ("admin".equals(user.getGroup_cd()) || "super".equals(user.getGroup_cd())) {
                     systemUser.setUserRole(SystemUser.UserRole.Administrator);
                 }

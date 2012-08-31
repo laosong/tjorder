@@ -43,17 +43,15 @@ public class ResultContext {
         }
     }
 
-    public void setError(Exception exception, String errorView) {
+    public void setError(Exception exception, String errorName, String errorView) {
         if (exception != null) {
             actionError = exception;
             templateView = errorView;
 
             putResult("success", false);
-            String message = actionError.getMessage();
-            if (message == null) {
-                message = actionError.getClass().getName();
-            }
-            putResult("message", message);
+            if (errorName == null)
+                errorName = "error";
+            putResult(errorName, actionError);
         }
     }
 

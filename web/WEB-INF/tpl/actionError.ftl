@@ -1,29 +1,13 @@
-<#-- @ftlvariable name="message" type="java.lang.String" -->
-<@override name="title">错误_<@super/></@override>
-<@override name="head_css">
-<style type="text/css">
-    .error_info {
-        height: 180px;
-        padding-top: 20px;
-        text-align: center;
-        color: #ff0000;
-    }
-</style>
-</@override>
-<@override name="body_content">
-<div id="content">
-    <div class="error_info">
-        <span id="errorMessage"></span>
-    </div>
+<#-- @ftlvariable name="error" type="java.lang.Exception" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>出错了</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+</head>
+<body>
+<div>
+    <p>出错了<#if error??>${error.getMessage()}</#if></p>
 </div>
-</@override>
-<@override name="body_footerjs">
-<input type="hidden" id="error_hidden" value="${message!("error")?html}">
-<script type="text/javascript">
-    $(function () {
-        var errorMsg = $("#error_hidden").val();
-        $("#errorMessage").text(getLocaleMessage(errorMsg));
-    });
-</script>
-</@override>
-<@extends name="base.ftl"/>
+</body>
+</html>

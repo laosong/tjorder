@@ -16,7 +16,7 @@ public class HandlerMapping implements Serializable {
 
     private String bean;
 
-    private String function;
+    private String method;
 
     private String role;
 
@@ -38,12 +38,12 @@ public class HandlerMapping implements Serializable {
         this.bean = bean;
     }
 
-    public String getFunction() {
-        return function;
+    public String getMethod() {
+        return method;
     }
 
-    public void setFunction(String function) {
-        this.function = function;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public String getRole() {

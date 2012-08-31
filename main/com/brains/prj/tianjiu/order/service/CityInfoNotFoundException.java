@@ -8,9 +8,14 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
-import com.brains.prj.tianjiu.order.common.MessageUtils;
+import com.brains.prj.tianjiu.order.common.LogicException;
 
-public class CityInfoNotFoundException extends Exception {
+public class CityInfoNotFoundException extends LogicException {
+
+    private static final long serialVersionUID = -8900224421357535316L;
+
+    private short types;
+
     private int cityId;
 
     private String province;
@@ -18,21 +23,34 @@ public class CityInfoNotFoundException extends Exception {
     private String country;
 
     public CityInfoNotFoundException(int cityId) {
+        this.types = 0;
         this.cityId = cityId;
     }
 
     public CityInfoNotFoundException(String province, String city, String country) {
+        this.types = 1;
         this.province = province;
         this.city = city;
         this.country = country;
     }
 
-    @Override
-    public String getMessage() {
-        if (province != null) {
-            return MessageUtils.format(MessageUtils.CityInfoNotFoundExceptionById_Message, cityId);
-        } else {
-            return MessageUtils.format(MessageUtils.CityInfoNotFoundExceptionByName_Message, province, city, country);
-        }
+    public short getTypes() {
+        return types;
+    }
+
+    public int getCityId() {
+        return cityId;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getCountry() {
+        return country;
     }
 }
