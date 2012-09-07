@@ -8,7 +8,7 @@
 <div style="margin-bottom: 20px;">
     <span>订单编号:${order.getOrderCd()}</span>
     <span style="margin-left: 50px;">订购日期:${order.getCreatedDate()?datetime}</span>
-    <span style="margin-left: 50px;">当前状态:<@OrderStatusString order.getState()/></span>
+    <span style="margin-left: 50px;">当前状态:<@OrderStateString order.getState()/></span>
     <span style="margin-left: 50px;">金额:${order.getSumPrice()?string.currency}</span>
 </div>
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="orderItemTable">

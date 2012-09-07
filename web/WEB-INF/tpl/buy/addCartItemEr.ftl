@@ -35,7 +35,17 @@
     </#if>
     <#if evaGoodsBuyException??>
     <div class="infoTip">
-        <p>品鉴商品</p>
+        <#assign evaOrders = evaGoodsBuyException.getEvaOrders()>
+        <#assign evaItems = evaGoodsBuyException.getEvaItems()>
+        <#if (evaOrders?size>0)>
+            <p>
+                您<#list evaOrders as evaOrder>${evaOrder.getCreatedDate()?datetime}的订单${evaOrder.getOrderCd()}</#list>已经够过买过品鉴商品，您本次不能购买任何品鉴商品
+            </p>
+        <#else>
+            <p>
+                您购物车中已经有<#list evaItems as evaItem>${evaItem.getName()}</#list>等品鉴商品，如果您想购买此品鉴商品，需删除购物车中已有的品鉴商品
+            </p>
+        </#if>
     </div>
     </#if>
     <#if evaGoodBuyCountException??>

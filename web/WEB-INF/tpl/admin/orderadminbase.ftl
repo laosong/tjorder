@@ -8,7 +8,7 @@
     </ul>
 </div>
 </#macro>
-<#macro OrderStatusString os=0>
+<#macro OrderStateString os=0>
     <#if os==0>刚创建
     <#elseif os==1>已提交
     <#elseif os==2>已付款

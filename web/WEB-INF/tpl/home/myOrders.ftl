@@ -32,7 +32,7 @@
                     </#list>
                 </td>
                 <td>${order.getSumPrice()?string.currency}</td>
-                <td class="f999"><@OrderStatusString order.getState()/></td>
+                <td class="f999"><@OrderStateString order.getState()/></td>
                 <td class="o_l"><a href="#">继续订单</a><a href="#">删除</a></td>
             </tr>
             </#list>
@@ -42,8 +42,5 @@
 </@override>
 <@override name="body_footerjs">
     <@super/>
-<script type="text/javascript">
-
-</script>
 </@override>
 <@extends name="mybase.ftl"/>

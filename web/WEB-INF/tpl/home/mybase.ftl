@@ -3,7 +3,6 @@
 <div class="per_nav">
     <dl>
         <dt>订单中心</dt>
-        <dd <#if nav_name=="allorders">class="curNav"</#if>><a href="/orderAction/myOrders">所有订单</a></dd>
         <dd <#if nav_name=="uncomporders">class="curNav"</#if>><a href="/orderAction/myUnCompleteOrders">未完成订单</a></dd>
         <dd <#if nav_name=="comporders">class="curNav"</#if>><a href="/orderAction/myCompleteOrders">已结束订单</a></dd>
         <dd><a href="/home/user/comments.htm">我的评论</a></dd>
@@ -17,7 +16,7 @@
     </dl>
 </div>
 </#macro>
-<#macro OrderStatusString os=0>
+<#macro OrderStateString os=0>
     <#if os==0>刚创建
     <#elseif os==1>已提交
     <#elseif os==2>已付款

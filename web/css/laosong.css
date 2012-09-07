@@ -263,7 +263,11 @@ h1, h2, h3, h4, h5, h6 {
     width: 84px;
 }
 
-.p-quantity a {
+.p-quantity .quantity-form input {
+    float: left;
+}
+
+.p-quantity .quantity-form a {
     background: url("/images/laosong/amount-bg.png") no-repeat scroll 0 0 transparent;
     display: block;
     float: left;
@@ -274,12 +278,12 @@ h1, h2, h3, h4, h5, h6 {
     width: 18px;
 }
 
-.p-quantity a.decrement {
+.p-quantity .quantity-form a.decrement {
     background-position: 0 0;
     margin-right: 5px;
 }
 
-.p-quantity a.increment {
+.p-quantity .quantity-form a.increment {
     background-position: 0 -13px;
     float: right;
 }
@@ -291,10 +295,9 @@ h1, h2, h3, h4, h5, h6 {
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
     background-color: #FFFFFF;
-    border-color: #AAAAAA #DDDDDD #DDDDDD #AAAAAA;
-    border-right: 1px solid #DDDDDD;
-    border-style: solid;
-    border-width: 1px;
+    border: 1px solid #AAAAAA;
+    border-right-color: #DDDDDD;
+    border-bottom-color: #DDDDDD;
     font-size: 12px;
     height: 18px;
     overflow: hidden;
@@ -321,11 +324,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .infoTip {
-    margin: 50px 0 10px 0;
+    margin: 50px 0 30px 0;
     padding: 10px;
     background: #FFFDEE;
     border: 1px solid #EDD28B;
     color: #F60;
+}
+
+.infoTip p {
+    margin: 5px;
 }
 
 .infoAct {

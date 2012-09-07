@@ -7,4 +7,4 @@
 [#macro super][/#macro]
 [#macro extends name][/#macro]
 [#macro OrderControl path para][/#macro]
-[#macro OrderStatusString os][/#macro]
+[#macro OrderStateString os][/#macro]

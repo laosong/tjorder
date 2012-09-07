@@ -189,7 +189,7 @@
             var itemId = itemRowObj.find("input[name=itemId]").val();
             var itemCount = itemRowObj.find("input[name=edit_num]").val();
             if (itemCount <= 0) {
-                alert(getLocaleMessage("client.cart.InputGoodNum"));
+                alert(getLocaleMessage("请输入一个大于0的数字"));
                 $.callOrderAction("POST", "/orderAction/showCartData", null,
                         function (data) {
                             updateCartData(data);

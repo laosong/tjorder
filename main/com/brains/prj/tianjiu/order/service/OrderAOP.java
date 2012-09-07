@@ -191,7 +191,7 @@ class OrderAOP {
 
     @Transactional(readOnly = true)
     public List<Order> getUserCompleteOrders(int userId) {
-        short[] complete_state = {Order.STATE_COMPLETE};
+        short[] complete_state = {Order.STATE_COMPLETE, Order.STATE_CANCELED};
         List<Order> orders = orderMapper.getUserOrdersByState(userId, complete_state);
         fillOrdersItems(orders);
         return orders;

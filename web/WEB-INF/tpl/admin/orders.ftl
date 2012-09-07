@@ -21,7 +21,7 @@
             <td>${order.getOrderCd()}</td>
             <td>${order.getCreatedDate()?datetime}</td>
             <td>${order.getSumPrice()?string.currency}</td>
-            <td><@OrderStatusString order.getState()/></td>
+            <td><@OrderStateString order.getState()/></td>
             <td><a href="/orderAction/adminOrder?orderId=${order.getId()?c}">查看详细</a></td>
         </tr>
         </#list>
