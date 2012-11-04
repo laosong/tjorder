@@ -53,7 +53,7 @@
                 <a href="#" target="_blank">友情链接</a>
             </div>
             <p class="copyright fcor_gray">Copyright&nbsp;&copy;&nbsp;2012, All Rights Reserved
-                <a href="#" target="_blank">京ICP证000000号</a>
+                <a href="#" target="_blank">黔ICP备12004944号</a>
             </p>
         </div>
     </@block>
