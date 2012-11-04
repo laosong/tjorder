@@ -108,6 +108,7 @@ public class AddressController {
             String address = rc.getParameter("address");
             String zipCode = rc.getParameter("zipCode");
             String recvPhone = rc.getParameter("recvPhone");
+            String recvEmail = rc.getParameter("recvEmail");
 
             CityInfo cityInfo = addressService.getCity(provinceName, cityName, countryName);
 
@@ -118,6 +119,7 @@ public class AddressController {
             userAddress.setZipCode(zipCode);
             userAddress.setRecvName(recvName);
             userAddress.setRecvPhone(recvPhone);
+            userAddress.setRecvEmail(recvEmail);
             addressService.saveUserAddress(userAddress);
 
             List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
