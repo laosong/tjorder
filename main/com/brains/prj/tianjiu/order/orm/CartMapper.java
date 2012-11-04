@@ -45,4 +45,6 @@ public interface CartMapper {
 
 
     public List<CartItem> getItemsByUser(@Param("userId") int userId);
+
+    public int delItemsByUser(@Param("userId") int userId);
 }

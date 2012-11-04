@@ -20,9 +20,9 @@
                     <div class="eb_checkOrder_cul">
                         <h3 class="f14px fb" id="addressH3">收货人信息<span class="yellow_block_tip" style="display: none;">请填写收货人信息</span>
                         </h3>
-                        <div id="userAddress" class="usedAddress">
+                        <div class="usedAddress" id="userAddress">
                         </div>
-                        <div class="newAddress">
+                        <div class="newAddress" id="newAddress">
                             <p class="fb">新建收货人</p>
                             <table summary="新增收货人信息">
                                 <tr>
@@ -137,7 +137,6 @@
 </div>
 <script type="text/javascript">
     $(function () {
-
         function updateUserAddress(result) {
             $("#userAddress").empty();
             $("#userAddress").html(result);
@@ -162,11 +161,22 @@
         var cityO = {oName:"请选择城市", oValue:"0"};
         var countryO = {oName:"请选择区县", oValue:"0"};
 
-        var provinceOptStr = $("#provinces").html();
-        if (true) {
+        function resetNewAddressForm() {
+            $("#recvNameInput").val("");
+            $("#addressInput").val("");
+            $("#zipCodeInput").val("");
+            $("#recvPhoneInput").val("");
+            $("#recvEmailInput").val("");
+
+            var provinceOptStr = $("#provinces").html();
             var provinceOptions = ['<option value="', provinceO.oValue, '">', provinceO.oName, '</option>'];
             $("#provinceSelect").html(provinceOptions.join("") + provinceOptStr);
             provinceSelectChanged();
+        }
+
+
+        if (true) {
+            resetNewAddressForm();
         }
 
         $("#provinceSelect").change(function (event) {
@@ -253,10 +263,13 @@
             addressParams["address"] = $("#addressInput").val();
             addressParams["zipCode"] = $("#zipCodeInput").val();
             addressParams["recvPhone"] = $("#recvPhoneInput").val();
+            addressParams["recvEmail"] = $("#recvEmailInput").val();
 
             $.callOrderAction("POST", "/orderAction/addUserAddress", addressParams,
                     function (data) {
                         updateUserAddress(data);
+                        resetNewAddressForm();
+                        alert(getLocaleMessage("地址已保存并设置为当前订单的默认送货地址"));
                     }
             );
         });
@@ -290,7 +303,7 @@
             $("#submitOrderHint").show();
             $.callOrderAction("POST", "/orderAction/submitOrder", params,
                     function (data) {
-                        window.location.href = "/orderAction/payOrder?orderId=" + data["orderId"];
+                        window.location.href = "/orderAction/payAfterSubmit?orderId=" + data["orderId"];
                     }
             );
             return false;

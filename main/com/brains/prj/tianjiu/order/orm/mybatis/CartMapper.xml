@@ -66,4 +66,8 @@
         SELECT * FROM cart_item WHERE user_id=#{userId}
     </select>
 
+    <delete id="delItemsByUser">
+        DELETE FROM cart_item WHERE user_id=#{userId}
+    </delete>
+
 </mapper>

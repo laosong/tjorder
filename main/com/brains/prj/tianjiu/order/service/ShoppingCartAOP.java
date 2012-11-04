@@ -80,4 +80,10 @@ class ShoppingCartAOP {
     public List<CartItem> getUserCartItems(int userId) {
         return cartMapper.getItemsByUser(userId);
     }
+
+    @CacheEvict(value = CACHE_NAME, key = "'UserCartItems' + #userId")
+    @Transactional
+    public int delUserCartItem(int userId) {
+        return cartMapper.delItemsByUser(userId);
+    }
 }

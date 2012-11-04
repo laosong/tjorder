@@ -165,4 +165,8 @@ public class ShoppingCartService {
             throw new CartItemNotFoundException(id, itemId);
         }
     }
+
+    public int clearUserCart(int userId) {
+        return shoppingCartAOP.delUserCartItem(userId);
+    }
 }

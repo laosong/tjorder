@@ -115,6 +115,7 @@ public class OrderController {
 
             ShoppingCart cart = shoppingCartService.getUserCart(user.getUserId());
             orderService.submitOrder(order, cart);
+            shoppingCartService.clearUserCart(user.getUserId());
 
             result.putResult("orderId", order.getId());
             result.putResult("order", order);
