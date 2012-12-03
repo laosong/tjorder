@@ -112,11 +112,11 @@ public class OrderService {
         orderAOP.submitOrder(order, shoppingCart);
     }
 
-    public Order preparePay(int userId, int orderId) throws OrderNotFoundException,
+    public Order preparePay(int userId, String orderCd) throws OrderNotFoundException,
             OrderPayNoNeedException, OrderStateException, OrderPayExpiredException {
-        Order order = orderAOP.getUserOrder(userId, orderId);
+        Order order = orderAOP.getUserOrder(userId, orderCd);
         if (order == null) {
-            throw new OrderNotFoundException(orderId);
+            throw new OrderNotFoundException(orderCd);
         }
         if (order.getPaymentId() == 1) {
             throw new OrderPayNoNeedException(order);
@@ -124,10 +124,34 @@ public class OrderService {
         return order;
     }
 
+    public void payOrder(String orderCd) throws OrderNotFoundException {
+        int ret = orderAOP.updateOrderState(orderCd, Order.STATE_PAYED);
+    }
+
+    public void shipOrder(String orderCd) throws OrderNotFoundException {
+
+    }
+
+    public void completeOrder(String orderCd) throws OrderNotFoundException {
+
+    }
+
+    public void cancelOrder(String orderCd) throws OrderNotFoundException {
+
+    }
+
     public Order getUserOrder(int userId, int orderId) throws OrderNotFoundException {
         Order order = orderAOP.getUserOrder(userId, orderId);
         if (order == null) {
             throw new OrderNotFoundException(orderId);
+        }
+        return order;
+    }
+
+    public Order getUserOrder(int userId, String orderCd) throws OrderNotFoundException {
+        Order order = orderAOP.getUserOrder(userId, orderCd);
+        if (order == null) {
+            throw new OrderNotFoundException(orderCd);
         }
         return order;
     }

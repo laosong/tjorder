@@ -26,8 +26,14 @@ public interface OrderMapper {
     public int updateOrderPriceById(@Param("id") int id,
                                     @Param("sumPrice") float sumPrice);
 
-    public Order getUserOrderInfo(@Param("userId") int userId,
-                                  @Param("orderId") int orderId);
+    public int updateOrderState(@Param("orderCd") String orderCd,
+                                @Param("state") short state);
+
+    public Order getUserOrderInfoById(@Param("userId") int userId,
+                                      @Param("orderId") int orderId);
+
+    public Order getUserOrderInfoByCd(@Param("userId") int userId,
+                                      @Param("orderCd") String orderCd);
 
     public List<Order> getUserOrderContainEvaItem(@Param("userId") int userId,
                                                   @Param("evaItemType") short evaItemType,

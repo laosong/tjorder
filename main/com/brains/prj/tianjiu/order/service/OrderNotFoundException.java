@@ -15,9 +15,14 @@ public class OrderNotFoundException extends LogicException {
     private static final long serialVersionUID = 3109382961230545787L;
 
     private int orderId;
+    private String orderCd;
 
     public OrderNotFoundException(int orderId) {
         this.orderId = orderId;
+    }
+
+    public OrderNotFoundException(String orderCd) {
+        this.orderCd = orderCd;
     }
 
     public int getOrderId() {

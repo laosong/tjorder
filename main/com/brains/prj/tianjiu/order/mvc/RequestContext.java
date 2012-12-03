@@ -38,6 +38,14 @@ public class RequestContext {
         this.requestParametersMap = parseQueryString(queryString);
     }
 
+    public String getQueryString() {
+        return httpServletRequest.getQueryString();
+    }
+
+    public Map<String, String[]> getParametersMap() {
+        return requestParametersMap;
+    }
+
     public String[] getParameters(String paraName) {
         return requestParametersMap.get(paraName);
     }
@@ -101,7 +109,7 @@ public class RequestContext {
         return "json".equals(getParameter("respDataType"));
     }
 
-    private static HashMap<String, String[]> parseQueryString(String s) {
+    public static Map<String, String[]> parseQueryString(String s) {
         String[] valArray = null;
 
         if (s == null) {
@@ -117,7 +125,7 @@ public class RequestContext {
                 throw new IllegalArgumentException();
             }
             String key = parseName(pair.substring(0, pos), sb);
-            String val = parseName(pair.substring(pos + 1, pair.length()), sb);
+            String val = pair.substring(pos + 1);
             if (ht.containsKey(key)) {
                 String[] oldValues = (String[]) ht.get(key);
                 valArray = new String[oldValues.length + 1];
@@ -155,7 +163,6 @@ public class RequestContext {
                             i++;
                         }
                     }
-
                 default:
                     sb.append(c);
             }

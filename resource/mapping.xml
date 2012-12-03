@@ -30,6 +30,9 @@
     <mapping path="submitCart" bean="orderController" method="submitCart" role="Register"/>
     <mapping path="submitOrder" bean="orderController" method="submitOrder" role="Register"/>
     <mapping path="payAfterSubmit" bean="orderController" method="payAfterSubmit" role="Register"/>
+    <mapping path="alipaySubmit" bean="orderController" method="alipaySubmit" role="Register"/>
+    <mapping path="alipayReturn" bean="orderController" method="alipayReturn" role="Register"/>
+    <mapping path="alipayNotify" bean="orderController" method="alipayNotify" role="Anonymous"/>
 
     <mapping path="myHome" bean="orderController" method="getMyHomeInfo" role="Register"/>
     <mapping path="myOrders" bean="orderController" method="getMyOrders" role="Register"/>

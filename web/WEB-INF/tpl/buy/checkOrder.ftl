@@ -303,7 +303,7 @@
             $("#submitOrderHint").show();
             $.callOrderAction("POST", "/orderAction/submitOrder", params,
                     function (data) {
-                        window.location.href = "/orderAction/payAfterSubmit?orderId=" + data["orderId"];
+                        window.location.href = "/orderAction/payAfterSubmit?orderCd=" + data["orderCd"];
                     }
             );
             return false;

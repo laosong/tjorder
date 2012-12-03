@@ -122,14 +122,30 @@ class OrderAOP {
         return createResult;
     }
 
-    public void updateOrderFee(Order order, OrderFee orderFee) {
+    public int updateOrderFee(Order order, OrderFee orderFee) {
+        return 0;
+    }
+
+    @Transactional
+    public int updateOrderState(String orderCd, short newState) {
+        return orderMapper.updateOrderState(orderCd, newState);
     }
 
     @Transactional(readOnly = true)
     public Order getUserOrder(int userId, int orderId) {
-        Order order = orderMapper.getUserOrderInfo(userId, orderId);
+        Order order = orderMapper.getUserOrderInfoById(userId, orderId);
         if (order != null) {
-            List<OrderItem> orderItems = orderMapper.getOrderItems(orderId);
+            List<OrderItem> orderItems = orderMapper.getOrderItems(order.getId());
+            order.setOrderItems(orderItems);
+        }
+        return order;
+    }
+
+    @Transactional(readOnly = true)
+    public Order getUserOrder(int userId, String orderCd) {
+        Order order = orderMapper.getUserOrderInfoByCd(userId, orderCd);
+        if (order != null) {
+            List<OrderItem> orderItems = orderMapper.getOrderItems(order.getId());
             order.setOrderItems(orderItems);
         }
         return order;
