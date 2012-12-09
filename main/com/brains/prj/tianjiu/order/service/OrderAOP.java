@@ -232,6 +232,12 @@ class OrderAOP {
         return orderStatuses;
     }
 
+    @Transactional
+    public int addOrderLog(OrderLog orderLog) {
+        int add = orderMapper.createOrderLog(orderLog);
+        return add;
+    }
+
     @Transactional(readOnly = true)
     public TotalList<Order> getOrdersInfo(int offset, int limit) {
         List<Order> orders = orderMapper.getOrdersByPage(offset, limit);

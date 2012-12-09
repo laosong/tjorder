@@ -176,4 +176,16 @@
         SELECT * FROM order_status WHERE order_id=#{orderId}
     </select>
 
+    <parameterMap id="orderLogParameterMap" type="com.brains.prj.tianjiu.order.domain.OrderLog">
+        <parameter property="userId"/>
+        <parameter property="orderId"/>
+        <parameter property="logType"/>
+        <parameter property="logContent"/>
+        <parameter property="logInfo"/>
+    </parameterMap>
+
+    <insert id="createOrderLog" parameterMap="orderLogParameterMap">
+        INSERT INTO order_log(user_id, order_id, log_type, log_content, log_info) VALUES(?, ?, ?, ?, ?)
+    </insert>
+
 </mapper>

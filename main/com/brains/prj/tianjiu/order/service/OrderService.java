@@ -129,15 +129,15 @@ public class OrderService {
     }
 
     public void shipOrder(String orderCd) throws OrderNotFoundException {
-
+        int ret = orderAOP.updateOrderState(orderCd, Order.STATE_SHIPPED);
     }
 
     public void completeOrder(String orderCd) throws OrderNotFoundException {
-
+        int ret = orderAOP.updateOrderState(orderCd, Order.STATE_COMPLETE);
     }
 
     public void cancelOrder(String orderCd) throws OrderNotFoundException {
-
+        int ret = orderAOP.updateOrderState(orderCd, Order.STATE_CANCELED);
     }
 
     public Order getUserOrder(int userId, int orderId) throws OrderNotFoundException {
@@ -186,6 +186,10 @@ public class OrderService {
     public List<OrderStatus> getOrderStatus(int orderId) {
         List<OrderStatus> orderStatuses = orderAOP.getOrderStatus(orderId);
         return orderStatuses;
+    }
+
+    public void addOrderLog(OrderLog orderLog) {
+        orderAOP.addOrderLog(orderLog);
     }
 
     public TotalList<Order> getOrdersInfo(int offset, int limit) {

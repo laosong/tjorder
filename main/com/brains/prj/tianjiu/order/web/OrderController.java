@@ -8,10 +8,12 @@ package com.brains.prj.tianjiu.order.web;
  * To change this template use File | Settings | File Templates.
  */
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -162,6 +164,12 @@ public class OrderController {
         }
     }
 
+    public String money2String(float money) {
+        NumberFormat df = DecimalFormat.getInstance();
+        df.setMaximumFractionDigits(2);
+        return df.format(money);
+    }
+
     public void alipaySubmit(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
@@ -180,11 +188,11 @@ public class OrderController {
                 sParaTemp.put("seller_email", AliPayHelper.seller_email);
                 sParaTemp.put("out_trade_no", order.getOrderCd());
                 sParaTemp.put("subject", order.getOrderCd());
-                sParaTemp.put("price", "0.01");
+                sParaTemp.put("price", money2String(order.getSumPrice()));
                 sParaTemp.put("quantity", "1");
                 sParaTemp.put("logistics_fee", "0.00");
-                sParaTemp.put("logistics_type", "POST");
-                sParaTemp.put("logistics_payment", "SELLER_PAY");
+                sParaTemp.put("logistics_type", AliPayHelper.ShipType.POST);
+                sParaTemp.put("logistics_payment", AliPayHelper.ShipPayType.SELLER_PAY);
                 sParaTemp.put("body", order.getOrderDesc());
                 sParaTemp.put("show_url", AliPayHelper.ALIPAY_SHOW_URL_BASE + order.getOrderCd());
                 sParaTemp.put("receive_name", shippingInfo.getRecvName());
@@ -194,6 +202,15 @@ public class OrderController {
                 sParaTemp.put("receive_mobile", shippingInfo.getRecvEmail());
 
                 String sHtmlText = AliPayHelper.buildRequest(sParaTemp, "POST");
+
+                OrderLog orderLog = new OrderLog();
+                orderLog.setUserId(order.getUserId());
+                orderLog.setOrderId(order.getId());
+                orderLog.setLogType("alipaySubmit");
+                orderLog.setLogContent(sHtmlText);
+                orderLog.setLogInfo("");
+                orderService.addOrderLog(orderLog);
+
                 result.putResult("alipaySubmitForm", sHtmlText);
                 result.setTemplateView("buy/alipaySubmit");
             } catch (OrderPayNoNeedException e) {
@@ -214,11 +231,17 @@ public class OrderController {
     }
 
     public void alipayReturn(RequestContext rc, ResultContext result) {
+        OrderLog orderLog = new OrderLog();
+        orderLog.setLogType("alipayReturn");
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            java.util.Map<String, String[]> paramsMap = RequestContext.parseQueryString(rc.getQueryString());
-            java.util.Map<String, String> params = AliPayHelper.convert(paramsMap);
+            String query = rc.getQueryString();
+            orderLog.setLogContent(query);
+
+            java.util.Map<String, String[]> paramsMap = RequestContext.parseQueryString(query);
+            StringBuilder paramString = null;
+            java.util.Map<String, String> params = AliPayHelper.convertHttpParams(paramsMap, null);
 
             boolean verifyOK = AliPayHelper.verify(params);
             if (verifyOK) {
@@ -226,25 +249,70 @@ public class OrderController {
                 String trade_no = params.get("trade_no");
                 String trade_status = params.get("trade_status");
                 String total_fee = params.get("total_fee");
-                if (StringUtils.equals(trade_status, "WAIT_SELLER_SEND_GOODS")) {
+                if (StringUtils.equals(trade_status, AliPayHelper.TradeStatus.WAIT_SELLER_SEND_GOODS)) {
                     orderService.payOrder(out_trade_no);
                     Order order = orderService.getUserOrder(user.getUserId(), out_trade_no);
                     result.putResult("order", order);
                     result.setTemplateView("buy/orderDone");
+
+                    orderLog.setOrderId(order.getId());
+                    orderLog.setLogInfo("payOrder");
+                } else {
+                    orderLog.setLogInfo("trade_status != WAIT_SELLER_SEND_GOODS");
                 }
             } else {
+                orderLog.setLogInfo("verifyOK false");
                 System.out.print("AliPayHelper.verify failed!!");
             }
         } catch (IllegalArgumentException e) {
             result.setError(e, null, null);
         } catch (UnsupportedEncodingException e) {
+            orderLog.setLogInfo("UnsupportedEncodingException");
             result.setError(e, "unsupportedEncodingException", "buy/alipayReturnEx");
         } catch (OrderNotFoundException e) {
+            orderLog.setLogInfo("OrderNotFoundException");
             result.setError(e, "orderNotFoundException", "buy/alipayReturnEx");
         }
+        orderService.addOrderLog(orderLog);
     }
 
     public void alipayNotify(RequestContext rc, ResultContext result) {
+        OrderLog orderLog = new OrderLog();
+        orderLog.setLogType("alipayNotify");
+        try {
+            java.util.Map<String, String[]> paramsMap = rc.getParametersMap();
+            StringBuilder paramString = new StringBuilder();
+            java.util.Map<String, String> params = AliPayHelper.convertHttpParams(paramsMap, paramString);
+
+            orderLog.setLogContent(paramString.toString());
+
+            boolean verifyOK = AliPayHelper.verify(params);
+            if (verifyOK) {
+                String out_trade_no = params.get("out_trade_no");
+                String trade_no = params.get("trade_no");
+                String trade_status = params.get("trade_status");
+                String refund_status = params.get("refund_status");
+                if (refund_status == null) {
+                    if (StringUtils.equals(trade_status, AliPayHelper.TradeStatus.WAIT_SELLER_SEND_GOODS)) {
+                        try {
+                            orderService.payOrder(out_trade_no);
+                            orderLog.setLogInfo("payOrder");
+                        } catch (OrderNotFoundException e) {
+                            orderLog.setLogInfo("OrderNotFoundException");
+                        }
+                    }
+                }
+            } else {
+                orderLog.setLogInfo("verifyOK false");
+            }
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        } catch (UnsupportedEncodingException e) {
+            orderLog.setLogInfo("UnsupportedEncodingException");
+            result.setError(e, "unsupportedEncodingException", "buy/alipayNotify");
+        }
+        orderService.addOrderLog(orderLog);
+        result.setTemplateView("buy/alipayNotify");
     }
 
     protected void fillOrderDetail(Order order) {

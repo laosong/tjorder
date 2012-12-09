@@ -34,10 +34,39 @@ public class AliPayHelper {
     static final String ALIPAY_GATEWAY_NEW = "https://mapi.alipay.com/gateway.do?";
     static final String ALIPAY_VERIFY_URL = "https://mapi.alipay.com/gateway.do?service=notify_verify&";
 
-    static final String ALIPAY_RETURN_URL = "http://127.0.0.1:8080/orderAction/alipayReturn";
-    static final String ALIPAY_NOTIFY_URL = "http://127.0.0.1:8080/orderAction/alipayNotify";
+    static final String ALIPAY_RETURN_URL = "http://www.36519.com/orderAction/alipayReturn";
+    static final String ALIPAY_NOTIFY_URL = "http://www.36519.com/orderAction/alipayNotify";
 
-    static final String ALIPAY_SHOW_URL_BASE = "http://127.0.0.1:8080/orderAction/showOrder?orderCd=";
+    static final String ALIPAY_SHOW_URL_BASE = "http://www.36519.com/orderAction/showOrder?orderCd=";
+
+    static class ShipType {
+        static final String POST = "POST";
+        static final String EXPRESS = "EXPRESS";
+        static final String EMS = "EMS";
+    }
+
+    static class ShipPayType {
+        static final String BUYER_PAY = "BUYER_PAY";
+        static final String SELLER_PAY = "SELLER_PAY";
+        static final String BUYER_PAY_AFTER_RECEIVE = "BUYER_PAY_AFTER_RECEIVE";
+    }
+
+    static class TradeStatus {
+        static final String WAIT_BUYER_PAY = "WAIT_BUYER_PAY"; //等待买家付款
+        static final String WAIT_SELLER_SEND_GOODS = "WAIT_SELLER_SEND_GOODS"; //买家已付款，等待卖家发货
+        static final String WAIT_BUYER_CONFIRM_GOODS = "WAIT_BUYER_CONFIRM_GOODS"; //卖家已发货，等待买家确认
+        static final String TRADE_FINISHED = "TRADE_FINISHED"; //交易成功结束
+        static final String TRADE_CLOSED = "TRADE_CLOSED"; //交易中途关闭（已结束，未成功完成）
+    }
+
+    static class RefundStatus {
+        static final String WAIT_SELLER_AGREE = "WAIT_SELLER_AGREE"; //退款协议等待卖家确认中
+        static final String SELLER_REFUSE_BUYER = "SELLER_REFUSE_BUYER"; //卖家不同意协议，等待买家修改
+        static final String WAIT_BUYER_RETURN_GOODS = "WAIT_BUYER_RETURN_GOODS"; //退款协议达成，等待买家退货
+        static final String WAIT_SELLER_CONFIRM_GOODS = "WAIT_SELLER_CONFIRM_GOODS"; //等待卖家收货
+        static final String REFUND_SUCCESS = "REFUND_SUCCESS"; //退款成功
+        static final String REFUND_CLOSED = "REFUND_CLOSED"; //退款关闭
+    }
 
     /**
      * 生成要请求给支付宝的参数数组
@@ -136,20 +165,20 @@ public class AliPayHelper {
         List<String> keys = new ArrayList<String>(params.keySet());
         Collections.sort(keys);
 
-        String prestr = "";
+        StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
             String value = params.get(key);
 
             if (i == keys.size() - 1) {//拼接时，不包括最后一个&字符
-                prestr = prestr + key + "=" + value;
+                stringBuilder.append(key).append("=").append(value);
             } else {
-                prestr = prestr + key + "=" + value + "&";
+                stringBuilder.append(key).append("=").append(value).append("&");
             }
         }
 
-        return prestr;
+        return stringBuilder.toString();
     }
 
     /**
@@ -202,7 +231,8 @@ public class AliPayHelper {
         }
     }
 
-    public static Map<String, String> convert(Map<String, String[]> params) throws UnsupportedEncodingException {
+    public static Map<String, String> convertHttpParams(Map<String, String[]> params, StringBuilder paramString)
+            throws UnsupportedEncodingException {
         String enc = input_charset;
 
         Map<String, String> result = new HashMap<String, String>();
@@ -212,7 +242,11 @@ public class AliPayHelper {
             for (int i = 0; i < values.length; i++) {
                 values[i] = java.net.URLDecoder.decode(values[i], enc);
             }
-            result.put(entry.getKey(), StringUtils.join(values, ','));
+            String catValue = StringUtils.join(values, ',');
+            result.put(entry.getKey(), catValue);
+            if (paramString != null) {
+                paramString.append(entry.getKey()).append("=").append(catValue).append("&");
+            }
         }
         return result;
     }
@@ -224,8 +258,8 @@ public class AliPayHelper {
      * @return 验证结果
      */
     public static boolean verify(Map<String, String> params) {
-        //判断responsetTxt是否为true，isSign是否为true
-        //responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
+        //判断responseTxt是否为true，isSign是否为true
+        //responseTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
         //isSign不是true，与安全校验码、请求时的参数格式（如：带自定义参数等）、编码格式有关
         String responseTxt = "true";
         if (params.get("notify_id") != null) {
