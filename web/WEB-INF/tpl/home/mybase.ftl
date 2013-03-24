@@ -12,10 +12,11 @@
         <dt>账户中心</dt>
         <dd><a href="/home/user/info.htm">个人资料</a></dd>
         <dd><a href="/home/user/ch-pwd.htm">密码修改</a></dd>
-        <dd><a href="/orderAction/myAddress">地址管理</a></dd>
+        <dd <#if nav_name=="address">class="curNav"</#if>><a href="/orderAction/myAddress">地址管理</a></dd>
     </dl>
 </div>
 </#macro>
+<#macro ProductUrl pid=0>/home/product/#{pid}.htm</#macro>
 <#macro OrderStateString os=0>
     <#if os==0>刚创建
     <#elseif os==1>已提交

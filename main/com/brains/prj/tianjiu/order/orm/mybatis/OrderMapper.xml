@@ -116,7 +116,9 @@
     </select>
 
     <parameterMap id="shippingInfoParameterMap" type="com.brains.prj.tianjiu.order.domain.ShippingInfo">
-        <parameter property="citiesId"/>
+        <parameter property="province"/>
+        <parameter property="city"/>
+        <parameter property="country"/>
         <parameter property="address"/>
         <parameter property="zipCode"/>
         <parameter property="recvName"/>
@@ -125,13 +127,15 @@
     </parameterMap>
 
     <insert id="createShippingInfo" parameterMap="shippingInfoParameterMap" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO shipping_info(cities_id, address, zip_code, recv_name, recv_phone, recv_email)
-          VALUES(?, ?, ?, ?, ?, ?)
+        INSERT INTO shipping_info(province, city, country, address, zip_code, recv_name, recv_phone, recv_email)
+          VALUES(?, ?, ?, ?, ?, ?, ?, ?)
     </insert>
 
     <resultMap id="shippingInfoResultMap" type="com.brains.prj.tianjiu.order.domain.ShippingInfo">
         <id property="id" column="id"/>
-        <result property="citiesId" column="cities_id"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="country" column="country"/>
         <result property="address" column="address"/>
         <result property="zipCode" column="zip_code"/>
         <result property="recvName" column="recv_name"/>

@@ -43,9 +43,10 @@
     <mapping path="adminOrders" bean="orderController" method="adminGetOrders" role="Administrator"/>
     <mapping path="adminOrder" bean="orderController" method="adminGetOrder" role="Administrator"/>
 
-    <mapping path="showAllCity" bean="addressController" method="getAllCityInfo"/>
+    <mapping path="myAddress" bean="addressController" method="getMyAddress" role="Register"/>
+    <mapping path="myAddressMod" bean="addressController" method="getMyAddressMod" role="Register"/>
 
-    <mapping path="showCity" bean="addressController" method="getCityInfo"/>
+    <mapping path="showAllCity" bean="addressController" method="getAllCityInfo"/>
     <mapping path="getProvinces" bean="addressController" method="getProvinces"/>
     <mapping path="getProvinceCities" bean="addressController" method="getProvinceCities"/>
     <mapping path="getCityCountries" bean="addressController" method="getCityCountries"/>
@@ -53,4 +54,5 @@
     <mapping path="getUserAddress" bean="addressController" method="getUserAddress" role="Register"/>
     <mapping path="addUserAddress" bean="addressController" method="addUserAddress" role="Register"/>
     <mapping path="delUserAddress" bean="addressController" method="delUserAddress" role="Register"/>
+    <mapping path="modUserAddress" bean="addressController" method="modUserAddress" role="Register"/>
 </mappings>

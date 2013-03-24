@@ -84,7 +84,7 @@ class AddressAOP {
 
     @CacheEvict(value = CACHE_NAME, key = "'UserAddresses' + #userAddress.userId")
     @Transactional
-    public int saveUserAddress(UserAddress userAddress) {
+    public int addUserAddress(UserAddress userAddress) {
         return addressMapper.addUserAddress(userAddress);
     }
 
@@ -92,6 +92,14 @@ class AddressAOP {
     @Transactional
     public int delUserAddress(int userId, int id) {
         return addressMapper.delUserAddress(userId, id);
+    }
+
+    @CacheEvict(value = CACHE_NAME, key = "'UserAddresses' + #userId")
+    @Transactional
+    public int modUserAddress(int userId, int id, UserAddress userAddress) {
+        userAddress.setId(id);
+        userAddress.setUserId(userId);
+        return addressMapper.modUserAddress(userAddress);
     }
 }
 

@@ -103,13 +103,17 @@ public class OrderController {
             int delivery = rc.getParameterInt("delivery");
 
             UserAddress userAddress = addressService.getUserAddressById(orderPost);
+            CityInfo cityInfo = addressService.getCity(userAddress.getProvince(), userAddress.getCity(), userAddress.getCountry());
 
             ShippingInfo shippingInfo = new ShippingInfo();
-            shippingInfo.setCitiesId(userAddress.getCitiesId());
+            shippingInfo.setProvince(cityInfo.getProvince());
+            shippingInfo.setCity(cityInfo.getCity());
+            shippingInfo.setCountry(cityInfo.getCountry());
             shippingInfo.setAddress(userAddress.getAddress());
             shippingInfo.setZipCode(userAddress.getZipCode());
             shippingInfo.setRecvName(userAddress.getRecvName());
             shippingInfo.setRecvPhone(userAddress.getRecvPhone());
+            shippingInfo.setRecvEmail(userAddress.getRecvEmail());
 
             order.setUserId(user.getUserId());
             order.setPaymentId(payment);
@@ -130,6 +134,8 @@ public class OrderController {
             result.setError(e, "badParameterException", "buy/submitOrderEr");
         } catch (UserAddressNotFoundException e) {
             result.setError(e, "userAddressNotFoundException", "buy/submitOrderEr");
+        } catch (CityInfoNotFoundException e) {
+            result.setError(e, "cityInfoNotFoundException", "buy/submitOrderEr");
         } catch (DeliveryNotFoundException e) {
             result.setError(e, "deliveryNotFoundException", "buy/submitOrderEr");
         } catch (CartEmptyException e) {

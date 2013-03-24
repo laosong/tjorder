@@ -73,11 +73,15 @@ public class AddressService {
         return userAddress;
     }
 
-    public int saveUserAddress(UserAddress userAddress) {
-        return addressAOP.saveUserAddress(userAddress);
+    public int addUserAddress(UserAddress userAddress) {
+        return addressAOP.addUserAddress(userAddress);
     }
 
     public int delUserAddress(int userId, int id) {
         return addressAOP.delUserAddress(userId, id);
+    }
+
+    public int modUserAddress(int userId, int id, UserAddress userAddress) {
+        return addressAOP.modUserAddress(userId, id, userAddress);
     }
 }

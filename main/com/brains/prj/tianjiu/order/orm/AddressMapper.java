@@ -39,4 +39,6 @@ public interface AddressMapper {
 
     public int delUserAddress(@Param("userId") int userId,
                               @Param("id") int id);
+
+    public int modUserAddress(UserAddress userAddress);
 }

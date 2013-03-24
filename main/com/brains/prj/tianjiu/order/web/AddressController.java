@@ -34,20 +34,6 @@ public class AddressController {
         result.setTemplateView("showCity");
     }
 
-    public void getCityInfo(RequestContext rc, ResultContext result) {
-        try {
-            int id = rc.getParameterInt("id");
-            CityInfo cityInfo = addressService.getCity(id);
-
-            result.putResult("city", cityInfo);
-            result.setTemplateView("showCity");
-        } catch (BadParameterException e) {
-            result.setError(e, null, null);
-        } catch (CityInfoNotFoundException e) {
-            result.setError(e, null, null);
-        }
-    }
-
     public void getProvinces(RequestContext rc, ResultContext result) {
         try {
             List<String> provinces = addressService.getProvinces();
@@ -82,6 +68,7 @@ public class AddressController {
     public void getUserAddress(RequestContext rc, ResultContext result) {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
             List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
 
             int checkAddress = 0;
@@ -114,13 +101,16 @@ public class AddressController {
 
             UserAddress userAddress = new UserAddress();
             userAddress.setUserId(user.getUserId());
-            userAddress.setCitiesId(cityInfo.getId());
+            userAddress.setProvince(cityInfo.getProvince());
+            userAddress.setCity(cityInfo.getCity());
+            userAddress.setCountry(cityInfo.getCountry());
             userAddress.setAddress(address);
             userAddress.setZipCode(zipCode);
             userAddress.setRecvName(recvName);
             userAddress.setRecvPhone(recvPhone);
             userAddress.setRecvEmail(recvEmail);
-            addressService.saveUserAddress(userAddress);
+
+            addressService.addUserAddress(userAddress);
 
             List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
 
@@ -152,6 +142,101 @@ public class AddressController {
             result.putResult("userAddresses", userAddresses);
             result.setTemplateView("buy/userAddress");
         } catch (BadParameterException e) {
+            result.setError(e, null, null);
+        }
+    }
+
+    public void modUserAddress(RequestContext rc, ResultContext result) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            int addressId = rc.getParameterInt("addressId");
+
+            String provinceName = rc.getParameter("provinceName");
+            String cityName = rc.getParameter("cityName");
+            String countryName = rc.getParameter("countryName");
+            String recvName = rc.getParameter("recvName");
+            String address = rc.getParameter("address");
+            String zipCode = rc.getParameter("zipCode");
+            String recvPhone = rc.getParameter("recvPhone");
+            String recvEmail = rc.getParameter("recvEmail");
+
+            CityInfo cityInfo = addressService.getCity(provinceName, cityName, countryName);
+
+            UserAddress userAddress = new UserAddress();
+            userAddress.setUserId(user.getUserId());
+            userAddress.setProvince(cityInfo.getProvince());
+            userAddress.setCity(cityInfo.getCity());
+            userAddress.setCountry(cityInfo.getCountry());
+            userAddress.setAddress(address);
+            userAddress.setZipCode(zipCode);
+            userAddress.setRecvName(recvName);
+            userAddress.setRecvPhone(recvPhone);
+            userAddress.setRecvEmail(recvEmail);
+
+            addressService.modUserAddress(user.getUserId(), addressId, userAddress);
+
+            List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
+
+            int checkAddress = 0;
+            checkAddress = userAddress.getId();
+            result.putResult("checkAddress", checkAddress);
+            result.putResult("userAddresses", userAddresses);
+            result.setTemplateView("buy/userAddress");
+        } catch (BadParameterException e) {
+            result.setError(e, null, null);
+        } catch (CityInfoNotFoundException e) {
+            result.setError(e, null, null);
+        }
+    }
+
+    public void getMyAddress(RequestContext rc, ResultContext result) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            List<String> provinces = addressService.getProvinces();
+
+            List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
+
+            result.putResult("provinces", provinces);
+            result.putResult("userAddresses", userAddresses);
+            result.setTemplateView("home/myAddress");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        }
+    }
+
+    public void getMyAddressMod(RequestContext rc, ResultContext result) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            List<String> provinces = addressService.getProvinces();
+
+            List<UserAddress> userAddresses = addressService.getUserAddresses(user.getUserId());
+
+            UserAddress userAddressMod = null;
+
+            int addressId = rc.getParameterInt("addressId");
+            for (UserAddress userAddress : userAddresses) {
+                if (userAddress.getId() == addressId) {
+                    userAddressMod = userAddress;
+                    break;
+                }
+            }
+
+            if (userAddressMod == null) {
+                throw new UserAddressNotFoundException(addressId);
+            }
+
+            result.putResult("provinces", provinces);
+            result.putResult("userAddresses", userAddresses);
+            result.putResult("userAddressMod", userAddressMod);
+            result.setTemplateView("home/myAddressMod");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        } catch (BadParameterException e) {
+            result.setError(e, null, null);
+        } catch (UserAddressNotFoundException e) {
             result.setError(e, null, null);
         }
     }

@@ -38,7 +38,9 @@
     <resultMap id="userAddressResultMap" type="com.brains.prj.tianjiu.order.domain.UserAddress">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
-        <result property="citiesId" column="cities_id"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="country" column="country"/>
         <result property="address" column="address"/>
         <result property="zipCode" column="zip_code"/>
         <result property="recvName" column="recv_name"/>
@@ -51,38 +53,23 @@
         SELECT * FROM user_address WHERE id=#{id}
     </select>
 
-    <resultMap extends="userAddressResultMap" id="userAddressWithCityResultMap"
-               type="com.brains.prj.tianjiu.order.domain.UserAddress">
-        <association property="cityInfo" javaType="com.brains.prj.tianjiu.order.domain.CityInfo">
-            <id property="id" column="cities_id"/>
-            <result property="province" column="province"/>
-            <result property="city" column="city"/>
-            <result property="country" column="country"/>
-        </association>
-    </resultMap>
-    <select id="getUserAddresses" parameterType="int" resultMap="userAddressWithCityResultMap">
-        SELECT A.*, B.id AS cities_id, B.province AS province, B.city AS city, B.country AS country
-          FROM user_address A, cities B WHERE A.cities_id=B.id AND user_id=#{userId}
+    <select id="getUserAddresses" parameterType="int" resultMap="userAddressResultMap">
+        SELECT * FROM user_address WHERE user_id=#{userId}
     </select>
 
-    <parameterMap id="userAddressParameterMap" type="com.brains.prj.tianjiu.order.domain.UserAddress">
-        <parameter property="userId"/>
-        <parameter property="citiesId"/>
-        <parameter property="address"/>
-        <parameter property="zipCode"/>
-        <parameter property="recvName"/>
-        <parameter property="recvPhone"/>
-        <parameter property="recvEmail"/>
-        <parameter property="state"/>
-    </parameterMap>
-
-    <insert id="addUserAddress" parameterMap="userAddressParameterMap" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user_address(user_id, cities_id, address, zip_code, recv_name, recv_phone, recv_email, state)
-          VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+    <insert id="addUserAddress" parameterType="com.brains.prj.tianjiu.order.domain.UserAddress" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user_address(user_id, province, city, country, address, zip_code, recv_name, recv_phone, recv_email, state)
+          VALUES(#{userId}, #{province}, #{city}, #{country}, #{address}, #{zipCode}, #{recvName}, #{recvPhone}, #{recvEmail}, #{state})
     </insert>
 
     <delete id="delUserAddress">
         DELETE FROM user_address WHERE user_id=#{userId} AND id=#{id}
     </delete>
+
+    <update id="modUserAddress" parameterType="com.brains.prj.tianjiu.order.domain.UserAddress">
+        UPDATE user_address SET province=#{province}, city=#{city}, country=#{country},
+        address=#{address}, zip_code=#{zipCode}, recv_name=#{recvName}, recv_phone=#{recvPhone}, recv_email=#{recvEmail}
+        WHERE user_id=#{userId} AND id=#{id}
+    </update>
 
 </mapper>

@@ -35,9 +35,18 @@
 .per_area label{display:inline-block; line-height:30px; width:100px; text-align:right;}
 .per_area input{border:1px solid #ccc; font-size:12px; padding:5px; width:220px;}
 .per_submit{margin-left:106px;}
+.personal_del .usedAddress{margin:10px 15px;}
 .personal_del .usedAddress td{border-bottom:1px dotted #dadada; padding:6px 3px;}
 .personal_del .usedAddress td a{margin:0 8px;}
+.personal_del .usedAddress td a:link,.usedAddress td a:visited{color:#369;}
+.personal_del .newAddress{margin:10px 15px 0;}
+.personal_del .newAddress .t_r{text-align:right;}
 .personal_del .newAddress td{padding:3px;}
+.personal_del .newAddress td span{color:#be0000; padding:0 4px;}
+.personal_del .newAddress td input{padding:2px 3px;}
+.personal_del .newAddress td select{margin-right:10px;}
+.personal_del .newAddress td label{padding:0 6px 0 15px;}
+.personal_del .saveAddress{margin-left:102px; margin-top:15px;}
 .per_mycenter a{margin-left:40px;}
 .per_mycenter a:link,.per_mycenter a:visited{color:#369;}
 .per_mycollect .c_til{background-color:#f0f0f0; border-top:2px solid #dadada; font-weight:bold; line-height:30px; padding-left:10px;}

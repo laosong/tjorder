@@ -1,14 +1,6 @@
 <#-- @ftlvariable name="cart" type="com.brains.prj.tianjiu.order.domain.ShoppingCart" -->
 <#-- @ftlvariable name="free_delivery_order_fee" type="java.lang.Float" -->
-<#macro OrderStatusString os=0>
-    <#if os==0>刚创建
-    <#elseif os==1>已提交
-    <#elseif os==2>已付款
-    <#elseif os==3>已发货
-    <#elseif os==4>已完成
-    <#elseif os==5>已取消
-    </#if>
-</#macro>
+<#macro ProductUrl pid=0>/home/product/#{pid}.htm</#macro>
 <table summary="购物车清单" class="ebtable">
     <thead>
     <tr>
@@ -27,7 +19,9 @@
         <#assign goodsItem = cartItem.getGoodsItem()>
     <tr class="cart_row">
         <td>${cartItem_index+1} - ${goodsItem.getId()}</td>
-        <td class="t_left"><a href="javascript:void(0);" target="_blank">${goodsItem.getName()?html}</a></td>
+        <td class="t_left">
+            <a href="<@ProductUrl goodsItem.getId()/>" target="_blank">${goodsItem.getName()?html}</a>
+        </td>
         <td>${goodsItem.getPrice()}</td>
         <td>${goodsItem.getMarketPrice()}</td>
         <td>现货</td>

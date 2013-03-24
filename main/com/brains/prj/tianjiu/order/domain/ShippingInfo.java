@@ -17,10 +17,10 @@ public class ShippingInfo implements java.io.Serializable {
     private static final long serialVersionUID = -8884434332854624838L;
 
     private int id;
-    /*
-    表cities id
-     */
-    private int citiesId;
+
+    private String province;
+    private String city;
+    private String country;
     private String address;
     private String zipCode;
     private String recvName;
@@ -37,12 +37,28 @@ public class ShippingInfo implements java.io.Serializable {
         this.id = id;
     }
 
-    public int getCitiesId() {
-        return citiesId;
+    public String getProvince() {
+        return province;
     }
 
-    public void setCitiesId(int citiesId) {
-        this.citiesId = citiesId;
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getAddress() {
@@ -86,17 +102,21 @@ public class ShippingInfo implements java.io.Serializable {
     }
 
     public CityInfo getCityInfo() {
+        if (cityInfo == null) {
+            cityInfo = new CityInfo();
+            cityInfo.setProvince(province);
+            cityInfo.setCity(city);
+            cityInfo.setCountry(country);
+        }
         return cityInfo;
-    }
-
-    public void setCityInfo(CityInfo cityInfo) {
-        this.cityInfo = cityInfo;
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(ObjectUtils.defaultIfNull(cityInfo, ""));
+        stringBuilder.append(ObjectUtils.defaultIfNull(province, ""));
+        stringBuilder.append(ObjectUtils.defaultIfNull(city, ""));
+        stringBuilder.append(ObjectUtils.defaultIfNull(country, ""));
         stringBuilder.append(ObjectUtils.defaultIfNull(address, ""));
         stringBuilder.append(ObjectUtils.defaultIfNull(zipCode, ""));
         stringBuilder.append(ObjectUtils.defaultIfNull(recvPhone, ""));

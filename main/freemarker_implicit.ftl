@@ -7,4 +7,5 @@
 [#macro super][/#macro]
 [#macro extends name][/#macro]
 [#macro OrderControl path para][/#macro]
+[#macro ProductUrl pid][/#macro]
 [#macro OrderStateString os][/#macro]
