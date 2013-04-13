@@ -8,7 +8,7 @@
 <%@ taglib prefix="s" uri="http://speedy.brains.com/jsp/tag" %>
 <s:portlet var="u" url="/pl/curr-user.htm" param=""/>
 <s:portlet url="/pl/category.htm" var="ca" param="id=${goods.category_id}"/>
-<s:portlet url="/pl/category.htm" var="brand" param="id=${ca.category.parent_id}"/>
+<s:portlet url="/pl/brand-list.htm" var="brand" param="orderbyIndex=1"/>
 <s:portlet url="/pl/goods-list.htm" var="sameBrand" param="state=2&pageNo=1&pageItemNum=7&orderbyIndex=11&brand_id=${ca.category.parent_id}"/>
 <html>
 <head>
@@ -86,7 +86,11 @@
                     <ul>
                         <li>市场价:<del><tags:price price="${goods.market_price}"/></del><span class="f999">商品货号：${goods.serial_num}</span></li>
                         <li>天酒价：<span class="price fred fb"><tags:price price="${goods.price}"/></span></li>
-                        <li>商品品牌：<a href="/home/brand/${ca.currNode.parent.data.id}.htm" target="_blank">${ca.currNode.parent.data.full_name}</a></li>
+                        	<jsp:useBean id="brandId" class="java.lang.String"/>
+                        	<c:forEach var="unit" items="${brand.list}">
+                        		<c:if test="${unit.category_id==ca.currNode.parent.data.id}"><c:set var="brandId" value="${unit.id}"/></c:if> 
+                        	</c:forEach>
+                        <li>商品品牌：<a href="/home/brand/${brandId}.htm" target="_blank">${ca.currNode.parent.data.full_name}</a></li>
                         <li>商品库存：有货，可送至全国</li>
                         <li>容量：${goods.volume}ml</li>
                         <li>香型：${goods.flavor}</li>
@@ -110,8 +114,9 @@
                 <ul class="pro_intro_tab tab tabTag_product clearfix">
                     <li onclick="setTab('product', 0);" class="curTag btn"><span class="btn">商品描述</span></li>
                     <li onclick="setTab('product', 1);" class="btn"><span class="btn">商品属性</span></li>
-                    <li onclick="setTab('product', 2);" class="btn"><span class="btn">质监报告</span></li>
-                    <li onclick="setTab('product', 3);" class="btn"><span class="btn">运输包装</span></li>
+                    <!-- <li onclick="setTab('product', 2);" class="btn"><span class="btn">质监报告</span></li>-->
+                    <li onclick="setTab('product', 2);" class="btn"><span class="btn">运输包装</span></li>
+                    <li onclick="setTab('product', 3);" class="btn"><span class="btn">用户评价</span></li>
                 </ul>
                 <div class="tabCon_product">
                     <div class="pro_intro_del">
@@ -132,11 +137,14 @@
                         </table>
                         </p>
                     </div>
-                    <div class="pro_intro_del hidden">
+                    <!-- <div class="pro_intro_del hidden">
                         ${goods.exam_report}
-                    </div>
+                    </div>-->
                     <div class="pro_intro_del hidden">
                         ${goods.package_info}
+                    </div>
+                    <div class="pro_intro_del hidden">
+                        
                     </div>
                 </div>
             </div><!-- end pro_intro -->

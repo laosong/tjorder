@@ -55,7 +55,7 @@ public class ShoppingCartService {
         for (CartItem cartItem : cartItems) {
             GoodsItem goodsItem = goodsAOP.getGoodsItem(cartItem.getItemId());
             if (goodsItem == null)
-                goodsItem = GoodsService.nobodyItem;
+                goodsItem = GoodsService.nonItem;
             cartItem.setGoodsItem(goodsItem);
         }
         shoppingCart.setCartItems(cartItems);

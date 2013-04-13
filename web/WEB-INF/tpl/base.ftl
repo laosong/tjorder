@@ -1,5 +1,6 @@
 <#global systemUser = __RequestContext.getSystemUser()>
 <#assign product_img_root = "">
+<@OrderControl path="getPageNavData" para="shortNames=b1|b2|b3"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -41,8 +42,8 @@
             <ul class="clearfix">
                 <li class="t_collect icon">
                     <a href="javascript:void(0);">收藏天酒商城</a><span>|</span></li>
-                <li><a href="#" target="_blank">网站公告</a><span>|</span></li>
-                <li><a href="#" target="_blank">关于我们</a></li>
+                <li><a href="/home/news-list.htm" target="_blank">网站公告</a><span>|</span></li>
+                <li><a href="/help/aboutus.htm" target="_blank">关于我们</a></li>
             </ul>
         </div>
     </div>
@@ -60,16 +61,13 @@
             </div>
             <div id="search" class="clearfix">
                 <div class="hotwords link_white left">
-                    <a href="#" target="_blank">茅台</a>
-                    <a href="#" target="_blank">五粮液</a>
-                    <a href="#" target="_blank">茅台</a>
-                    <a href="#" target="_blank">国窖1573</a>
-                    <a href="#" target="_blank">汾酒</a>
+                    <a href="/home/search/list.htm?keyword=茅台" target="_blank">茅台</a>
+                    <a href="/home/search/list.htm?keyword=国窖1573" target="_blank">国窖1573</a>
                 </div>
                 <div class="i_search left">
-                    <form>
-                        <input type="text" tabindex="1" value="搜索 茅台/劲酒" class="s_input">
-                        <input type="button" tabindex="2" value="搜索" class="s_submit btn">
+                    <form id="command" action="/home/search/list.htm" method="get">
+                        <input type="text" tabindex="1" name="keyword" value="" class="s_input"/>
+                        <input type="submit" tabindex="2" value="搜索" class="s_submit btn"/>
                     </form>
                 </div>
                 <div class="t_cart btn right" id="miniCartContainer">
@@ -86,10 +84,9 @@
                     <dt class="guide">购物指南</dt>
                     <dd>
                         <ul>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
+                            <li><a href="/help/buy.htm#1">如何购物</a></li>
+                            <li><a href="/help/buy.htm#2">购物保障</a></li>
+                            <li><a href="/help/buy.htm#3">发票说明</a></li>
                         </ul>
                     </dd>
                 </dl>
@@ -97,11 +94,8 @@
                     <dt class="pay">购买支付</dt>
                     <dd>
                         <ul>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
+                            <li><a href="/help/pay.htm#1">货到付款</a></li>
+                            <li><a href="/help/pay.htm#2">在线支付</a></li>
                         </ul>
                     </dd>
                 </dl>
@@ -109,10 +103,9 @@
                     <dt class="deliver">配送方式</dt>
                     <dd>
                         <ul>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
+                            <li><a href="/help/ship.htm#1">配送时间</a></li>
+                            <li><a href="/help/ship.htm#2">配送费用</a></li>
+                            <li><a href="/help/ship.htm#3">配送范围</a></li>
                         </ul>
                     </dd>
                 </dl>
@@ -120,10 +113,8 @@
                     <dt class="service">售后服务</dt>
                     <dd>
                         <ul>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
-                            <li><a href="#">天酒天酒天酒天酒</a></li>
+                            <li><a href="/help/service.htm#1">退换货政策</a></li>
+                            <li><a href="/help/service.htm#2">退换货流程</a></li>
                         </ul>
                     </dd>
                 </dl>
@@ -132,20 +123,21 @@
                     <dd>
                         <ul>
                             <li>400 60 36519(免长途费)</li>
-                            <li><a href="#">联系我们</a></li>
+                            <li><a href="/help/contactus.htm">联系我们</a></li>
                         </ul>
                     </dd>
                 </dl>
             </div>
             <div class="footer_nav">
                 <div class="f_link">
-                    <a href="#" target="_blank">关于我们</a><i>|</i>
-                    <a href="#" target="_blank">网站地图</a><i>|</i>
-                    <a href="#" target="_blank">联系我们</a><i>|</i>
-                    <a href="#" target="_blank">友情链接</a>
+                    <a href="/help/aboutus.htm" target="_blank">关于我们</a><i>|</i>
+                    <a href="/help/sitemap.htm" target="_blank">网站地图</a><i>|</i>
+                    <a href="/help/contactus.htm" target="_blank">联系我们</a><i>|</i>
+                    <a href="/help/flinks.htm" target="_blank">友情链接</a>
                 </div>
                 <p class="copyright fcor_gray">Copyright&nbsp;&copy;&nbsp;2012, All Rights Reserved
-                    <a href="#" target="_blank">黔ICP备12004944号</a></p>
+                    <a href="/html/icp.html" target="_blank">黔ICP证B2-20130004</a>黔ICP备12004944号
+                </p>
             </div>
         </div>
     </@block>

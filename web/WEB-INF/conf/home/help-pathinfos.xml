@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--后台URL配置-->
+    <bean id="helpPathInfos" class="com.brains.framework.web.bean.PathInfos">
+        <property name="paths">
+            <map>
+                <entry key="/help/aboutus.htm"><value>
+                    bean=currentUser@userControllerHP
+                    view=/WEB-INF/views/home/help/aboutus.jsp
+                    alias=alias-help-aboutus
+                    note=help-aboutus
+                </value></entry>
+                <entry key="/help/sitemap.htm"><value>
+                    bean=currentUser@userControllerHP
+                    view=/WEB-INF/views/home/help/sitemap.jsp
+                    alias=alias-help-sitemap
+                    note=help-sitemap
+                </value></entry>
+                <entry key="/help/contactus.htm"><value>
+                    bean=currentUser@userControllerHP
+                    view=/WEB-INF/views/home/help/contactus.jsp
+                    alias=alias-help-contactus
+                    note=help-contactus
+                </value></entry>
+                <entry key="/help/flinks.htm"><value>
+                    bean=currentUser@userControllerHP
+                    view=/WEB-INF/views/home/help/flinks.jsp
+                    alias=alias-help-flinks
+                    note=help-flinks
+                </value></entry>
+
+                <entry key="/help/buy.htm"><value>
+                    bean=currentUser@userControllerHP
+                    view=/WEB-INF/views/home/help/buy.jsp
+                    alias=alias-help-buy
+                    note=help-buy
+                </value></entry>
+                <entry key="/help/pay.htm"><value>
+                    bean=currentUser@userControllerHP
+                    view=/WEB-INF/views/home/help/pay.jsp
+                    alias=alias-help-pay
+                    note=help-pay
+                </value></entry>
+                <entry key="/help/ship.htm"><value>
+                    bean=currentUser@userControllerHP
+                    view=/WEB-INF/views/home/help/ship.jsp
+                    alias=alias-help-ship
+                    note=help-ship
+                </value></entry>
+                <entry key="/help/service.htm"><value>
+                    bean=currentUser@userControllerHP
+                    view=/WEB-INF/views/home/help/service.jsp
+                    alias=alias-help-service
+                    note=help-service
+                </value></entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

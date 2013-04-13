@@ -8,6 +8,7 @@ package com.brains.prj.tianjiu.order.service;
  * To change this template use File | Settings | File Templates.
  */
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -18,12 +19,19 @@ import com.brains.prj.tianjiu.order.domain.*;
 @Service
 public class GoodsService {
 
-    final static GoodsItem nobodyItem;
+    final static GoodsItem nonItem;
 
     static {
-        nobodyItem = new GoodsItem();
-        nobodyItem.setId(-1);
-        nobodyItem.setTitle("nobody");
+        nonItem = new GoodsItem();
+        nonItem.setId(-1);
+        nonItem.setTitle("nonItem");
+    }
+
+    final static Category nonCategory;
+
+    static {
+        nonCategory = new Category();
+        nonCategory.setFullName("nonCategory");
     }
 
     GoodsAOP goodsAOP;
@@ -48,8 +56,40 @@ public class GoodsService {
     public GoodsItem getGoodsItemNoThrow(int goodsId) {
         GoodsItem goodsItem = goodsAOP.getGoodsItem(goodsId);
         if (goodsItem == null) {
-            goodsItem = nobodyItem;
+            goodsItem = nonItem;
         }
         return goodsItem;
+    }
+
+    public List<AdItem> getAdsByAreaCd(String areaCd) {
+        return goodsAOP.getAdsByAreaCd(areaCd);
+    }
+
+    public Category getCategoryByShortName(String shortName) {
+        Category result = null;
+
+        List<Category> categories = goodsAOP.getAllCategories();
+        for (Category category : categories) {
+            if (org.apache.commons.lang.StringUtils.equalsIgnoreCase(category.getShortName(), shortName)) {
+                result = category;
+                break;
+            }
+        }
+        if (result == null) {
+            result = nonCategory;
+        }
+        return result;
+    }
+
+    public List<Category> getSubCategories(Category parent) {
+        List<Category> result = new LinkedList<Category>();
+
+        List<Category> categories = goodsAOP.getAllCategories();
+        for (Category category : categories) {
+            if (category.getParentId() == parent.getId()) {
+                result.add(category);
+            }
+        }
+        return result;
     }
 }

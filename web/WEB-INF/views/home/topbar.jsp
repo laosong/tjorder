@@ -10,7 +10,7 @@
                     <li>您好，欢迎来到天酒商城！<a href="/home/user/login.htm">请登录</a><a href="/home/user/reg.htm">免费注册</a><span>|</span></li>
                 </c:if>
                 <c:if test="${!empty u.user}">
-                    <li class="">您好，<span>${u.user.login_name}</span>！<a href="javascript:window.location.href='/home/user/logout.htm?toUrl=/index.htm';">退出</a><span>|</span></li>
+                    <li class="">您好，<span><a href="/home/user/center.htm">${u.user.login_name}</a></span>！<a href="javascript:window.location.href='/home/user/logout.htm?toUrl=/index.htm';">退出</a><span>|</span></li>
                     <li><a href="/home/user/favor.htm">我的收藏夹</a></li>
                 </c:if>
             </ul>
@@ -18,8 +18,8 @@
         <div class="toptip_tool right">
             <ul class="clearfix">
                 <li class="t_collect icon"><a href="javascript:void(0);" onclick="addfavorite()">收藏天酒商城</a><span>|</span></li>
-                <li><a href="#" target="_blank">网站公告</a><span>|</span></li>
-                <li><a href="#" target="_blank">关于我们</a></li>
+                <li><a href="/home/news-list.htm" target="_blank">网站公告</a><span>|</span></li>
+                <li><a href="/help/aboutus.htm" target="_blank">关于我们</a></li>
             </ul>
         </div>
     </div>

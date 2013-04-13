@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <div class="sbar190 left">
     <div class="sbar_personal sbar190_cul cul_border">
-        <h4 class="s190_til s190_per_til link_white fb"><a href="我的天酒.html">我的天酒商城</a></h4>
+        <h4 class="s190_til s190_per_til link_white fb"><a href="/home/user/center.htm">我的天酒商城</a></h4>
         <div class="per_nav">
             <dl>
                 <dt>订单中心</dt>

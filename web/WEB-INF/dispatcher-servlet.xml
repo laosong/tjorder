@@ -37,6 +37,8 @@
     <import resource="./conf/admin/admin-usr-pathinfos.xml"/>
     <import resource="./conf/admin/admin-commodity-controller.xml"/>
     <import resource="./conf/admin/admin-commodity-pathinfos.xml"/>
+    <import resource="./conf/home/help-controller.xml"/>
+    <import resource="./conf/home/help-pathinfos.xml"/>
 
     <!-- Database source -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

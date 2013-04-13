@@ -18,6 +18,7 @@
     <link href="/css/main.css" rel="stylesheet" type="text/css"/>
     <link href="/css/personal.css" rel="stylesheet" type="text/css"/>
     <style type="text/css" title="currentStyle">@import "/plugin/buk/buk.css";</style>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" language="javascript" src="/plugin/buk/pager.js"></script>
     <script type="text/javascript">
         function addfavorite()

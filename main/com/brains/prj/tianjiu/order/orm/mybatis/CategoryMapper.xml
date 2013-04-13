@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.brains.prj.tianjiu.order.orm.CategoryMapper">
+
+    <resultMap id="categoryResultMap" type="com.brains.prj.tianjiu.order.domain.Category">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="text" column="text"/>
+        <result property="href" column="href"/>
+    </resultMap>
+
+    <select id="getAllCategories" resultMap="categoryResultMap">
+        SELECT * FROM category WHERE state=1
+    </select>
+
+    <select id="getCategoriesByShortName" parameterType="java.lang.String" resultMap="categoryResultMap">
+        SELECT * FROM category WHERE short_name=#{shortName}
+    </select>
+
+</mapper>

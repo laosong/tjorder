@@ -50,7 +50,7 @@
                 <div id="confPasswordFld" class="easyforminput clearfix">
                     <div class="easyformlabel"><label for="iuseragainPwd"><span>*</span>再次输入密码：</label></div>
                     <div class="easyformfield">
-                        <input type="password" maxlength="20" value="" size="18" name="pass_confirm" id="iuseragainPwd" onpaste="return false"  />
+                        <input type="password" maxlength="20" value="" size="18" name="pwd_confirm" id="iuseragainPwd" onpaste="return false"  />
                     </div>
                 </div>
 

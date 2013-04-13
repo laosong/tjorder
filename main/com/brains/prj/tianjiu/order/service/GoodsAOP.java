@@ -22,11 +22,24 @@ import com.brains.prj.tianjiu.order.orm.*;
 class GoodsAOP {
     public static final String CACHE_NAME = "goodsCache";
 
+    AdMapper adMapper;
+    CategoryMapper categoryMapper;
+
     GoodsMapper goodsMapper;
 
     @Autowired
     public void setGoodsMapper(GoodsMapper goodsMapper) {
         this.goodsMapper = goodsMapper;
+    }
+
+    @Autowired
+    public void setAdMapper(AdMapper adMapper) {
+        this.adMapper = adMapper;
+    }
+
+    @Autowired
+    public void setCategoryMapper(CategoryMapper categoryMapper) {
+        this.categoryMapper = categoryMapper;
     }
 
     public List<GoodsItem> getGoodsForSale() {
@@ -38,5 +51,17 @@ class GoodsAOP {
     public GoodsItem getGoodsItem(int goodsId) {
         GoodsItem goodsItem = goodsMapper.getGoodsItemById(goodsId);
         return goodsItem;
+    }
+
+    @Cacheable(value = CACHE_NAME, key = "'AdsByAreaCd' + #areaCd")
+    @Transactional(readOnly = true)
+    public List<AdItem> getAdsByAreaCd(String areaCd) {
+        return adMapper.getAdsByAreaCd(areaCd);
+    }
+
+    @Cacheable(value = CACHE_NAME, key = "'AllCategories'")
+    @Transactional(readOnly = true)
+    public List<Category> getAllCategories() {
+        return categoryMapper.getAllCategories();
     }
 }

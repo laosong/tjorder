@@ -17,6 +17,7 @@
     <link href="/css/common.css"	rel="stylesheet" type="text/css"/>
     <link href="/css/main.css" rel="stylesheet" type="text/css"/>
     <link href="/css/personal.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript">
         function addfavorite()
         {

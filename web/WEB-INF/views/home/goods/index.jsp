@@ -25,13 +25,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="keywords" content="买茅台酒、劲酒、汾酒、国酒等各种白酒，上天酒商城." />
-    <meta name="description" content="茅台酒,劲酒,汾酒,国酒,五粮液,高端白酒,天酒商城" />
-    <title>高端白酒_天酒商城</title>
+    <meta name="keywords" content="网上购物,网上商城，茅台天酒商场" />
+    <meta name="description" content="天酒36519.COM-专业的茅台美酒网上购物商城，在线销售茅台、久丰、国台等多个品牌百万种优质商品。便捷、诚信、安全的服务，为您提供愉悦的网上商城购物体验!" />
+    <title>天酒商场—购茅台美酒，上天酒商城！</title>
     <link href="/css/base.css" rel="stylesheet" type="text/css"/>
-    <link href="/css/common.css"	rel="stylesheet" type="text/css"/>
-    <link href="/css/main.css"	rel="stylesheet" type="text/css"/>
-    <link href="/css/product.css"	rel="stylesheet" type="text/css"/>
+    <link href="/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/main.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/product.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/other.js"></script>
     <script type="text/javascript">
@@ -89,7 +89,7 @@
                     <div class="m_p_img"><a href="/home/product/${obj.id}.htm" target="_blank"><img src="${upfilePl.map['l-default'].path}" alt="${obj.degree}°${obj.title}${obj.volume}ml" /></a></div>
                     <div class="m_p_del">
                         <p class="m_p_til"><a href="/home/product/${obj.id}.htm" target="_blank">${obj.degree}°${obj.title}${obj.volume}ml</a></p>
-                        <p class="m_p_price f999">特惠价：<span class="fred fb"><tags:price price="${obj.price}"/></span></p>
+                        <p class="m_p_price f999">天酒价：<span class="fred fb"><tags:price price="${obj.price}"/></span></p>
                         <p class="m_p_price f999"><del>原价：<tags:price price="${obj.market_price}"/></del></p>
                     </div>
                 </li>
@@ -134,7 +134,7 @@
                     <div class="m_p_img"><a href="/home/product/${obj.id}.htm" target="_blank"><img src="${upfilePl.map['l-default'].path}" alt="${obj.degree}°${obj.title}${obj.volume}ml" /></a></div>
                     <div class="m_p_del">
                         <p class="m_p_til"><a href="/home/product/${obj.id}.htm" target="_blank">${obj.degree}°${obj.title}${obj.volume}ml</a></p>
-                        <p class="m_p_price f999">特惠价：<span class="fred fb"><tags:price price="${obj.price}"/></span></p>
+                        <p class="m_p_price f999">天酒价：<span class="fred fb"><tags:price price="${obj.price}"/></span></p>
                         <p class="m_p_price f999"><del>原价：<tags:price price="${obj.market_price}"/></del></p>
                     </div>
                 </li>
@@ -176,7 +176,7 @@
                     <div class="m_p_img"><a href="/home/product/${obj.id}.htm" target="_blank"><img src="${upfilePl.map['l-default'].path}" alt="${obj.degree}°${obj.title}${obj.volume}ml" /></a></div>
                     <div class="m_p_del">
                         <p class="m_p_til"><a href="/home/product/${obj.id}.htm" target="_blank">${obj.degree}°${obj.title}${obj.volume}ml</a></p>
-                        <p class="m_p_price f999">特惠价：<span class="fred fb"><tags:price price="${obj.price}"/></span></p>
+                        <p class="m_p_price f999">天酒价：<span class="fred fb"><tags:price price="${obj.price}"/></span></p>
                         <p class="m_p_price f999"><del>原价：<tags:price price="${obj.market_price}"/></del></p>
                     </div>
                 </li>

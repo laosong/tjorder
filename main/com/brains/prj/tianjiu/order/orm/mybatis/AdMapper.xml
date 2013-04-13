@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.brains.prj.tianjiu.order.orm.AdMapper">
+
+    <resultMap id="adResultMap" type="com.brains.prj.tianjiu.order.domain.AdItem">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="text" column="text"/>
+        <result property="href" column="href"/>
+    </resultMap>
+
+    <select id="getAdsByAreaCd" parameterType="java.lang.String" resultMap="adResultMap">
+        SELECT * FROM ad_area WHERE area_cd=#{areaCd}
+    </select>
+
+</mapper>

@@ -10,6 +10,17 @@
 <s:portlet url="/pl/category.htm" var="six" param="short_name=b6"/>
 <s:portlet url="/pl/category.htm" var="seven" param="short_name=b7"/>
 <s:portlet url="/pl/ad-list.htm" var="search" param="area_cd=search"/>
+<script type="text/javascript" src="/js/laosong_zhCn.js"></script>
+<script type="text/javascript" src="/js/laosong.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $.callOrderAction("POST", "/orderAction/miniCart", null,
+                function (data) {
+                    $("#miniCartContainer").html(data);
+                }
+        )
+    });
+</script>
 <div id="header" class="clearfix">
     <h1 class="logo left"><a href="/index.htm"><img src="/images/logo.png" alt="天酒商城" /></a><span>天酒商城</span></h1>
     <p class="slogan commonBg">喝茅台好酒，上天酒商城！</p>
@@ -114,11 +125,7 @@
                 <input type="submit" tabindex="2" value="搜索" class="s_submit btn" />
             </form:form>
         </div>
-        <div class="t_cart btn right">
-            <ul class="clearfix">
-                <li class="t_cart_num"><a href="#">购物车<span>10</span>件</a></li>
-                <li class="t_cart_pay link_white fb"><a href="#">去结算</a></li>
-            </ul>
+        <div id="miniCartContainer" class="t_cart btn right">
         </div>
     </div>
 </div><!-- end nav -->

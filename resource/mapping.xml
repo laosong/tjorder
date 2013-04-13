@@ -9,10 +9,12 @@
                 role  (Anonymous|Register|Administrator) #IMPLIED>
         ]>
 <mappings>
-    <mapping path="getSystemUser" bean="loginController" method="getSystemUser"/>
     <mapping path="showLoginPage" bean="loginController" method="showLoginPage"/>
     <mapping path="login" bean="loginController" method="login"/>
     <mapping path="logout" bean="loginController" method="logout"/>
+
+    <mapping path="getPageNavData" bean="loginController" method="getPageNavData"/>
+    <mapping path="getHelp" bean="loginController" method="getHelp"/>
 
     <mapping path="miniCart" bean="shoppingCartController" method="getMiniCart"/>
     <mapping path="showCart" bean="shoppingCartController" method="getCartPage" role="Register"/>
