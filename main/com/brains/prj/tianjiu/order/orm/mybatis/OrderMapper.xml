@@ -41,7 +41,10 @@
         UPDATE orders SET sum_price=#{sumPrice} WHERE id=#{id}
     </update>
 
-    <update id="updateOrderState">
+    <update id="updateOrderStateById">
+        UPDATE orders SET state=#{state} WHERE id=#{orderId}
+    </update>
+    <update id="updateOrderStateByCd">
         UPDATE orders SET state=#{state} WHERE order_cd=#{orderCd}
     </update>
 
@@ -147,25 +150,32 @@
         SELECT * FROM shipping_info WHERE id=#{id}
     </select>
 
+    <select id="getOrdersByState" resultMap="orderInfoResultMap">
+        SELECT * FROM orders WHERE user_id>0 AND state IN
+        <foreach collection="states" open="(" separator="," close=")" item="s">#{s}</foreach>
+    </select>
+
     <select id="getOrdersByPage" resultMap="orderInfoResultMap">
         SELECT SQL_CALC_FOUND_ROWS * FROM orders ORDER BY created_date DESC limit #{limit} offset #{offset}
     </select>
 
-    <select id="getOrderInfo" resultMap="orderInfoResultMap">
+    <select id="getOrderInfoById" resultMap="orderInfoResultMap">
         SELECT * FROM orders WHERE id=#{orderId}
     </select>
 
+    <select id="getOrderInfoByCd" resultMap="orderInfoResultMap">
+        SELECT * FROM orders WHERE order_cd=#{orderCd}
+    </select>
 
     <parameterMap id="orderStatusParameterMap" type="com.brains.prj.tianjiu.order.domain.OrderStatus">
         <parameter property="orderId"/>
         <parameter property="types"/>
         <parameter property="operator"/>
         <parameter property="info"/>
-        <parameter property="createTime"/>
     </parameterMap>
 
     <insert id="createOrderStatus" parameterMap="orderStatusParameterMap">
-        INSERT INTO order_status(order_id, types, operator, info, create_time) VALUES(?, ?, ?, ?, ?)
+        INSERT INTO order_status(order_id, types, operator, info) VALUES(?, ?, ?, ?)
     </insert>
 
     <resultMap id="orderStatusResultMap" type="com.brains.prj.tianjiu.order.domain.OrderStatus">

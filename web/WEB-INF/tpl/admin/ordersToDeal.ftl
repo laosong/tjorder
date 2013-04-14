@@ -1,10 +1,8 @@
-<#-- @ftlvariable name="curpage" type="java.lang.Number" -->
-<#-- @ftlvariable name="totalpage" type="java.lang.Number" -->
 <#-- @ftlvariable name="orders" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.Order>" -->
-<#assign page_name = "allorders">
+<#assign page_name = "orderstodeal">
 
 <@override name="admin_body_content">
-<h1>订单列表</h1>
+<h1>未完成订单</h1>
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="orderTable">
     <thead>
     <tr>
@@ -40,16 +38,6 @@
             "bPaginate":false,
             "oLanguage":{ "sInfo":"本页共 _TOTAL_ 条", "sInfoEmpty":"本页共  0 条", "sZeroRecords":"未找到匹配记录", "sSearch":"过滤:"}
         });
-
-        var pager = new Pager(${totalpage});
-
-        pager.hLink = window.location.pathname + "?pageNo=";
-
-        pager.suffixHLink = "";
-        pager.currPage = "${curpage}";
-        pager.numPageVisible = 10;
-
-        pager.paginate("#pager-bottom");
     });
 </script>
 </@override>

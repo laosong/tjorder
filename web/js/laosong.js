@@ -460,7 +460,7 @@ jQuery.extend({
                         } else if (failCallback) {
                             failCallback(data);
                         } else {
-                            laosong_alert(getLocaleMessage("client.ajax.ErrorTitle"), data.message);
+                            alert(getLocaleMessage("client.ajax.ErrorTitle"), data.message);
                         }
                     } else {
                         successCallback(data);

@@ -127,8 +127,13 @@ class OrderAOP {
     }
 
     @Transactional
+    public int updateOrderState(int orderId, short newState) {
+        return orderMapper.updateOrderStateById(orderId, newState);
+    }
+
+    @Transactional
     public int updateOrderState(String orderCd, short newState) {
-        return orderMapper.updateOrderState(orderCd, newState);
+        return orderMapper.updateOrderStateByCd(orderCd, newState);
     }
 
     @Transactional(readOnly = true)
@@ -207,7 +212,8 @@ class OrderAOP {
 
     @Transactional(readOnly = true)
     public List<Order> getUserCompleteOrders(int userId) {
-        short[] complete_state = {Order.STATE_COMPLETE, Order.STATE_CANCELED};
+        short[] complete_state
+                = {Order.STATE_COMPLETE, Order.STATE_CANCELED};
         List<Order> orders = orderMapper.getUserOrdersByState(userId, complete_state);
         fillOrdersItems(orders);
         return orders;
@@ -239,18 +245,43 @@ class OrderAOP {
     }
 
     @Transactional(readOnly = true)
-    public TotalList<Order> getOrdersInfo(int offset, int limit) {
+    public TotalList<Order> getOrdersToDeal() {
+        short[] to_deal_state =
+                {Order.STATE_SUBMIT, Order.STATE_PAYED, Order.STATE_SHIPPED};
+        List<Order> orders = orderMapper.getOrdersByState(to_deal_state);
+        return new TotalList<Order>(orders.size(), orders);
+    }
+
+    @Transactional(readOnly = true)
+    public TotalList<Order> getOrdersList(int offset, int limit) {
         List<Order> orders = orderMapper.getOrdersByPage(offset, limit);
         int total = orderMapper.getFoundRows();
         return new TotalList<Order>(total, orders);
     }
 
-    public Order getOrder(int orderId) {
-        Order order = orderMapper.getOrderInfo(orderId);
+    @Transactional(readOnly = true)
+    public Order getOrderById(int orderId) {
+        Order order = orderMapper.getOrderInfoById(orderId);
         if (order != null) {
-            List<OrderItem> orderItems = orderMapper.getOrderItems(orderId);
+            List<OrderItem> orderItems = orderMapper.getOrderItems(order.getId());
             order.setOrderItems(orderItems);
         }
+        return order;
+    }
+
+    @Transactional(readOnly = true)
+    public Order getOrderByCd(String orderCd) {
+        Order order = orderMapper.getOrderInfoByCd(orderCd);
+        if (order != null) {
+            List<OrderItem> orderItems = orderMapper.getOrderItems(order.getId());
+            order.setOrderItems(orderItems);
+        }
+        return order;
+    }
+
+    @Transactional(readOnly = true)
+    public Order getOrderInfoByCd(String orderCd) {
+        Order order = orderMapper.getOrderInfoByCd(orderCd);
         return order;
     }
 }

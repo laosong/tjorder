@@ -42,8 +42,12 @@
     <mapping path="myCompleteOrders" bean="orderController" method="getMyCompleteOrders" role="Register"/>
     <mapping path="myOrderDetail" bean="orderController" method="getMyOrderDetail" role="Register"/>
 
-    <mapping path="adminOrders" bean="orderController" method="adminGetOrders" role="Administrator"/>
+    <mapping path="adminOrders" bean="orderController" method="adminGetOrdersToDeal" role="Administrator"/>
+    <mapping path="adminOrdersList" bean="orderController" method="adminOrdersList" role="Administrator"/>
     <mapping path="adminOrder" bean="orderController" method="adminGetOrder" role="Administrator"/>
+    <mapping path="adminAddOrderLogistic" bean="orderController" method="adminAddOrderLogistic" role="Administrator"/>
+    <mapping path="adminMarkOrderComp" bean="orderController" method="adminMarkOrderComplete" role="Administrator"/>
+    <mapping path="adminMarkOrderCancel" bean="orderController" method="adminMarkOrderCancel" role="Administrator"/>
 
     <mapping path="myAddress" bean="addressController" method="getMyAddress" role="Register"/>
     <mapping path="myAddressMod" bean="addressController" method="getMyAddressMod" role="Register"/>

@@ -42,7 +42,7 @@
                         <div id="checkCode" class="info_input clearfix">
                             <label for="checkcode">验证码</label>
                             <div class="easyformfield codeInput">
-                                <input type="text" size="4" class="left" name="vc" id="valid_code" maxlength="4"/>
+                                <input type="text" size="4" class="left" name="verifyCd" id="valid_code" maxlength="4" tabIndex="3" />
                                 <img class="left" src="/verify_code.jpg" alt="验证码" id="valid_code_img" />
                                 <p class="f666"></p>
                             </div>
@@ -50,13 +50,13 @@
                         </div>
                         <div class="info_input log_remb clearfix">
                             <div class="log_checkbox left">
-                                <input id="remember" type="checkbox" name="expDays" value="14" tabIndex="3" />
+                                <input id="remember" type="checkbox" name="expDays" value="14" tabIndex="4" />
                                 <label for="remember">记住登录状态</label>
                             </div>
                             <p class="left"><a href="{- $web_grade_base_url -}/user/getpwd/" target="_blank">忘记密码？</a></p>
                         </div>
                         <div class="login_submit mart20">
-                            <input class="btn ebsmbbtn" type="submit" name="submit" value="登 录" onMouseOver="this.className='btn ebsmbbtn ebbtnhv'" onMouseOut="this.className='btn ebsmbbtn'" tabIndex="4" onclick="logonSubmit();" />
+                            <input class="btn ebsmbbtn" type="submit" name="submit" value="登 录" onMouseOver="this.className='btn ebsmbbtn ebbtnhv'" onMouseOut="this.className='btn ebsmbbtn'" tabIndex="5" onclick="logonSubmit();" />
                         </div>
                     </form:form>
                 </div>

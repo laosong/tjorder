@@ -17,6 +17,9 @@ public class OrderStatus implements Serializable {
 
     private int id;
     private int orderId;
+
+    public static final short TYPES_Logistic = 99;
+
     private short types;
     private String operator;
     private String info;

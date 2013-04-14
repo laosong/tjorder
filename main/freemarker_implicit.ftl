@@ -9,3 +9,4 @@
 [#macro OrderControl path para][/#macro]
 [#macro ProductUrl pid][/#macro]
 [#macro OrderStateString os][/#macro]
+[#macro OrderPayString os][/#macro]

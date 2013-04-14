@@ -21,7 +21,20 @@ import com.brains.prj.tianjiu.order.domain.*;
 @Service
 public class OrderService {
 
-    public static final int DEFAULT_DELIVERY_ID = 1;
+    static final int DEFAULT_DELIVERY_ID = 1;
+
+    static final PaymentInfo nonPaymentInfo;
+    static final ShippingInfo nonShippingInfo;
+    static final DeliveryInfo nonDeliveryInfo;
+
+    static {
+        nonPaymentInfo = new PaymentInfo();
+        nonPaymentInfo.setId(-1);
+        nonShippingInfo = new ShippingInfo();
+        nonShippingInfo.setId(-1);
+        nonDeliveryInfo = new DeliveryInfo();
+        nonDeliveryInfo.setId(-1);
+    }
 
     OrderAOP orderAOP;
 
@@ -124,20 +137,16 @@ public class OrderService {
         return order;
     }
 
-    public void payOrder(String orderCd) throws OrderNotFoundException {
-        int ret = orderAOP.updateOrderState(orderCd, Order.STATE_PAYED);
-    }
-
-    public void shipOrder(String orderCd) throws OrderNotFoundException {
-        int ret = orderAOP.updateOrderState(orderCd, Order.STATE_SHIPPED);
-    }
-
-    public void completeOrder(String orderCd) throws OrderNotFoundException {
-        int ret = orderAOP.updateOrderState(orderCd, Order.STATE_COMPLETE);
-    }
-
-    public void cancelOrder(String orderCd) throws OrderNotFoundException {
-        int ret = orderAOP.updateOrderState(orderCd, Order.STATE_CANCELED);
+    public void userPayOrder(String user, String orderCd, String info) throws OrderNotFoundException {
+        Order order = orderAOP.getOrderInfoByCd(orderCd);
+        if (order != null) {
+            int ret = orderAOP.updateOrderState(orderCd, Order.STATE_PAYED);
+            OrderStatus orderStatus = new OrderStatus();
+            orderStatus.setOrderId(order.getId());
+            orderStatus.setOperator(user);
+            orderStatus.setInfo(info);
+            orderAOP.addOrderStatus(orderStatus);
+        }
     }
 
     public Order getUserOrder(int userId, int orderId) throws OrderNotFoundException {
@@ -179,10 +188,6 @@ public class OrderService {
         return shippingInfo;
     }
 
-    public void addOrderStatus(OrderStatus orderStatus) {
-        orderAOP.addOrderStatus(orderStatus);
-    }
-
     public List<OrderStatus> getOrderStatus(int orderId) {
         List<OrderStatus> orderStatuses = orderAOP.getOrderStatus(orderId);
         return orderStatuses;
@@ -192,20 +197,104 @@ public class OrderService {
         orderAOP.addOrderLog(orderLog);
     }
 
-    public TotalList<Order> getOrdersInfo(int offset, int limit) {
-        TotalList<Order> ordersInfo = orderAOP.getOrdersInfo(offset, limit);
+    public TotalList<Order> getOrdersToDeal() {
+        TotalList<Order> ordersToDeal = orderAOP.getOrdersToDeal();
+        return ordersToDeal;
+    }
+
+    public TotalList<Order> getOrdersList(int offset, int limit) {
+        TotalList<Order> ordersInfo = orderAOP.getOrdersList(offset, limit);
         return ordersInfo;
     }
 
     public Order getOrder(int orderId) throws OrderNotFoundException {
-        Order order = orderAOP.getOrder(orderId);
+        Order order = orderAOP.getOrderById(orderId);
         if (order == null) {
             throw new OrderNotFoundException(orderId);
         }
         for (OrderItem orderItem : order.getOrderItems()) {
             orderItem.setGoodsItem(goodsAOP.getGoodsItem(orderItem.getItemId()));
         }
+
+        PaymentInfo paymentInfo = orderAOP.getPaymentInfo(order.getPaymentId());
+        if (paymentInfo == null) {
+            paymentInfo = nonPaymentInfo;
+        }
+
+        ShippingInfo shippingInfo = orderAOP.getOrderShippingInfo(order.getShippingId());
+        if (shippingInfo == null) {
+            shippingInfo = nonShippingInfo;
+        }
+
+        DeliveryInfo deliveryInfo = orderAOP.getDeliveryInfo(order.getDeliveryId());
+        if (deliveryInfo == null) {
+            deliveryInfo = nonDeliveryInfo;
+        }
+
+        order.setPaymentInfo(paymentInfo);
+        order.setShippingInfo(shippingInfo);
+        order.setDeliveryInfo(deliveryInfo);
+
         return order;
+    }
+
+    static final String ADMIN_OPERATOR = "操作员=";
+
+    public int adminAddOrderLogistic(int orderId, String user, String logistic, int force) {
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setOrderId(orderId);
+        orderStatus.setType(OrderStatus.TYPES_Logistic);
+        orderStatus.setOperator(ADMIN_OPERATOR + user);
+        if (force > 0) {
+            String info = "强制添加物流=" + logistic;
+            orderStatus.setInfo(info);
+            orderAOP.addOrderStatus(orderStatus);
+            return 1;
+        } else {
+            boolean exist = false;
+            List<OrderStatus> orderStatuses = orderAOP.getOrderStatus(orderId);
+            for (OrderStatus os : orderStatuses) {
+                if (os.getTypes() == OrderStatus.TYPES_Logistic) {
+                    exist = true;
+                    break;
+                }
+            }
+            if (exist == false) {
+                String info = "添加物流=" + logistic;
+                orderStatus.setInfo(info);
+                orderAOP.addOrderStatus(orderStatus);
+                return 1;
+            }
+        }
+        return -1;
+    }
+
+    public int adminMarkOrderComplete(int orderId, String user) {
+        int ret = orderAOP.updateOrderState(orderId, Order.STATE_COMPLETE);
+        if (ret > 0) {
+            OrderStatus orderStatus = new OrderStatus();
+            orderStatus.setOrderId(orderId);
+            orderStatus.setOperator(ADMIN_OPERATOR + user);
+            String info = "标记订单完成";
+            orderStatus.setInfo(info);
+            orderAOP.addOrderStatus(orderStatus);
+            return 1;
+        }
+        return -1;
+    }
+
+    public int adminMarkOrderCancel(int orderId, String user) {
+        int ret = orderAOP.updateOrderState(orderId, Order.STATE_CANCELED);
+        if (ret > 0) {
+            OrderStatus orderStatus = new OrderStatus();
+            orderStatus.setOrderId(orderId);
+            orderStatus.setOperator(ADMIN_OPERATOR + user);
+            String info = "标记订单取消";
+            orderStatus.setInfo(info);
+            orderAOP.addOrderStatus(orderStatus);
+            return 1;
+        }
+        return -1;
     }
 }
 

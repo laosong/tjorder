@@ -1,6 +1,7 @@
 <#global systemUser = __RequestContext.getSystemUser()>
 <#assign product_img_root = "">
 <@OrderControl path="getPageNavData" para="shortNames=b1|b2|b3"/>
+<#-- @ftlvariable name="searchAds" type="java.util.Collection<com.brains.prj.tianjiu.order.domain.AdItem>" -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -61,8 +62,9 @@
             </div>
             <div id="search" class="clearfix">
                 <div class="hotwords link_white left">
-                    <a href="/home/search/list.htm?keyword=茅台" target="_blank">茅台</a>
-                    <a href="/home/search/list.htm?keyword=国窖1573" target="_blank">国窖1573</a>
+                    <#list searchAds as searchAd>
+                        <a href="${searchAd.href}" target="_blank">${searchAd.title?html}</a>
+                    </#list>
                 </div>
                 <div class="i_search left">
                     <form id="command" action="/home/search/list.htm" method="get">

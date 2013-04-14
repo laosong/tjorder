@@ -20,16 +20,13 @@ import com.brains.prj.tianjiu.order.domain.*;
 public class GoodsService {
 
     final static GoodsItem nonItem;
+    final static Category nonCategory;
 
     static {
         nonItem = new GoodsItem();
         nonItem.setId(-1);
         nonItem.setTitle("nonItem");
-    }
 
-    final static Category nonCategory;
-
-    static {
         nonCategory = new Category();
         nonCategory.setFullName("nonCategory");
     }

@@ -17,6 +17,8 @@
 <@block name="include_js">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/laosong_zhCn.js"></script>
+    <script type="text/javascript" src="/js/laosong.js"></script>
     <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/plugin/buk/pager.js"></script>
 </@block>

@@ -256,7 +256,7 @@ public class OrderController {
                 String trade_status = params.get("trade_status");
                 String total_fee = params.get("total_fee");
                 if (StringUtils.equals(trade_status, AliPayHelper.TradeStatus.WAIT_SELLER_SEND_GOODS)) {
-                    orderService.payOrder(out_trade_no);
+                    orderService.userPayOrder(user.getUserName(), out_trade_no, "支付宝页面返回");
                     Order order = orderService.getUserOrder(user.getUserId(), out_trade_no);
                     result.putResult("order", order);
                     result.setTemplateView("buy/orderDone");
@@ -301,7 +301,7 @@ public class OrderController {
                 if (refund_status == null) {
                     if (StringUtils.equals(trade_status, AliPayHelper.TradeStatus.WAIT_SELLER_SEND_GOODS)) {
                         try {
-                            orderService.payOrder(out_trade_no);
+                            orderService.userPayOrder("", out_trade_no, "支付宝通知");
                             orderLog.setLogInfo("payOrder");
                         } catch (OrderNotFoundException e) {
                             orderLog.setLogInfo("OrderNotFoundException");
@@ -392,12 +392,30 @@ public class OrderController {
         }
     }
 
-    public void adminGetOrders(RequestContext rc, ResultContext result) {
+    public void adminGetOrdersToDeal(RequestContext rc, ResultContext result) {
         try {
-            int num_per_page = 10;
+            TotalList<Order> totalList = orderService.getOrdersToDeal();
+            result.putResult("orders", totalList.getList());
+            result.setTemplateView("admin/ordersToDeal");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        }
+    }
 
-            TotalList<Order> totalList = orderService.getOrdersInfo(0, num_per_page);
+    public void adminOrdersList(RequestContext rc, ResultContext result) {
+        int num_per_page = 10;
+        try {
+            int pageNo = 1;
+            try {
+                pageNo = rc.getParameterInt("pageNo");
+            } catch (BadParameterException ex) {
+            }
+            int offset = (pageNo - 1) * num_per_page;
 
+            TotalList<Order> totalList = orderService.getOrdersList(offset, num_per_page);
+
+            result.putResult("curpage", pageNo);
+            result.putResult("totalpage", totalList.getTotal() / num_per_page + 1);
             result.putResult("orders", totalList.getList());
             result.setTemplateView("admin/orders");
         } catch (IllegalArgumentException e) {
@@ -421,6 +439,62 @@ public class OrderController {
         } catch (BadParameterException e) {
             result.setError(e, null, null);
         } catch (OrderNotFoundException e) {
+            result.setError(e, null, null);
+        }
+    }
+
+    public void adminAddOrderLogistic(RequestContext rc, ResultContext result) {
+        try {
+            int orderId = rc.getParameterInt("orderId");
+            int force = 0;
+            try {
+                force = rc.getParameterInt("force");
+            } catch (BadParameterException ex) {
+            }
+
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            StringBuilder sbLogistic = new StringBuilder();
+            sbLogistic.append("物流公司：");
+            sbLogistic.append(rc.getParameter("name"));
+            sbLogistic.append("物流单号：");
+            sbLogistic.append(rc.getParameter("code"));
+            sbLogistic.append("备注信息：");
+            sbLogistic.append(rc.getParameter("info"));
+
+            int ret = orderService.adminAddOrderLogistic(orderId, user.getUserName(), sbLogistic.toString(), force);
+            if (ret < 0) {
+                result.putResult("errors", 1);
+            } else {
+                result.putResult("errors", 0);
+            }
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        } catch (BadParameterException e) {
+            result.setError(e, null, null);
+        }
+    }
+
+    public void adminMarkOrderComplete(RequestContext rc, ResultContext result) {
+        try {
+            int orderId = rc.getParameterInt("orderId");
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+            int ret = orderService.adminMarkOrderComplete(orderId, user.getUserName());
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        } catch (BadParameterException e) {
+            result.setError(e, null, null);
+        }
+    }
+
+    public void adminMarkOrderCancel(RequestContext rc, ResultContext result) {
+        try {
+            int orderId = rc.getParameterInt("orderId");
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+            int ret = orderService.adminMarkOrderCancel(orderId, user.getUserName());
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        } catch (BadParameterException e) {
             result.setError(e, null, null);
         }
     }
