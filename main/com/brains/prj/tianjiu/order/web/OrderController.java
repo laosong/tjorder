@@ -386,8 +386,32 @@ public class OrderController {
         try {
             com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
 
-            int orderId = rc.getParameterInt("orderId");
-        } catch (BadParameterException e) {
+            String orderCd = rc.getParameter("orderCd");
+
+            Order order = orderService.getOrder(orderCd);
+
+            List<OrderStatus> orderStatuses = orderService.getOrderStatus(order.getId());
+
+            result.putResult("order", order);
+            result.putResult("orderStatuses", orderStatuses);
+            result.setTemplateView("home/orderDetail");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        } catch (OrderNotFoundException e) {
+            result.setError(e, null, null);
+        }
+    }
+
+    public void cancelMyOrder(RequestContext rc, ResultContext result) {
+        try {
+            com.brains.prj.tianjiu.order.common.SystemUser user = rc.getSystemUser();
+
+            String orderCd = rc.getParameter("orderCd");
+            orderService.userCancelOrder(user.getUserName(), orderCd, "用户取消订单");
+            result.setTemplateView("home/cancelMyOrderOk");
+        } catch (IllegalArgumentException e) {
+            result.setError(e, null, null);
+        } catch (OrderNotFoundException e) {
             result.setError(e, null, null);
         }
     }
@@ -429,7 +453,7 @@ public class OrderController {
 
             Order order = orderService.getOrder(orderId);
 
-            List<OrderStatus> orderStatuses = orderService.getOrderStatus(orderId);
+            List<OrderStatus> orderStatuses = orderService.getOrderStatus(order.getId());
 
             result.putResult("order", order);
             result.putResult("orderStatuses", orderStatuses);

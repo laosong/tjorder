@@ -43,7 +43,7 @@
             <h3 class="con_til">我的天酒商城</h3>
             <div class="personal_del mart15">
                 <div class="per_welcome"><span>${u.user.login_name}</span>，欢迎您来到天酒商城！</div>
-                <div class="per_mycenter mart15"><a href="/home/user/info.htm">查看个人资料</a><a href="/home/user/ch-pwd.htm">修改密码</a><a href="账户中心-地址管理.html">地址管理</a></div>
+                <div class="per_mycenter mart15"><a href="/home/user/info.htm">查看个人资料</a><a href="/home/user/ch-pwd.htm">修改密码</a><a href="/orderAction/myAddress">地址管理</a></div>
                 <div class="per_mycollect mart20">
                     <div class="c_til fb">我的藏酒阁</div>
                     <ul class="m_p mart10 clearfix">

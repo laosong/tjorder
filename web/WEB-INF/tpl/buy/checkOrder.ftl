@@ -95,7 +95,9 @@
                         </dl>
                         <dl class="mart10">
                             <dt>配送方式</dt>
-                            <dd><input type="radio" name="delivery" value="1" checked="checked"/>EMS</dd>
+                            <dd>
+                                <input type="radio" name="delivery" value="1" checked="checked"/>EMS（运费21元，满99元免运费）
+                            </dd>
                         </dl>
                     </div>
                     <div class="eb_checkOrder_cul mart20">
@@ -196,6 +198,22 @@
             addressParams["zipCode"] = $("#zipCodeInput").val();
             addressParams["recvPhone"] = $("#recvPhoneInput").val();
             addressParams["recvEmail"] = $("#recvEmailInput").val();
+
+            if (addressParams["recvName"].length <= 0) {
+                $("#recvNameInput").focus();
+                alert("需填写收获人姓名");
+                return;
+            }
+            if (addressParams["address"].length <= 0) {
+                $("#addressInput").focus();
+                alert("需填写收获地址");
+                return;
+            }
+            if (addressParams["recvPhone"].length <= 0) {
+                $("#recvPhoneInput").focus();
+                alert("需填写联系电话");
+                return;
+            }
 
             $.callOrderAction("POST", "/orderAction/addUserAddress", addressParams,
                     function (data) {

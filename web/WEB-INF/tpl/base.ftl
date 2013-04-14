@@ -33,7 +33,7 @@
                     </li>
                 <#else>
                     <li>您好，<span><a href="/home/user/center.htm">${systemUser.getUserName()!("nobody")}</a></span>！
-                        <a href="/home/user/logout.htm">退出</a><span>|</span>
+                        <a href="javascript:window.location.href='/home/user/logout.htm?toUrl=/index.htm';">退出</a><span>|</span>
                     </li>
                 </#if>
                 <li><a href="/home/user/favor.htm">我的收藏夹</a></li>

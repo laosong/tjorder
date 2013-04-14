@@ -21,7 +21,9 @@
         </tr>
             <#list orders as order>
             <tr>
-                <td>${order.getOrderCd()}</td>
+                <td>
+                    <a href="/orderAction/myOrderDetail?orderCd=${order.getOrderCd()}" target="_blank">${order.getOrderCd()}</a>
+                </td>
                 <td class="f999">${order.getCreatedDate()?datetime}</td>
                 <td class="t_l">
                     <#list order.getOrderItems() as order_item>
@@ -32,7 +34,7 @@
                 </td>
                 <td>${order.getSumPrice()?string.currency}</td>
                 <td class="f999"><@OrderStateString order.getState()/></td>
-                <td class="o_l"><a href="#">继续订单</a><a href="#">删除</a></td>
+                <td class="o_l"><@OrderOpString order.orderCd order.state order.paymentId/></td>
             </tr>
             </#list>
         </tbody>

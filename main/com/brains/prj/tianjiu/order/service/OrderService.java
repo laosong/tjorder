@@ -149,6 +149,18 @@ public class OrderService {
         }
     }
 
+    public void userCancelOrder(String user, String orderCd, String info) throws OrderNotFoundException {
+        Order order = orderAOP.getOrderInfoByCd(orderCd);
+        if (order != null && order.getState() == Order.STATE_SUBMIT) {
+            int ret = orderAOP.updateOrderState(orderCd, Order.STATE_CANCELED);
+            OrderStatus orderStatus = new OrderStatus();
+            orderStatus.setOrderId(order.getId());
+            orderStatus.setOperator(user);
+            orderStatus.setInfo(info);
+            orderAOP.addOrderStatus(orderStatus);
+        }
+    }
+
     public Order getUserOrder(int userId, int orderId) throws OrderNotFoundException {
         Order order = orderAOP.getUserOrder(userId, orderId);
         if (order == null) {
@@ -188,6 +200,43 @@ public class OrderService {
         return shippingInfo;
     }
 
+    public void getOrderDetail(Order order) {
+        for (OrderItem orderItem : order.getOrderItems()) {
+            GoodsItem goodsItem = goodsAOP.getGoodsItem(orderItem.getItemId());
+            if (goodsItem == null)
+                goodsItem = GoodsService.nonItem;
+            orderItem.setGoodsItem(goodsItem);
+        }
+
+        PaymentInfo paymentInfo = orderAOP.getPaymentInfo(order.getPaymentId());
+        if (paymentInfo == null) {
+            paymentInfo = nonPaymentInfo;
+        }
+
+        ShippingInfo shippingInfo = orderAOP.getOrderShippingInfo(order.getShippingId());
+        if (shippingInfo == null) {
+            shippingInfo = nonShippingInfo;
+        }
+
+        DeliveryInfo deliveryInfo = orderAOP.getDeliveryInfo(order.getDeliveryId());
+        if (deliveryInfo == null) {
+            deliveryInfo = nonDeliveryInfo;
+        }
+
+        order.setPaymentInfo(paymentInfo);
+        order.setShippingInfo(shippingInfo);
+        order.setDeliveryInfo(deliveryInfo);
+    }
+
+    public Order getOrder(String orderCd) throws OrderNotFoundException {
+        Order order = orderAOP.getOrderByCd(orderCd);
+        if (order == null) {
+            throw new OrderNotFoundException(orderCd);
+        }
+        getOrderDetail(order);
+        return order;
+    }
+
     public List<OrderStatus> getOrderStatus(int orderId) {
         List<OrderStatus> orderStatuses = orderAOP.getOrderStatus(orderId);
         return orderStatuses;
@@ -212,29 +261,7 @@ public class OrderService {
         if (order == null) {
             throw new OrderNotFoundException(orderId);
         }
-        for (OrderItem orderItem : order.getOrderItems()) {
-            orderItem.setGoodsItem(goodsAOP.getGoodsItem(orderItem.getItemId()));
-        }
-
-        PaymentInfo paymentInfo = orderAOP.getPaymentInfo(order.getPaymentId());
-        if (paymentInfo == null) {
-            paymentInfo = nonPaymentInfo;
-        }
-
-        ShippingInfo shippingInfo = orderAOP.getOrderShippingInfo(order.getShippingId());
-        if (shippingInfo == null) {
-            shippingInfo = nonShippingInfo;
-        }
-
-        DeliveryInfo deliveryInfo = orderAOP.getDeliveryInfo(order.getDeliveryId());
-        if (deliveryInfo == null) {
-            deliveryInfo = nonDeliveryInfo;
-        }
-
-        order.setPaymentInfo(paymentInfo);
-        order.setShippingInfo(shippingInfo);
-        order.setDeliveryInfo(deliveryInfo);
-
+        getOrderDetail(order);
         return order;
     }
 
@@ -262,6 +289,7 @@ public class OrderService {
             if (exist == false) {
                 String info = "添加物流=" + logistic;
                 orderStatus.setInfo(info);
+                orderAOP.updateOrderState(orderId, Order.STATE_SHIPPED);
                 orderAOP.addOrderStatus(orderStatus);
                 return 1;
             }

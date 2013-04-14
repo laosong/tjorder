@@ -19,13 +19,13 @@
     <select id="getGoodsListByState" parameterType="int" resultMap="goodsResultMap">
       SELECT A.id, A.title, A.price, A.market_price, A.types, A.state, A.degree, A.volume,
           concat(B.file_location, '/', file_name) AS img
-          FROM goods A LEFT JOIN upload_file B on A.id=B.owner_id WHERE A.state=#{state} AND B.owner_type=1 AND B.mark='s'
+          FROM goods A LEFT JOIN upload_file B on A.id=B.owner_id WHERE A.state=#{state} AND B.owner_type=1 AND B.label='l-default'
     </select>
 
     <select id="getGoodsItemById" parameterType="int" resultMap="goodsResultMap">
         SELECT A.id, A.title, A.price, A.market_price, A.types, A.state, A.degree, A.volume,
           concat(B.file_location, '/', file_name) AS img
-          FROM goods A LEFT JOIN upload_file B on A.id=B.owner_id WHERE A.id=#{id} AND B.owner_type=1 AND B.mark='s'
+          FROM goods A LEFT JOIN upload_file B on A.id=B.owner_id WHERE A.id=#{id} AND B.owner_type=1 AND B.label='l-default'
     </select>
 
 </mapper>

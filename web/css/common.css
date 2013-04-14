@@ -159,3 +159,8 @@ img[original^="http"]{background-color:#e7e7e7; display:inline-block;}
 #footer_sim{margin:15px 0; color:#585757; text-align:center;}
 #footer_sim ul{padding:10px 0 6px 0; border-top:1px solid #acacac;}
 #footer_sim ul li{display:inline; padding:0 2px;}
+
+/* 404 */
+.con_404{margin:40px 0 0 100px; padding:50px 0 0 220px; height:220px; background:#fff url(../images/img404.jpg) no-repeat 0 0;}
+.con_404 h3{font-size:20px; font-weight:bold;}
+.con_404_time{padding:0 3px; font-weight:bold; font-weight:bold; color:red;}

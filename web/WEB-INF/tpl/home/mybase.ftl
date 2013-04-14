@@ -26,6 +26,13 @@
     <#elseif os==5>已取消
     </#if>
 </#macro>
+<#macro OrderOpString ocd os=0 pm=0>
+    <#if os==0>
+    <#elseif os==1>
+        <#if pm==2><a href="/orderAction/payAfterSubmit?orderCd=${ocd}">在线支付</a></#if>
+    <a href="/orderAction/cancelMyOrder?orderCd=${ocd}">取消</a>
+    </#if>
+</#macro>
 <@override name="include_css">
     <@super/>
 <link rel="stylesheet" type="text/css" href="/css/personal.css"/>
@@ -34,7 +41,7 @@
 <div id="content" class="clearfix mart10">
     <div class="sbar190 left">
         <div class="sbar_personal sbar190_cul cul_border">
-            <h4 class="s190_til s190_per_til link_white fb"><a href="/orderAction/myHome">我的天酒商城</a></h4>
+            <h4 class="s190_til s190_per_til link_white fb"><a href="/home/user/center.htm">我的天酒商城</a></h4>
             <@my_nav page_name/>
         </div>
         <div class="sbar190_cul cul_border mart10">

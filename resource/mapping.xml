@@ -41,6 +41,8 @@
     <mapping path="myUnCompleteOrders" bean="orderController" method="getMyUnCompleteOrders" role="Register"/>
     <mapping path="myCompleteOrders" bean="orderController" method="getMyCompleteOrders" role="Register"/>
     <mapping path="myOrderDetail" bean="orderController" method="getMyOrderDetail" role="Register"/>
+    <mapping path="showOrder" bean="orderController" method="getMyOrderDetail" role="Register"/>
+    <mapping path="cancelMyOrder" bean="orderController" method="cancelMyOrder" role="Register"/>
 
     <mapping path="adminOrders" bean="orderController" method="adminGetOrdersToDeal" role="Administrator"/>
     <mapping path="adminOrdersList" bean="orderController" method="adminOrdersList" role="Administrator"/>

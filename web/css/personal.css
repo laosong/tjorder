@@ -57,3 +57,14 @@
 .per_service dd a:link,.per_service dd a:visited{color:#369;}
 .per_welcome{padding-left:12px;}
 .per_welcome span{font-family:"Arial", "Helvetica", "sans-serif"; font-size:18px;}
+
+.personal_del_order{font-family:Arial,Verdana,"宋体"; border:1px solid #dadada; background-color:#f0f0f0;}
+.personal_del_order_t{padding:10px 20px; line-height:30px; background-color:#f0f0f0;}
+.personal_del_order_t span{margin-right:100px;}
+.personal_del_order_t a{font-weight:normal; font-size:12px;}
+.personal_del_order_t strong{margin-right:5px; color:#009900;}
+.personal_del_order dl{padding:15px 20px 20px; border-top:1px solid #dadada; background-color:#fff;}
+.personal_del_order dl dt{font-weight:bold; padding-bottom:8px;}
+.personal_del_order dl dd{padding-bottom:3px;}
+.personal_del_order_b{padding:15px 25px 15px 0; border-top:1px solid #dadada; font-size:14px; text-align:right;}
+.personal_del_order_b span{font-size:18px;}

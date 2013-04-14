@@ -43,12 +43,12 @@
     <span style="margin-left: 50px;">配送方式:${order.deliveryInfo.deliverDesc?html}</span>
 </div>
 <div style="margin-bottom: 10px;">
-    <span>收货人姓名:${order.shippingInfo.recvName?html}</span>
-    <span style="margin-left: 50px;">联系电话:${order.shippingInfo.recvPhone?html}</span>
-    <span style="margin-left: 50px;">邮编:${order.shippingInfo.zipCode?html}</span>
+    <span>收货人姓名:${order.shippingInfo.recvName!("")?html}</span>
+    <span style="margin-left: 50px;">联系电话:${order.shippingInfo.recvPhone!("")?html}</span>
+    <span style="margin-left: 50px;">邮编:${order.shippingInfo.zipCode!("")?html}</span>
 </div>
 <div style="margin-bottom: 20px;">
-    <span>地址:${order.shippingInfo.province?html}${order.shippingInfo.city?html}${order.shippingInfo.country?html}${order.shippingInfo.address?html}</span>
+    <span>收货人地址:${order.shippingInfo.getCityInfo()}</span>
 </div>
 <div>
     <form>

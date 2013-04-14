@@ -1,5 +1,6 @@
 [#ftl]
 [#-- @implicitly included --]
+[#-- @ftlvariable name="product_img_root" type="java.lang.String" --]
 [#-- @ftlvariable name="__RequestContext" type="com.brains.prj.tianjiu.order.mvc.RequestContext" --]
 
 [#macro block name][/#macro]
@@ -10,3 +11,4 @@
 [#macro ProductUrl pid][/#macro]
 [#macro OrderStateString os][/#macro]
 [#macro OrderPayString os][/#macro]
+[#macro OrderOpString ocd os pm][/#macro]

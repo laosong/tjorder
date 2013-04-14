@@ -73,7 +73,6 @@ public class AddressController {
 
             int checkAddress = 0;
             for (UserAddress userAddress : userAddresses) {
-                checkAddress = userAddress.getId();
                 break;
             }
             result.putResult("checkAddress", checkAddress);
