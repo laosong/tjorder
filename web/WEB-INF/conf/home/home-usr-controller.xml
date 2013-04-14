@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="regLoginRequiredException" class="com.brains.groundwork.exception.RegUserLoginRequiredException">
+        <property name="extInfo" value="Reg login in"/>
+    </bean>
+    <bean id="regUserChecker" class="com.brains.prj.tianjiu.user.UserLoginCookieChecker">
+        <property name="perm" value="user.login"/>
+        <property name="loginRequiredException" ref="regLoginRequiredException"/>
+        <property name="userReadService" ref="userReadService"/>
+        <property name="userGroupReadService" ref="groupReadService"/>
+    </bean>
+
+    <bean id="cookieLoginChecker" class="com.brains.prj.tianjiu.user.UserLoginCookieChecker">
+        <property name="silence" value="true"/>
+        <property name="userReadService" ref="userReadService"/>
+        <property name="userGroupReadService" ref="groupReadService"/>
+    </bean>
+
+		<bean id="userLoginValidator" class="com.brains.groundwork.web.validate.SpeedyValidator">
+        <property name="validateList">
+            <list>
+                <value>fn:verifyCdFails(form.__req,form.verifyCd)|*|err.login.verifyCd.failed</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="loginFormController" class="com.brains.groundwork.web.stock.UserLoginFormController">
+        <description>用户登录</description>
+        <property name="daoReadService" ref="userReadService"/>
+        <property name="userGroupReadService" ref="groupReadService"/>
+        <property name="succViewAlias" value="alias-home-user-center"/>
+        <property name="enableCookie" value="true"/>
+    </bean>
+
+    <bean id="userRegValidator" class="com.brains.groundwork.web.validate.SpeedyValidator">
+        <property name="validateList">
+            <list>
+                <value>form.login_name.length()==0|login_name|err.input.required|用户名</value>
+                <value>form.email.length()==0|email|err.input.required|邮箱</value>
+                <value>form.login_pass!=form.get('pwd_confirm')|login_pass|err.input.password.not.match</value>
+                <value>fn:verifyCdFails(form.__req,form.verifyCd)|*|err.login.verifyCd.failed</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="regFormController" class="com.brains.groundwork.web.stock.UserRegFormController">
+        <description>用户注册</description>
+        <property name="daoReadService" ref="userReadService"/>
+        <property name="daoWriteService" ref="userWriteService"/>
+        <property name="userGroupReadService" ref="groupReadService"/>
+        <property name="validator" ref="userRegValidator"/>
+        <property name="succViewAlias" value="alias-home-user-center"/>
+        <property name="groupCd" value="reguser"/>
+    </bean>
+
+    <bean id="homeUserCenter" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>用户中心</description>
+        <property name="checkers" ref="regUserChecker"/>
+    </bean>
+
+    <bean id="homeUserInfo" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>个人资料</description>
+        <property name="checkers" ref="regUserChecker"/>
+    </bean>
+
+    <bean id="homeUserLogout" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>用户注销</description>
+        <property name="removeLoginCookie" value="true"/>
+    </bean>
+
+    <bean id="homeUserFavor" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>用户收藏</description>
+        <property name="checkers" ref="regUserChecker"/>
+    </bean>
+
+    <bean id="homeUserComment" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>用户评论列表</description>
+        <property name="checkers" ref="regUserChecker"/>
+    </bean>
+
+    <bean id="homeUserValidator" class="com.brains.groundwork.web.validate.SpeedyValidator">
+        <property name="validateList">
+            <list>
+                <value>form.new_pass!=form.get('pwd_confirm')|login_pass|err.input.password.not.match</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="homeUserChPwd" class="com.brains.groundwork.web.stock.UserChangePwdForm">
+        <description>密码修改</description>
+        <property name="checkers" ref="regUserChecker"/>
+        <property name="daoReadService" ref="userReadService"/>
+        <property name="daoWriteService" ref="userWriteService"/>
+        <property name="validator" ref="homeUserValidator"/>
+    </bean>
+
+    <bean id="homeUserPwdSucc" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>密码修改成功</description>
+        <property name="checkers" ref="regUserChecker"/>
+    </bean>
+
+    <bean id="homeUserController" class="com.brains.prj.tianjiu.user.web.UserController">
+        <description>增加删除收藏</description>
+        <property name="checkers" ref="regUserChecker"/>
+        <property name="userReadService" ref="userReadService"/>
+        <property name="userWriteService" ref="userWriteService"/>
+    </bean>
+
+    <bean id="commentsAddEditForm" class="com.brains.prj.tianjiu.user.web.GoodsCommentAddForm">
+        <property name="checkers" ref="regUserChecker"/>
+        <property name="daoReadService" ref="commentsReadService"/>
+        <property name="daoWriteService" ref="commentsWriteService"/>
+        <property name="goodsWriteService" ref="goodsWriteService"/>
+        <property name="orderItemWriteService" ref="orderItemWriteService"/>
+        <property name="succViewAlias" value="alias-home-user-comments"/>
+        <property name="maxMsgLength" value="1000"/>
+    </bean>
+
+    <bean id="homeUseCommentsDetail" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>评论内容</description>
+        <property name="checkers" ref="regUserChecker"/>
+    </bean>
+
+
+</beans>

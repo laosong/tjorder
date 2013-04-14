@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="adAreaDao" class="com.brains.publishing.dao.AdAreaDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="addSql" value="${ad.area.add.sql}"/>
+        <property name="delSql" value="${ad.area.del.sql}"/>
+        <property name="editSql" value="${ad.area.edit.sql}"/>
+        <property name="getSql" value="${ad.area.get.sql}"/>
+        <property name="searchSelectClause" value="${ad.area.search.select.clause}"/>
+        <property name="searchWhereClause" value="${ad.area.search.where.clause}"/>
+        <property name="searchOrderbyClause" value="${ad.area.search.orderby.clause}"/>
+    </bean>
+    <!-- news Dao-->
+    <bean id="newsDao" class="com.brains.publishing.dao.ContentDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="addSql" value="${news.add.sql}"/>
+        <property name="delSql" value="${news.del.sql}"/>
+        <property name="editSql" value="${news.edit.sql}"/>
+        <property name="getSql" value="${news.get.sql}"/>
+        <property name="searchSelectClause" value="${news.search.select.clause}"/>
+        <property name="searchWhereClause" value="${news.search.where.clause}"/>
+        <property name="searchOrderbyClause" value="${news.search.orderby.clause}"/>
+    </bean>
+    <!--brand-->
+    <bean id="brandDao" class="com.brains.publishing.dao.ContentDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="addSql" value="${brand.add.sql}"/>
+        <property name="delSql" value="${brand.del.sql}"/>
+        <property name="editSql" value="${brand.edit.sql}"/>
+        <property name="getSql" value="${brand.get.sql}"/>
+        <property name="searchSelectClause" value="${brand.search.select.clause}"/>
+        <property name="searchWhereClause" value="${brand.search.where.clause}"/>
+        <property name="searchOrderbyClause" value="${brand.search.orderby.clause}"/>
+    </bean>
+    <!--上传文件Dao-->
+    <bean id="uploadFileDao" class="com.brains.publishing.dao.UploadFileDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="addSql" value="${upfile.add.sql}"/>
+        <property name="delSql" value="${upfile.del.sql}"/>
+        <property name="editSql" value="${upfile.edit.sql}"/>
+        <property name="getSql" value="${upfile.get.sql}"/>
+        <property name="searchSelectClause" value="${upfile.select.clause}"/>
+        <property name="searchWhereClause" value="${upfile.where.clause}"/>
+        <property name="searchOrderbyClause" value="${upfile.orderby.clause}"/>
+    </bean>
+    <!--类目Dao-->
+    <bean id="categoryDao" class="com.brains.publishing.dao.CategoryDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="addSql" value="${category.add.sql}"/>
+        <property name="delSql" value="${category.del.sql}"/>
+        <property name="editSql" value="${category.edit.sql}"/>
+        <property name="getSql" value="${category.get.sql}"/>
+        <property name="searchSelectClause" value="${category.select.clause}"/>
+        <property name="searchWhereClause" value="${category.where.clause}"/>
+        <property name="searchOrderbyClause" value="${category.orderby.clause}"/>
+    </bean>
+    <!--类目Dao-->
+    <bean id="goodsDao" class="com.brains.prj.tianjiu.commodity.dao.GoodsDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="addSql" value="${goods.add.sql}"/>
+        <property name="delSql" value="${goods.del.sql}"/>
+        <property name="editSql" value="${goods.edit.sql}"/>
+        <property name="getSql" value="${goods.get.sql}"/>
+        <property name="searchSelectClause" value="${goods.select.clause}"/>
+        <property name="searchWhereClause" value="${goods.where.clause}"/>
+        <property name="searchOrderbyClause" value="${goods.orderby.clause}"/>
+    </bean>
+
+</beans>

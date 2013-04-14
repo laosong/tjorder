@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="adMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="commodity.adMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+    <bean id="newsMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="commodity.newsMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+    <bean id="cateMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="commodity.cateMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+    <bean id="brandMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="commodity.brandMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+    <bean id="customizeMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="commodity.customizeMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+    <bean id="goodsDownMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="commodity.goodsDownMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+    <bean id="goodsUpMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="commodity.goodsUpMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+    <!-- 广告 -->
+    <bean id="adminAdMgr" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>广告列表</description>
+        <property name="checkers">
+            <list><ref bean="adMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="adAreaAddEditForm" class="com.brains.publishing.web.stock.AdAreaAddEditForm">
+        <description>广告添加修改</description>
+        <property name="daoReadService" ref="adAreaReadService"/>
+        <property name="daoWriteService" ref="adAreaWriteService"/>
+        <property name="uploadFileWriteService" ref="fileWriteService"/>
+        <property name="succViewAlias" value="alias-admin-ad-list"/>
+        <property name="checkers">
+            <list><ref bean="adMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="adminAdDel" class="com.brains.groundwork.web.stock.GenericUpdateController">
+        <description>广告删除</description>
+        <property name="daoWriteService" ref="adAreaWriteService"/>
+        <property name="checkers">
+            <list><ref bean="adMgrChecker"/></list>
+        </property>
+    </bean>
+    <!-- 新闻 -->
+    <bean id="adminNewsMgr" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>新闻列表</description>
+        <property name="checkers">
+            <list><ref bean="newsMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="newsAddEditForm" class="com.brains.publishing.web.stock.ContentAddEditForm">
+        <description>广告添加修改</description>
+        <property name="daoReadService" ref="newsReadService"/>
+        <property name="daoWriteService" ref="newsWriteService"/>
+        <property name="uploadFileWriteService" ref="fileWriteService"/>
+        <property name="succViewAlias" value="alias-admin-news-list"/>
+        <property name="types" value="20"/>
+        <property name="checkers">
+            <list><ref bean="newsMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="adminNewsDel" class="com.brains.groundwork.web.stock.GenericUpdateController">
+        <description>广告删除</description>
+        <property name="daoWriteService" ref="newsWriteService"/>
+        <property name="checkers">
+            <list><ref bean="newsMgrChecker"/></list>
+        </property>
+    </bean>
+
+    <bean id="adminUpfileDel" class="com.brains.groundwork.web.stock.GenericUpdateController">
+        <description>Upload file 删除</description>
+        <property name="daoWriteService" ref="fileWriteService"/>
+        <property name="checkers">
+            <list><ref bean="adminLoginChecker"/></list>
+        </property>
+    </bean>
+
+    <bean id="adminCategoryList" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>分类列表</description>
+        <property name="checkers">
+            <list><ref bean="cateMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="adminCategoryMgr" class="com.brains.publishing.web.stock.CategoryAddEditController">
+        <description>分类管理</description>
+        <property name="daoWriteService" ref="categoryWriteService"/>
+        <property name="checkers">
+            <list><ref bean="cateMgrChecker"/></list>
+        </property>
+    </bean>
+    <!-- 品牌 -->
+    <bean id="adminBrandList" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>品牌列表</description>
+        <property name="checkers">
+            <list><ref bean="brandMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="adminBrandAddEdit" class="com.brains.prj.tianjiu.commodity.web.BrandAddEditForm">
+        <description>品牌管理</description>
+        <property name="daoReadService" ref="brandReadService"/>
+        <property name="daoWriteService" ref="brandWriteService"/>
+        <property name="uploadFileWriteService" ref="fileWriteService"/>
+        <property name="types" value="10"/>
+        <property name="succViewAlias" value="alias-admin-brand-list"/>
+        <property name="checkers">
+            <list><ref bean="brandMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="adminBrandDel" class="com.brains.groundwork.web.stock.GenericUpdateController">
+        <description>Brand  删除</description>
+        <property name="daoWriteService" ref="brandWriteService"/>
+        <property name="checkers">
+            <list><ref bean="brandMgrChecker"/></list>
+        </property>
+    </bean>
+    <!-- 首页 新品 活动 人气 婚庆 模块维护 -->
+    <bean id="adminCustomizeList" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>首页 新品 活动 人气 婚庆 模块列表</description>
+        <property name="checkers">
+            <list><ref bean="customizeMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="adminCustomizeAddEdit" class="com.brains.prj.tianjiu.commodity.web.GoodsAddEditForm">
+        <description>首页 新品 活动 人气 婚庆 模块维护管理</description>
+        <property name="daoReadService" ref="goodsReadService"/>
+        <property name="daoWriteService" ref="goodsWriteService"/>
+        <property name="checkers">
+            <list><ref bean="customizeMgrChecker"/></list>
+        </property>
+    </bean>
+    <!-- 商品-预览 -->
+    <bean id="adminGoodsPreview" class="com.brains.prj.tianjiu.commodity.web.HomeController">
+        <description>商品预览</description>
+        <property name="goodsSearchService" ref="goodsSearchService"/>
+        <property name="goodsReadService" ref="goodsReadService"/>
+        <property name="goodsWriteService" ref="goodsWriteService"/>
+        <property name="preview" value="true"/>
+    </bean>
+    <!-- 商品-未上架 -->
+    <bean id="adminGoodsDownList" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>商品-未上架</description>
+        <property name="checkers">
+            <list><ref bean="goodsDownMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="adminGoodsAddEditValidator" class="com.brains.groundwork.web.validate.SpeedyValidator">
+        <property name="validateList">
+            <list>
+                <value>form.category_id==0|category_id|err.input.required|分类</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="adminGoodsAddEdit" class="com.brains.prj.tianjiu.commodity.web.GoodsAddEditForm">
+        <description>商品-未上架管理</description>
+        <property name="daoReadService" ref="goodsReadService"/>
+        <property name="daoWriteService" ref="goodsWriteService"/>
+        <property name="uploadFileWriteService" ref="fileWriteService"/>
+        <property name="validator" ref="adminGoodsAddEditValidator"/>
+        <property name="succViewAlias" value="alias-goods-down-list"/>
+        <property name="checkers">
+            <list><ref bean="goodsDownMgrChecker"/></list>
+        </property>
+    </bean>
+    <!-- 商品-上架 -->
+    <bean id="adminGoodsUpList" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>商品-上架</description>
+        <property name="checkers">
+            <list><ref bean="goodsUpMgrChecker"/></list>
+        </property>
+    </bean>
+    <bean id="adminGoodsDel" class="com.brains.groundwork.web.stock.GenericUpdateController">
+        <description>商品  删除</description>
+        <property name="daoWriteService" ref="goodsWriteService"/>
+        <property name="checkers">
+            <list><ref bean="goodsDownMgrChecker"/></list>
+        </property>
+    </bean>
+
+    <bean id="adminGoodsUpDown" class="com.brains.groundwork.web.stock.GenericUpdateController">
+        <description>商品 上下价</description>
+        <property name="daoWriteService" ref="goodsWriteService"/>
+        <property name="colNumberList">
+            <list><value>id</value><value>state</value></list>
+        </property>
+        <property name="checkers">
+            <list><ref bean="goodsUpMgrChecker"/></list>
+        </property>
+    </bean>
+</beans>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="userReadService" class="com.brains.groundwork.service.UserReadService" >
+        <property name="dao" ref="userDao"/>
+    </bean>
+
+    <bean id="userWriteService" class="com.brains.groundwork.service.UserWriteService" >
+        <property name="dao" ref="userDao"/>
+    </bean>
+
+    <bean id="groupReadService" class="com.brains.groundwork.service.UserGroupReadService" >
+        <property name="dao" ref="grpDao"/>
+    </bean>
+
+    <bean id="groupWriteService" class="com.brains.groundwork.service.UserGroupWriteService" >
+        <property name="dao" ref="grpDao"/>
+    </bean>
+
+    <!-- comments -->
+    <bean id="commentsReadService" class="com.brains.publishing.service.CommentsReadService">
+        <property name="dao" ref="commentsDao"/>
+    </bean>
+    <bean id="commentsWriteService" class="com.brains.publishing.service.CommentsWriteService">
+        <property name="dao" ref="commentsDao"/>
+    </bean>
+
+</beans>

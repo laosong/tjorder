@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="adminLoginRequiredException" class="com.brains.groundwork.exception.AdminLoginRequiredException">
+        <property name="extInfo" value="Admin login in"/>
+    </bean>
+    <bean id="adminLoginChecker" class="com.brains.groundwork.checker.LoginChecker">
+        <property name="exception" ref="adminLoginRequiredException"/>
+    </bean>
+    <bean id="userMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="user.userMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+    <bean id="adminMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="user.adminMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+    <bean id="commentsMgrChecker" class="com.brains.groundwork.checker.SimplePermChecker">
+        <property name="perm" value="user.commentsMgr"/>
+        <property name="loginRequiredException" ref="adminLoginRequiredException"/>
+    </bean>
+
+    <bean id="adminIndex" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>管理员首页</description>
+        <property name="checkers">
+            <list>
+                <ref bean="adminLoginChecker"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="adminUserMgr" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>管理员管理</description>
+        <property name="checkers">
+            <list>
+                <ref bean="adminMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="adminUserDel" class="com.brains.groundwork.web.stock.GenericUpdateController">
+        <description>管理员删除</description>
+        <property name="daoWriteService" ref="userWriteService"/>
+        <property name="checkers">
+            <list>
+                <ref bean="adminMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="adminUserValidator" class="com.brains.groundwork.web.validate.SpeedyValidator">
+        <property name="validateList">
+            <list>
+                <value>form.login_pass!=form.get('pwd_confirm')|login_pass|err.input.password.not.match</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="adminUserAddEditForm" class="com.brains.groundwork.web.stock.UserAddEditForm">
+        <description>管理员添加修改</description>
+        <property name="daoReadService" ref="userReadService"/>
+        <property name="daoWriteService" ref="userWriteService"/>
+        <property name="succViewAlias" value="alias-usr-admin-lists"/>
+        <property name="validator" ref="adminUserValidator"/>
+        <property name="checkers">
+            <list>
+                <ref bean="adminMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="adminGroupListController" class="com.brains.groundwork.web.stock.FunctionalController">
+        <property name="checkers">
+            <list>
+                <ref bean="adminMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="adminGroupDel" class="com.brains.groundwork.web.stock.GenericUpdateController">
+        <description>用户组删除</description>
+        <property name="daoWriteService" ref="groupWriteService"/>
+        <property name="checkers">
+            <list>
+                <ref bean="adminMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="commodityPermDataList" class="com.brains.prj.tianjiu.user.provider.CommodityPermDataList">
+        <property name="name" value="commodity"/>
+    </bean>
+    <bean id="userPermDataList" class="com.brains.prj.tianjiu.user.provider.UserPermDataList">
+        <property name="name" value="user"/>
+    </bean>
+
+    <bean id="adminGroupAddEditForm" class="com.brains.groundwork.web.stock.GroupAddEditForm">
+        <description>用户组添加修改</description>
+        <property name="succViewAlias" value="alias-usr-admin-group-list"/>
+        <property name="daoReadService" ref="groupReadService"/>
+        <property name="daoWriteService" ref="groupWriteService"/>
+        <property name="permList">
+            <list>
+                <ref bean="commodityPermDataList" />
+                <ref bean="userPermDataList" />
+            </list>
+        </property>
+        <property name="checkers">
+            <list>
+                <ref bean="adminMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="adminLoginValidator" class="com.brains.groundwork.web.validate.SpeedyValidator">
+        <property name="validateList">
+            <list>
+                <value>form.login_name.length()==0|login_name|err.input.required|登录名</value>
+                <value>fn:verifyCdFails(form.__req,form.verifyCd)|*|err.login.verifyCd.failed</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="adminUserLoginForm" class="com.brains.groundwork.web.stock.UserLoginFormController">
+        <description>管理员登录表单的相关处理</description>
+        <property name="daoReadService" ref="userReadService"/>
+        <property name="userGroupReadService" ref="groupReadService"/>
+        <property name="validator" ref="adminLoginValidator"/>
+        <property name="succViewAlias" value="alias-admin-index"/>
+    </bean>
+
+    <bean id="regUserCommentsMgr" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>评论管理</description>
+        <property name="checkers">
+            <list>
+                <ref bean="commentsMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+
+
+    <bean id="regUserCommentsDel" class="com.brains.prj.tianjiu.user.web.CommentsController">
+        <description>用户comments删除</description>
+        <property name="orderItemWriteService" ref="orderItemWriteService"/>
+        <property name="commentsReadService" ref="commentsReadService"/>
+        <property name="commentsWriteService" ref="commentsWriteService"/>
+        <property name="checkers">
+            <list>
+                <ref bean="commentsMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="regUserMgr" class="com.brains.groundwork.web.stock.FunctionalController">
+        <description>注册用户管理</description>
+        <property name="checkers">
+            <list>
+                <ref bean="userMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="regUserDel" class="com.brains.groundwork.web.stock.GenericUpdateController">
+        <description>注册用户删除</description>
+        <property name="daoWriteService" ref="userWriteService"/>
+        <property name="checkers">
+            <list>
+                <ref bean="userMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="regUserValidator" class="com.brains.groundwork.web.validate.SpeedyValidator">
+        <property name="validateList">
+            <list>
+                <value>form.login_pass!=form.get('pwd_confirm')|login_pass|err.input.password.not.match</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="regUserAddEditForm" class="com.brains.groundwork.web.stock.UserAddEditForm">
+        <description>注册用户</description>
+        <property name="daoReadService" ref="userReadService"/>
+        <property name="daoWriteService" ref="userWriteService"/>
+        <property name="types" value="1"/>
+        <property name="succViewAlias" value="alias-usr-reg-lists"/>
+        <property name="validator" ref="regUserValidator"/>
+        <property name="checkers">
+            <list>
+                <ref bean="userMgrChecker"/>
+            </list>
+        </property>
+    </bean>
+</beans>

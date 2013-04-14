@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="plPathInfos" class="com.brains.framework.web.bean.PathInfos">
+        <property name="paths">
+            <map>
+                <entry key="/pl/category.htm"><value>
+                    bean=getObject@categoryControllerPL
+                    note=category_PL
+                </value></entry>
+                <entry key="/pl/cate-leaf-list.htm"><value>
+                    bean=getLeafList@categoryControllerPL
+                    note=Get all leaf category objects
+                </value></entry>
+                <entry key="/pl/brand-list.htm"><value>
+                    bean=list@brandPL
+                    note=brandPL
+                </value></entry>
+                <entry key="/pl/brand-obj.htm"><value>
+                    bean=getObject@brandPL
+                    note=brand object
+                </value></entry>
+                <entry key="/pl/goods-list.htm"><value>
+                    bean=list@goodsPL
+                    note=goods list
+                </value></entry>
+                <entry key="/pl/goods-obj.htm"><value>
+                    bean=getObject@goodsPL
+                    note=goods object
+                </value></entry>
+                <entry key="/pl/upfile-list.htm"><value>
+                    bean=fileList@uploadFilePL
+                    note=upload file list
+                </value></entry>
+                <entry key="/pl/upfile-2list.htm"><value>
+                    bean=file2List@uploadFilePL
+                    note=upload file list list
+                </value></entry>
+                <entry key="/pl/upfile-map.htm"><value>
+                    bean=fileLabelMap@uploadFilePL
+                    note=upload file label to file map
+                </value></entry>
+                <entry key="/pl/news-list.htm"><value>
+                    bean=list@newsControllerPL
+                    note=news list
+                </value></entry>
+                <entry key="/pl/news-obj.htm"><value>
+                    bean=getObject@newsControllerPL
+                    note=news Object
+                </value></entry>
+                <entry key="/pl/ad-list.htm"><value>
+                    bean=list@adAreaControllerPL
+                    note=ad list
+                </value></entry>
+                <entry key="/pl/user-list.htm"><value>
+                    bean=list@userControllerPL
+                    note=user list
+                </value></entry>
+                <entry key="/pl/user-obj.htm"><value>
+                    bean=getObject@userControllerPL
+                    note=user object
+                </value></entry>
+                <entry key="/pl/curr-user.htm"><value>
+                    bean=currentUser@userControllerPL
+                    note=user list
+                </value></entry>
+                <entry key="/pl/grp-list.htm"><value>
+                    bean=list@groupControllerPL
+                    note=grp list
+                </value></entry>
+                <entry key="/pl/grp-obj.htm"><value>
+                    bean=getObject@groupControllerPL
+                    note=grp object
+                </value></entry>
+                <entry key="/pl/cookie-obj.htm"><value>
+                    bean=getObject@cookieControllerPL
+                </value></entry>
+                <entry key="/pl/cookie-list.htm"><value>
+                    bean=list@cookieControllerPL
+                </value></entry>
+                <entry key="/pl/comments-obj.htm"><value>
+                    bean=getObject@commentsControllerPL
+                </value></entry>
+                <entry key="/pl/comments-list.htm"><value>
+                    bean=list@commentsControllerPL
+                </value></entry>
+                <entry key="/pl/orderItem-list.htm"><value>
+                    bean=list@orderItemControllerPL
+                </value></entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

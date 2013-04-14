@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="homeController" class="com.brains.prj.tianjiu.commodity.web.HomeController">
+        <description>商品信息</description>
+        <property name="checkers" ref="cookieLoginChecker"/>
+        <property name="goodsSearchService" ref="goodsSearchService"/>
+        <property name="goodsReadService" ref="goodsReadService"/>
+        <property name="goodsWriteService" ref="goodsWriteService"/>
+        <property name="preview" value="false"/>
+    </bean>
+
+    <bean id="commentsList" class="com.brains.groundwork.web.stock.FunctionalController"/>
+
+    <bean id="newsList" class="com.brains.groundwork.web.stock.FunctionalController"/>
+
+    <bean id="newsDetail" class="com.brains.groundwork.web.stock.FunctionalController"/>
+
+    <bean id="brandDetail" class="com.brains.groundwork.web.stock.FunctionalController"/>
+
+</beans>

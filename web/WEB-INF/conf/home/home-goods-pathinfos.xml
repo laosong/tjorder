@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--后台URL配置-->
+    <bean id="goodsHomePathInfos" class="com.brains.framework.web.bean.PathInfos">
+        <property name="paths">
+            <map>
+                <entry key="/home/product/*.htm"><value>
+                    bean=detail@homeController
+                    view=/WEB-INF/views/home/goods/detail.jsp
+                    param=id
+                    note=商品信息
+                </value></entry>
+               <entry key="/home/list*.htm"><value>
+                    bean=list@homeController
+                    view=/WEB-INF/views/home/goods/list.jsp
+                    param=id
+                    note=商品list
+                </value></entry>
+                <entry key="/home/0list*.htm"><value>
+                    bean=list@homeController
+                    view=/WEB-INF/views/home/goods/list0.jsp
+                    param=id
+                    note=评鉴商品list
+                </value></entry>
+                <entry key="/index.htm"><value>
+                    bean=index@homeController
+                    view=/WEB-INF/views/home/goods/index.jsp
+                    note=商品index
+                </value></entry>
+                <entry key="/home/products/comments-list.htm"><value>
+                    bean=forward@commentsList
+                    view=/WEB-INF/views/home/goods/comments-list.jsp
+                    note=评论列表
+                </value></entry>
+                <entry key="/home/news/*.htm"><value>
+                    bean=forward@newsDetail
+                    view=/WEB-INF/views/home/goods/news.jsp
+                    param=id
+                    note=公告内容
+                </value></entry>
+                <entry key="/home/brand/*.htm"><value>
+                    bean=forward@brandDetail
+                    view=/WEB-INF/views/home/goods/brand.jsp
+                    param=id
+                    note=品牌内容
+                </value></entry>
+                <entry key="/home/search/list.htm"><value>
+                    bean=search@homeController
+                    view=/WEB-INF/views/home/goods/search.jsp
+                    param=id
+                    note=search
+                </value></entry>
+                <entry key="/home/news-list.htm"><value>
+                    bean=forward@commentsList
+                    view=/WEB-INF/views/home/goods/news-list.jsp
+                    note=公告列表
+                </value></entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

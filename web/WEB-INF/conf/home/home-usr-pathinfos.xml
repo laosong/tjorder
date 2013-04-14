@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--后台URL配置-->
+    <bean id="usrHomePathInfos" class="com.brains.framework.web.bean.PathInfos">
+        <property name="paths">
+            <map>
+                <entry key="/home/user/login.htm"><value>
+                    bean=loginFormController
+                    view=/WEB-INF/views/home/user/login.jsp
+                    alias=alias-home-login
+                    note=home login
+                </value></entry>
+                <entry key="/home/user/reg.htm"><value>
+                    bean=regFormController
+                    view=/WEB-INF/views/home/user/reg.jsp
+                    note=home reg
+                </value></entry>
+                <entry key="/home/user/logout.htm"><value>
+                    bean=logout@homeUserLogout
+                    note=home log out
+                </value></entry>
+                <entry key="/home/user/favor.htm"><value>
+                    bean=forward@homeUserFavor
+                    view=/WEB-INF/views/home/user/favor.jsp
+                    alias=alias-home-user-favor
+                    note=home login
+                </value></entry>
+                <entry key="/home/user/center.htm"><value>
+                    bean=forward@homeUserCenter
+                    view=/WEB-INF/views/home/user/center.jsp
+                    alias=alias-home-user-center
+                    note=home login
+                </value></entry>
+                <entry key="/home/user/info.htm"><value>
+                    bean=forward@homeUserInfo
+                    view=/WEB-INF/views/home/user/info.jsp
+                </value></entry>
+                <entry key="/home/user/ch-pwd.htm"><value>
+                    bean=homeUserChPwd
+                    view=/WEB-INF/views/home/user/ch-pwd.jsp
+                    note=home user pwd form
+                </value></entry>
+                <entry key="/home/user/ch-pwd-succ.htm"><value>
+                    bean=forward@homeUserPwdSucc
+                    view=/WEB-INF/views/home/user/ch-pwd-succ.jsp
+                    note=home change pwd successfully
+                </value></entry>
+                <entry key="/home/user/add-favor.htm"><value>
+                    bean=addFavor@homeUserController
+                </value></entry>
+                <entry key="/home/user/del-favor.htm"><value>
+                    bean=delFavor@homeUserController
+                </value></entry>
+                <entry key="/home/user/add-comments.htm"><value>
+                    bean=commentsAddEditForm
+                    view=/WEB-INF/views/home/user/comments-form.jsp
+                </value></entry>
+                <entry key="/home/user/comments.htm"><value>
+                    bean=forward@homeUserComment
+                    view=/WEB-INF/views/home/user/comments.jsp
+                    alias=alias-home-user-comments
+                </value></entry>
+                <entry key="/home/user/comments-detail*.htm"><value>
+                    bean=forward@homeUseCommentsDetail
+                    param=id
+                    view=/WEB-INF/views/home/user/comments-detail.jsp
+                </value></entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--后台URL配置-->
+    <bean id="commodityAdminPathInfos" class="com.brains.framework.web.bean.PathInfos">
+        <property name="paths">
+            <map>
+                <entry key="/admin/commodity/ad-list.htm"><value>
+                    bean=forward@adminAdMgr
+                    view=/WEB-INF/views/admin/commodity/ad-list.jsp
+                    alias=alias-admin-ad-list
+                    note=ad management
+                </value></entry>
+                <entry key="/admin/commodity/ad-add-edit*.htm"><value>
+                    bean=adAreaAddEditForm
+                    view=/WEB-INF/views/admin/commodity/ad-add-edit.jsp
+                    param=id
+                    note=ad add edit
+                </value></entry>
+                <entry key="/admin/commodity/ad-del*.htm"><value>
+                    bean=del@adminAdDel
+                    param=id
+                    note=ad 删除
+                </value></entry>
+                <entry key="/admin/commodity/news-list.htm"><value>
+                    bean=forward@adminNewsMgr
+                    view=/WEB-INF/views/admin/commodity/news-list.jsp
+                    alias=alias-admin-news-list
+                    note=ad management
+                </value></entry>
+                <entry key="/admin/commodity/news-add-edit*.htm"><value>
+                    bean=newsAddEditForm
+                    view=/WEB-INF/views/admin/commodity/news-add-edit.jsp
+                    param=id
+                    note=news add edit
+                </value></entry>
+                <entry key="/admin/commodity/news-del*.htm"><value>
+                    bean=del@adminNewsDel
+                    param=id
+                    note=news 删除
+                </value></entry>
+                <entry key="/admin/commodity/upload-file-del*.htm"><value>
+                    bean=del@adminUpfileDel
+                    param=id
+                    note=upload file 删除
+                </value></entry>
+                <entry key="/admin/commodity/category-list.htm"><value>
+                    bean=forward@adminCategoryList
+                    view=/WEB-INF/views/admin/commodity/category-list.jsp
+                    alias=alias-admin-portal-category-list
+                    note=类目列表
+                </value></entry>
+                <entry key="/admin/commodity/category-add.htm"><value>
+                    bean=addEdit@adminCategoryMgr
+                    note=添加类目
+                </value></entry>
+                <entry key="/admin/commodity/category-del*.htm"><value>
+                    bean=del@adminCategoryMgr
+                    param=id
+                    note=类目删除
+                </value></entry>
+                <entry key="/admin/commodity/brand-list.htm"><value>
+                    bean=forward@adminBrandList
+                    view=/WEB-INF/views/admin/commodity/brand-list.jsp
+                    alias=alias-admin-brand-list
+                    note=brand management
+                </value></entry>
+                <entry key="/admin/commodity/brand-add-edit*.htm"><value>
+                    bean=adminBrandAddEdit
+                    view=/WEB-INF/views/admin/commodity/brand-add-edit.jsp
+                    param=cateId
+                    note=brand add edit
+                </value></entry>
+                <entry key="/admin/commodity/brand-del*.htm"><value>
+                    bean=del@adminBrandDel
+                    param=id
+                    note=brand 删除
+                </value></entry>
+                <entry key="/admin/commodity/customize-add-edit.htm"><value>
+                    bean=adminCustomizeAddEdit
+                    note= add edit
+                </value></entry>
+                <entry key="/admin/commodity/customize-special.htm"><value>
+                    bean=forward@adminCustomizeList
+                    view=/WEB-INF/views/admin/commodity/customize-special-list.jsp
+                    note=活动
+                </value></entry>
+                <entry key="/admin/commodity/customize-recommend.htm"><value>
+                    bean=forward@adminCustomizeList
+                    view=/WEB-INF/views/admin/commodity/customize-recommend-list.jsp
+                    note=人气
+                </value></entry>
+                <entry key="/admin/commodity/customize-new.htm"><value>
+                    bean=forward@adminCustomizeList
+                    view=/WEB-INF/views/admin/commodity/customize-new-list.jsp
+                    note=新品
+                </value></entry>
+                <entry key="/admin/commodity/customize-hot.htm"><value>
+                    bean=forward@adminCustomizeList
+                    view=/WEB-INF/views/admin/commodity/customize-hot-list.jsp
+                    note=婚庆
+                </value></entry>
+                <entry key="/admin/commodity/goods-down-list.htm"><value>
+                    bean=forward@adminGoodsDownList
+                    view=/WEB-INF/views/admin/commodity/goods-down-list.jsp
+                    alias=alias-goods-down-list
+                    note=goods-down
+                </value></entry>
+                <entry key="/admin/commodity/goods0-down-list.htm"><value>
+                    bean=forward@adminGoodsDownList
+                    view=/WEB-INF/views/admin/commodity/goods-down-list.jsp?price=0
+                    alias=alias-goods0-down-list
+                    note=goods-down
+                </value></entry>
+                <entry key="/admin/commodity/goods-up-list.htm"><value>
+                    bean=forward@adminGoodsUpList
+                    view=/WEB-INF/views/admin/commodity/goods-up-list.jsp
+                    note=goods-down
+                </value></entry>
+                <entry key="/admin/commodity/goods0-up-list.htm"><value>
+                    bean=forward@adminGoodsUpList
+                    view=/WEB-INF/views/admin/commodity/goods-up-list.jsp?price=0
+                    note=goods-down
+                </value></entry>
+                <entry key="/admin/commodity/goods-add-edit*.htm"><value>
+                    bean=adminGoodsAddEdit
+                    view=/WEB-INF/views/admin/commodity/goods-add-edit.jsp
+                    param=id
+                    note=good add edit
+                </value></entry>
+                <entry key="/admin/commodity/goods0-add-edit*.htm"><value>
+                    bean=adminGoodsAddEdit
+                    view=/WEB-INF/views/admin/commodity/goods-add-edit.jsp?price=0
+                    param=id
+                    note=good add edit
+                </value></entry>
+                <entry key="/admin/commodity/goods-del*.htm"><value>
+                    bean=del@adminGoodsDel
+                    param=id
+                    note=brand 删除
+                </value></entry>
+                <entry key="/admin/commodity/goods-updown.htm"><value>
+                    bean=update@adminGoodsUpDown
+                    note=商品 上下价
+                </value></entry>
+                <entry key="/admin/commodity/goods-preview*.htm"><value>
+                    bean=detail@adminGoodsPreview
+                    view=/WEB-INF/views/home/goods/detail.jsp
+                    param=id
+                    note=商品预览
+                </value></entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

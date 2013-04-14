@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="goodsPL" class="com.brains.publishing.web.stock.ContentControllerPL">
+        <property name="daoReadService" ref="goodsReadService"/>
+        <property name="objKey" value="goods"/>
+    </bean>
+
+    <bean id="brandPL" class="com.brains.publishing.web.stock.ContentControllerPL">
+        <property name="daoReadService" ref="brandReadService"/>
+    </bean>
+
+    <bean id="categoryControllerPL" class="com.brains.publishing.web.stock.CategoryControllerPL">
+        <property name="categoryRs" ref="categoryReadService"/>
+    </bean>
+
+    <bean id="uploadFilePL" class="com.brains.publishing.web.stock.UploadFileControllerPL">
+        <property name="uploadFileReadService" ref="fileReadService"/>
+    </bean>
+
+    <bean id="newsControllerPL" class="com.brains.publishing.web.stock.ContentControllerPL">
+        <property name="daoReadService" ref="newsReadService"/>
+    </bean>
+
+    <bean id="adAreaControllerPL" class="com.brains.publishing.web.stock.AdAreaControllerPL">
+        <property name="daoReadService" ref="adAreaReadService"/>
+    </bean>
+
+    <bean id="userControllerPL" class="com.brains.groundwork.web.stock.UserControllerPL">
+        <property name="daoReadService" ref="userReadService"/>
+    </bean>
+
+    <bean id="groupControllerPL" class="com.brains.groundwork.web.stock.GroupControllerPL">
+        <property name="daoReadService" ref="groupReadService"/>
+    </bean>
+
+    <bean id="cookieControllerPL" class="com.brains.groundwork.web.stock.CookieControllerPL">
+    </bean>
+
+    <bean id="commentsControllerPL" class="com.brains.publishing.web.stock.CommentsControllerPL">
+        <property name="daoReadService" ref="commentsReadService"/>
+    </bean>
+
+    <bean id="orderItemControllerPL" class="com.brains.groundwork.web.stock.GenericControllerPL">
+        <property name="daoReadService" ref="orderItemReadService"/>
+    </bean>
+
+</beans>

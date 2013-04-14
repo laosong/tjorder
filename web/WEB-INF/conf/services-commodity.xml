@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="store" class="com.brains.framework.cache.BaseCategoryKeyStoreImpl" />
+
+    <bean id="adAreaReadService" class="com.brains.publishing.service.AdAreaReadService" >
+        <property name="dao" ref="adAreaDao"/>
+    </bean>
+    <bean id="adAreaWriteService" class="com.brains.publishing.service.AdAreaWriteService" >
+        <property name="dao" ref="adAreaDao"/>
+    </bean>
+    <!-- news -->
+    <bean id="newsReadService" class="com.brains.publishing.service.ContentReadService" >
+        <property name="dao" ref="newsDao"/>
+    </bean>
+    <bean id="newsWriteService" class="com.brains.publishing.service.ContentWriteService" >
+        <property name="dao" ref="newsDao"/>
+    </bean>
+    <!-- upload file -->
+    <bean id="fileReadService" class="com.brains.publishing.service.UploadFileReadService">
+        <property name="dao" ref="uploadFileDao"/>
+    </bean>
+    <bean id="fileWriteService" class="com.brains.publishing.service.UploadFileWriteService">
+        <property name="dao" ref="uploadFileDao"/>
+        <property name="fileDiskLocation" value="${upfile.path}"/>
+        <property name="fileWebLocation" value="/upload"/>
+    </bean>
+    <!-- Category-->
+    <bean id="categoryReadService" class="com.brains.publishing.service.CategoryReadService" >
+        <property name="dao" ref="categoryDao"/>
+        <property name="store" ref="store"/>
+    </bean>
+    <bean id="categoryWriteService" class="com.brains.publishing.service.CategoryWriteService" >
+        <property name="dao" ref="categoryDao"/>
+        <property name="store" ref="store"/>
+    </bean>
+    <!-- news -->
+    <bean id="brandReadService" class="com.brains.publishing.service.ContentReadService" >
+        <property name="dao" ref="brandDao"/>
+    </bean>
+    <bean id="brandWriteService" class="com.brains.publishing.service.ContentWriteService" >
+        <property name="dao" ref="brandDao"/>
+    </bean>
+    <!-- goods -->
+    <bean id="goodsReadService" class="com.brains.prj.tianjiu.commodity.service.GoodsReadService" >
+        <property name="dao" ref="goodsDao"/>
+    </bean>
+    <bean id="goodsWriteService" class="com.brains.prj.tianjiu.commodity.service.GoodsWriteService" >
+        <property name="dao" ref="goodsDao"/>
+    </bean>
+    <bean id="goodsSearchService" class="com.brains.prj.tianjiu.commodity.service.GoodsSearchService" >
+        <property name="dao" ref="goodsDao"/>
+        <property name="selectClause" value="SELECT * FROM view_search"/>
+    </bean>
+
+</beans>

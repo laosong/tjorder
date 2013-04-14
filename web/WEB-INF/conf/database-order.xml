@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="orderItemDao" class="com.brains.groundwork.dao.BaseDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="editSql" value="${order.items.edit.sql}"/>
+        <property name="getSql" value="${order.items.get.sql}"/>
+        <property name="searchSelectClause" value="${order.items.search.select.clause}"/>
+        <property name="searchWhereClause" value="${order.items.search.where.clause}"/>
+        <property name="searchOrderbyClause" value="${order.items.search.orderby.clause}"/>
+    </bean>
+
+
+</beans>

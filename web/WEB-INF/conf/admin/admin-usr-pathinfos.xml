@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--后台URL配置-->
+    <bean id="usrAdminPathInfos" class="com.brains.framework.web.bean.PathInfos">
+        <property name="paths">
+            <map>
+                <!--Admin login-->
+                <entry key="/admin/usr/login.htm"><value>
+                    bean=adminUserLoginForm
+                    view=/WEB-INF/views/admin/usr/admin-login.jsp
+                    alias=alias-admin-login
+                    note=Admin login
+                </value></entry>
+                <!--Admin login-->
+                <entry key="/admin/index.htm"><value>
+                    bean=forward@adminIndex
+                    view=/WEB-INF/views/admin/index.jsp
+                    alias=alias-admin-index
+                    note=Admin Index
+                </value></entry>
+                <!--Admin列表-->
+                <entry key="/admin/usr/admin-list.htm"><value>
+                    bean=forward@adminUserMgr
+                    view=/WEB-INF/views/admin/usr/admin-list.jsp
+                    alias=alias-usr-admin-lists
+                    note=管理员列表
+                </value></entry>
+                <!--Admin add or edit form-->
+                <entry key="/admin/usr/admin-add-edit*.htm"><value>
+                    bean=adminUserAddEditForm
+                    view=/WEB-INF/views/admin/usr/admin-add-edit.jsp
+                    param=id
+                    note=管理员添加修改
+                </value></entry>
+                <!--Delete a Admin user-->
+                <entry key="/admin/usr/admin-del*.htm"><value>
+                    bean=del@adminUserDel
+                    param=id
+                    note=管理员删除
+                </value></entry>
+                <entry key="/admin/usr/admin-group-list.htm"><value>
+                    bean=forward@adminGroupListController
+                    view=/WEB-INF/views/admin/usr/admin-group-list.jsp
+                    alias=alias-usr-admin-group-list
+                    note=权限组列表
+                </value></entry>
+                <entry key="/admin/usr/admin-group-add-edit*.htm"><value>
+                    bean=adminGroupAddEditForm
+                    view=/WEB-INF/views/admin/usr/admin-group-add-edit.jsp
+                    param=id
+                    note=权限组编辑
+                </value></entry>
+                <entry key="/admin/usr/admin-group-del*.htm"><value>
+                    bean=del@adminGroupDel
+                    param=id
+                    note=权限组删除
+                </value></entry>
+                <entry key="/admin/usr/reg-list.htm"><value>
+                    bean=forward@regUserMgr
+                    view=/WEB-INF/views/admin/usr/reg-list.jsp
+                    alias=alias-usr-reg-lists
+                    note=register user 列表
+                </value></entry>
+                <entry key="/admin/usr/reg-add-edit*.htm"><value>
+                    bean=regUserAddEditForm
+                    view=/WEB-INF/views/admin/usr/reg-add-edit.jsp
+                    param=id
+                    note=注册用户添加修改
+                </value></entry>
+                <entry key="/admin/usr/reg-del*.htm"><value>
+                    bean=del@regUserDel
+                    param=id
+                    note=注册用户删除
+                </value></entry>
+                <entry key="/admin/usr/comments-list.htm"><value>
+                    bean=forward@regUserCommentsMgr
+                    view=/WEB-INF/views/admin/usr/comments-list.jsp
+                    alias=alias-usr-comments-lists
+                    note=comments 列表
+                </value></entry>
+                <entry key="/admin/usr/comments-del*.htm"><value>
+                    bean=delComments@regUserCommentsDel
+                    param=id
+                    note=评论删除
+                </value></entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

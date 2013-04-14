@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="userDao" class="com.brains.groundwork.dao.UserDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="addSql" value="${usr.add.sql}"/>
+        <property name="delSql" value="${usr.del.sql}"/>
+        <property name="editSql" value="${usr.edit.sql}"/>
+        <property name="getSql" value="${usr.get.sql}"/>
+        <property name="searchSelectClause" value="${usr.search.select.clause}"/>
+        <property name="searchWhereClause" value="${usr.search.where.clause}"/>
+        <property name="searchOrderbyClause" value="${usr.search.orderby.clause}"/>
+    </bean>
+
+    <bean id="grpDao" class="com.brains.groundwork.dao.GroupDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="addSql" value="${usr.admin.grp.add.sql}"/>
+        <property name="delSql" value="${usr.admin.grp.del.sql}"/>
+        <property name="editSql" value="${usr.admin.grp.edit.sql}"/>
+        <property name="getSql" value="${usr.admin.grp.get.sql}"/>
+        <property name="searchSelectClause" value="${usr.admin.grp.select.clause}"/>
+        <property name="searchWhereClause" value="${usr.admin.grp.where.clause}"/>
+    </bean>
+
+    <!--评论Dao-->
+    <bean id="commentsDao" class="com.brains.publishing.dao.CommentsDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="addSql" value="${comments.add.sql}"/>
+        <property name="delSql" value="${comments.del.sql}"/>
+        <property name="editSql" value="${comments.edit.sql}"/>
+        <property name="getSql" value="${comments.get.sql}"/>
+        <property name="searchSelectClause" value="${comments.select.clause}"/>
+        <property name="searchWhereClause" value="${comments.where.clause}"/>
+        <property name="searchOrderbyClause" value="${comments.orderby.clause}"/>
+    </bean>
+</beans>
