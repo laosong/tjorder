@@ -41,8 +41,15 @@
 <div id="container">
     <c:import url="../header.jsp" charEncoding="utf-8"/>
     <div id="content" class="noticeCon mart10">
-        <div class="notice_del">
+        <div class="notice_del" style="line-height: 26px;">
             <h2 class="acticle_til fb txtcenter">联系我们</h2>
+            <p>客服热线：4006-36519</p>
+            <p>非常欢迎您直接与我们联络，我们将竭诚为您服务。</p>
+            <p>客服热线：4006-36519</p>
+            <p>(服务时间：周一至周日，9:00-23:00；特殊节假日将另行通知。)</p>
+            <p>投诉及建议：mailto:kefu@36519.com</p>
+            <p>总经理投诉直通车：mailto:ceo@36519.com</p>
+            <p>公司地址：贵州省仁怀市茅台镇</p>
         </div>
     </div><!-- end content -->
     <c:import url="../footer.jsp" charEncoding="utf-8"/>

@@ -26,7 +26,7 @@
 <@override name="body_content">
 <div id="bottom-main">
     <@orderadmin_nav page_name/>
-    <div id="content">
+    <div id="content" style="overflow: hidden;">
         <@block name="admin_body_content"></@block>
     </div>
 </div>

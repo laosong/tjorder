@@ -36,7 +36,7 @@
                     <#else>
                         <a href="/orderAction/showCart">${systemUser.getUserName()!("nobody")}</a><span>|</span>
                         <a href="/orderAction/myOrders">我的订单</a><span>|</span>
-                        <a href="/home/user/logout.htm">[退出]</a>
+                        <a href="javascript:window.location.href='/home/user/logout.htm?toUrl=/index.htm';">[退出]</a>
                     </#if>
                 </div>
             </div>

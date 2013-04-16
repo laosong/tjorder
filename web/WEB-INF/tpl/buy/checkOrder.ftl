@@ -201,12 +201,12 @@
 
             if (addressParams["recvName"].length <= 0) {
                 $("#recvNameInput").focus();
-                alert("需填写收获人姓名");
+                alert("需填写收货人姓名");
                 return;
             }
             if (addressParams["address"].length <= 0) {
                 $("#addressInput").focus();
-                alert("需填写收获地址");
+                alert("需填写收货地址");
                 return;
             }
             if (addressParams["recvPhone"].length <= 0) {

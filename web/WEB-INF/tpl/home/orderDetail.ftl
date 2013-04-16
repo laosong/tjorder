@@ -24,8 +24,27 @@
     <dl>
         <dt>支付及配送方式</dt>
         <dd>支付方式：${order.paymentInfo.payDesc}</dd>
-        <dd>运费：21.00元</dd>
+        <dd>运费：${order.deliveryFee}元</dd>
         <dd>配送方式：${order.deliveryInfo.deliverDesc}</dd>
+    </dl>
+    <dl>
+        <dt>处理详情</dt>
+        <dd>
+            <table summary="处理详情" class="personal_order">
+                <tr>
+                    <th width="12%">编号</th>
+                    <th>内容</th>
+                    <th width="22%">时间</th>
+                </tr>
+                <#list orderStatuses as orderStatus>
+                    <tr>
+                        <td>${orderStatus_index+1}</td>
+                        <td class="t_l">${orderStatus.info?html}</td>
+                        <td>${orderStatus.createTime?datetime}</td>
+                    </tr>
+                </#list>
+            </table>
+        </dd>
     </dl>
     <dl>
         <dt>商品清单</dt>
@@ -51,28 +70,9 @@
             </table>
         </dd>
     </dl>
-    <div class="personal_del_order_b">商品金额:${order.sumPrice}元 + 运费:0.00元 =
-        <span class="fb">订单总金额：<strong class="fred">${order.sumPrice}</strong> 元</span>
+    <div class="personal_del_order_b">商品金额:${order.itemFee?string.currency}元 + 运费:${order.deliveryFee}元 =
+        <span class="fb">订单总金额：<strong class="fred">${order.sumPrice?string.currency}</strong> 元</span>
     </div>
-    <dl>
-        <dt>处理详情</dt>
-        <dd>
-            <table summary="处理详情" class="personal_order">
-                <tr>
-                    <th width="12%">编号</th>
-                    <th>内容</th>
-                    <th width="22%">时间</th>
-                </tr>
-                <#list orderStatuses as orderStatus>
-                    <tr>
-                        <td></td>
-                        <td class="t_l">${orderStatus.info?html}</td>
-                        <td>${orderStatus.createTime?datetime}</td>
-                    </tr>
-                </#list>
-            </table>
-        </dd>
-    </dl>
 </div>
 </@override>
 <@override name="body_footerjs">

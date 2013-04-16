@@ -481,9 +481,9 @@ public class OrderController {
             StringBuilder sbLogistic = new StringBuilder();
             sbLogistic.append("物流公司：");
             sbLogistic.append(rc.getParameter("name"));
-            sbLogistic.append("物流单号：");
+            sbLogistic.append(" 物流单号：");
             sbLogistic.append(rc.getParameter("code"));
-            sbLogistic.append("备注信息：");
+            sbLogistic.append(" 备注信息：");
             sbLogistic.append(rc.getParameter("info"));
 
             int ret = orderService.adminAddOrderLogistic(orderId, user.getUserName(), sbLogistic.toString(), force);

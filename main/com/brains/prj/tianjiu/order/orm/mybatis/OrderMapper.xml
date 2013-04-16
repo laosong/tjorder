@@ -11,6 +11,8 @@
         <parameter property="deliveryId"/>
         <parameter property="shippingId"/>
         <parameter property="types"/>
+        <parameter property="itemFee"/>
+        <parameter property="deliveryFee"/>
         <parameter property="sumPrice"/>
         <parameter property="createdDate"/>
         <parameter property="state"/>
@@ -26,8 +28,8 @@
     </parameterMap>
 
     <insert id="createOrder" parameterMap="orderParameterMap" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO orders(user_id, order_cd, payment_id, delivery_id, shipping_id, types, sum_price, created_date, state)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO orders(user_id, order_cd, payment_id, delivery_id, shipping_id, types, item_fee, delivery_fee, sum_price, created_date, state)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     </insert>
     <update id="setOrderCd">
         UPDATE orders SET order_cd=#{orderCd} WHERE id=#{orderId}
@@ -56,6 +58,8 @@
         <result property="deliveryId" column="delivery_id"/>
         <result property="shippingId" column="shipping_id"/>
         <result property="types" column="types"/>
+        <result property="itemFee" column="item_fee"/>
+        <result property="deliveryFee" column="delivery_fee"/>
         <result property="sumPrice" column="sum_price"/>
         <result property="createdDate" column="created_date"/>
         <result property="orderDesc" column="order_desc"/>

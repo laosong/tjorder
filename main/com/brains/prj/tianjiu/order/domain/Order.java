@@ -40,6 +40,9 @@ public class Order implements Serializable {
     public static final short TYPES_NORMAL = 1;
 
     private short types;
+
+    private float itemFee;
+    private float deliveryFee;
     private float sumPrice;
     private Date createdDate;
     private String orderDesc;
@@ -126,6 +129,22 @@ public class Order implements Serializable {
         this.types = types;
     }
 
+    public float getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public float getItemFee() {
+        return itemFee;
+    }
+
+    public void setItemFee(float itemFee) {
+        this.itemFee = itemFee;
+    }
+
+    public void setDeliveryFee(float deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
     public float getSumPrice() {
         return sumPrice;
     }
@@ -192,14 +211,13 @@ public class Order implements Serializable {
 
     public static final float FREE_DELIVERY_ORDER_FEE = 99;
 
-    public OrderFee calcOrderFee(float itemFee) {
-        OrderFee orderFee = new OrderFee();
-        orderFee.setItemFee(itemFee);
+    public void calcOrderFee() {
+        deliveryFee = 0.0f;
         if (itemFee < FREE_DELIVERY_ORDER_FEE) {
             if (deliveryInfo != null) {
-                orderFee.setDeliveryFee(deliveryInfo.getFee());
+                deliveryFee = deliveryInfo.getFee();
             }
         }
-        return orderFee;
+        sumPrice = itemFee + deliveryFee;
     }
 }

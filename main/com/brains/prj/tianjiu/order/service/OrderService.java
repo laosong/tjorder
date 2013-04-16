@@ -103,9 +103,13 @@ public class OrderService {
         checkCartForSubmit(userId, shoppingCart);
 
         Order order = new Order();
+        order.setItemFee(shoppingCart.getTotalPrice());
         DeliveryInfo deliveryInfo = orderAOP.getDeliveryInfo(DEFAULT_DELIVERY_ID);
         order.setDeliveryInfo(deliveryInfo);
-        OrderFee orderFee = order.calcOrderFee(shoppingCart.getTotalPrice());
+        order.calcOrderFee();
+        OrderFee orderFee = new OrderFee();
+        orderFee.setItemFee(order.getItemFee());
+        orderFee.setDeliveryFee(order.getDeliveryFee());
         return orderFee;
     }
 
@@ -113,12 +117,11 @@ public class OrderService {
             GoodsStateException, EvaGoodsBuyException {
         checkCartForSubmit(order.getUserId(), shoppingCart);
 
-        float itemFee = shoppingCart.getTotalPrice();
-        OrderFee orderFee = order.calcOrderFee(itemFee);
+        order.setItemFee(shoppingCart.getTotalPrice());
+        order.calcOrderFee();
 
         order.setOrderCd("");
         order.setTypes(Order.TYPES_NORMAL);
-        order.setSumPrice(orderFee.getTotalFee());
         order.setCreatedDate(new Date());
         order.setState(Order.STATE_SUBMIT);
 

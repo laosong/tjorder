@@ -21,7 +21,7 @@
         </tr>
             <#list orders as order>
             <tr>
-                <td>
+                <td class="o_l">
                     <a href="/orderAction/myOrderDetail?orderCd=${order.getOrderCd()}" target="_blank">${order.getOrderCd()}</a>
                 </td>
                 <td class="f999">${order.getCreatedDate()?datetime}</td>
